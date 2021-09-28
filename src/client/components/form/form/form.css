@@ -1,0 +1,30 @@
+
+.input-container {  
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.children-container {
+  width: 100%;
+}
+
+/*
+.input-footer{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+  }
+*/
+
+.input-message-error {
+	color: darkred; 
+	font-size: small;
+}
+
+
+  
+
+
