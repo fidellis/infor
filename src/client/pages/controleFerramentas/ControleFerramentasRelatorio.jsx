@@ -6,38 +6,22 @@ import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
 import Button from '~/components/Button';
 import NavigationButton from '~/components/NavigationButton';
-import { getFerramentas, getUserConfig } from './controleFerramentasHook';
+import { getRelatorio } from './controleFerramentasHook';
 
 const columns = {
-    id: {
-        label: '#',
-        search: true,
-        width: 50,
-    },
-    nome: {
-        label: 'Nome',
-        search: true,
-    },
-    'demandante.nome': {
-        label: 'Demandante',
-        width: 250,
-        search: true,
-    },
-    'responsavel.nome': {
-        label: 'Responsável',
-        width: 250,
-        search: true,
-    },
     'status.nome': {
-        label: 'Situação',
+        label: 'Status',
+    },
+    quantidade: {
+        label: 'Quantidade',
         width: 100,
-        search: true,
+        align: 'center',
     },
 };
 
 const Component = (props) => {
     const [data, setData] = useState([]);
-    const [response, loading] = getRelatorio({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status'] });
+    const [response, loading] = getRelatorio();
 
     useEffect(() => {
         setData(response);
@@ -48,19 +32,18 @@ const Component = (props) => {
             <DataTable
                 rows={data}
                 columns={columns}
-                width="95%"
-                count
+                width="50%"
                 exportCsv
-                onClick={({ row }) => props.history.push(`/controle-ferramentas-form/${row.id}`)}
+                headerHeight={30}
             />
 
-            <NavigationButton buttons={[
+            {/* <NavigationButton buttons={[
                 {
                     label: 'Adicionar Ferramenta',
-                    onClick: () => props.history.push('/controle-ferramentas-form/0'),
+                    onClick: () => props.history.push('/controle-ferramentas'),
                 },
             ]}
-            />
+            /> */}
         </div>
     );
 };

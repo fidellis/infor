@@ -9,7 +9,7 @@ export function getFerramentas(params) {
   async function change() {
     setLoading(true);
     const [response] = await Promise.all([
-      getData('/controleFerramentas/ferramenta', { ...params, order: ['nome'] }),
+      getData('/controleFerramentas/ferramenta', { ...params, order: ['id'] }),
     ]);
     setData(response);
     setLoading(false);
@@ -39,7 +39,7 @@ export function getFerramenta({ id, ...params }) {
   return data;
 }
 
-export function getRelatorio(params) {
+export function getRelatorio(params = {}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState();
 
