@@ -9,7 +9,7 @@ export function getModelos(params) {
   async function change() {
     setLoading(true);
     const [response] = await Promise.all([
-      getData('/teste', { ...params, order: ['nome'] }),
+      getData('/controleFerramentas/ferramenta', { ...params, order: ['nome'] }),
     ]);
     setData(response);
     setLoading(false);
@@ -23,19 +23,19 @@ export function getModelos(params) {
 }
 
 export function getModelo({ id, ...params }) {
-    const [data, setData] = useState({ sumario: [], backlog: [], sistemas: [], responsaveis: [] });
-  
-    async function change() {
-      const [response] = await Promise.all([
-        getData(`/teste/${id}`, params),
-      ]);
-      setData(response);
-    }
-  
-    useEffect(() => {
-      if(Number(id)) change();
-    }, []);
-  
-    return data;
+  const [data, setData] = useState({ sumario: [], backlog: [], sistemas: [], responsaveis: [] });
+
+  async function change() {
+    const [response] = await Promise.all([
+      getData(`/controleFerramentas/ferramenta/${id}`, params),
+    ]);
+    setData(response);
   }
+
+  useEffect(() => {
+    if (Number(id)) change();
+  }, []);
+
+  return data;
+}
 

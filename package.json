@@ -1,13 +1,13 @@
 {
-  "name": "modelo",
+  "name": "infor",
   "version": "0.0.4",
   "private": true,
-  "description": "Modelo",
+  "description": "Infor",
   "app": {
-    "name": "modelo",
-    "port": "4099",
-    "path": "modelo",
-    "title": "Modelo - Diemp"
+    "name": "infor",
+    "port": "4014",
+    "path": "infor",
+    "title": "Infor - Diemp"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.4",
@@ -135,7 +135,7 @@
     "runjob": "node scripts/runjob.js"
   },
   "repository": {
-    "url": "git@disem5.intranet.bb.com.br:infor/modelo.git"
+    "url": "git@disem5.intranet.bb.com.br:infor/infor.git"
   },
   "jest": {
     "collectCoverageFrom": [

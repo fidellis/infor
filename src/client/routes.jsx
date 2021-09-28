@@ -1,25 +1,40 @@
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import Testes from '~/pages/Testes';
-import TesteForm from '~/pages/TesteForm';
+import ControleFerramentasList from '~/pages/controleFerramentas/ControleFerramentasList';
+import ControleFerramentasForm from '~/pages/controleFerramentas/ControleFerramentasForm';
 
 const isDev = process.env.AMBIENTE !== 'producao';
 
 function allow({ usuario }) {
-  const PREFIXOS_AUTORIZADOS = [9973];
+  const PREFIXOS_AUTORIZADOS = [];
   const COMISSOES_AUTORIZADAS = [];
   const MATRICULAS_AUTORIZADAS = [];
-  return usuario.isDiemp ||
+  const UORS_AUTORIZADAS = [283521];
+  return UORS_AUTORIZADAS ||
     PREFIXOS_AUTORIZADOS.includes(usuario.prefixo) ||
     COMISSOES_AUTORIZADAS.includes(usuario.comissao_id) ||
     MATRICULAS_AUTORIZADAS.includes(usuario.chave);
 }
 const routes = [
-  { path: '/', Component: () => <Redirect to="/testes" />, exact: true, link: false },
-  { path: '/testes', label: 'Testes', Component: Testes, icon: 'list', allow },
-  { path: '/teste/:id', label: 'Teste', Component: TesteForm, allow, link: false },
-  { path: '/teste-config', label: 'Configurar', Component: Testes, icon: 'settings', allow },
+  { path: '/', Component: () => <Redirect to="/controle-ferramentas" />, exact: true, link: false },
+  {
+    label: 'Controle de Ferramentas',
+    icon: 'list',
+    allow,
+    itens: [
+      {
+        label: '',
+        subitens: [
+          { path: '/controle-ferramentas', label: 'Ferramentas', Component: ControleFerramentasList, allow },
+          { path: '/controle-ferramentas-form/:id', label: 'Controle de Painéis e Ferramentas', Component: ControleFerramentasForm, allow, link: false },
+          { path: '/controle-ferramentas-relatorio', label: 'Relatório', Component: ControleFerramentasList, allow },
+        ],
+      },
+    ],
+  },
+
+  // { path: '/teste-config', label: 'Configurar', Component: ControleFerramentasList, icon: 'settings', allow },
 ];
 
 export function getPages() {

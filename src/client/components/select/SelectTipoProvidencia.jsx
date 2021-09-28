@@ -4,11 +4,12 @@ import Select from './SelectModel';
 const Component = props => <Select {...props} />;
 
 Component.defaultProps = {
-  url: '/tipo',
-  id: 'tipo_id',
-  label: 'Tipo',
+  url: '/controleFerramentas/tipoProvidencia',
+  id: 'tipo_providencia_id',
+  label: 'Tipo Providência',
   optionValue: 'id',
   optionLabel: 'nome',
+  params: { order: ['nome'] },
 };
 
 export default Component;

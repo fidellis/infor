@@ -6,7 +6,7 @@ import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
 import Button from '~/components/Button';
 import NavigationButton from '~/components/NavigationButton';
-import { getModelos, getUserConfig } from './testeHook';
+import { getModelos, getUserConfig } from './controleFerramentasHook';
 
 const columns = {
   id: {
@@ -15,7 +15,7 @@ const columns = {
     width: 50,
   },
   nome: {
-    label: 'Teste',
+    label: 'Nome',
     search: true,
   },
   'usuarioInclusao.nome': {
@@ -29,7 +29,7 @@ const columns = {
   }
 };
 
-const Component = props => {
+const Component = (props) => {
   const [data, setData] = useState([]);
   const [resolucoes, loading] = getModelos({ include: ['usuarioInclusao'] });
 
@@ -37,24 +37,24 @@ const Component = props => {
     setData(resolucoes);
   }, [resolucoes]);
 
-    return (
-      <div>
-        <DataTable 
-          rows={data}
-          columns={columns}
-          width="90%"
-          onClick={({ row }) => props.history.push(`/teste/${row.id}`)}
-          />
+  return (
+    <div>
+      <DataTable
+        rows={data}
+        columns={columns}
+        width="90%"
+        onClick={({ row }) => props.history.push(`/controle-ferramentas-form/${row.id}`)}
+      />
 
-        <NavigationButton buttons={[
-          {
-            label: 'Adicionar Teste',
-            onClick: () => props.history.push('/teste/0'),
-          },
-        ]}
-        />
-      </div>
-    );
+      <NavigationButton buttons={[
+        {
+          label: 'Adicionar Ferramenta',
+          onClick: () => props.history.push('/controle-ferramentas-form/0'),
+        },
+      ]}
+      />
+    </div>
+  );
 }
 
 Component.propTypes = {};

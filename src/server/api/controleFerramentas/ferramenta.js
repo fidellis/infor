@@ -3,8 +3,8 @@ import paramsConverter from 'common/sequelize/params';
 module.exports = (router) => {
 
   router.post('/', async (req, res, next) => {
-    const { Teste } = sequelize.models;
-    const modelParams = paramsConverter(Teste);
+    const { FerramentaInfor } = sequelize.models;
+    const modelParams = paramsConverter(FerramentaInfor);
     const params = modelParams(req);
     const usuario = req.session.usuario;
     const data = req.body;
@@ -19,10 +19,10 @@ module.exports = (router) => {
 
     try {
       if (!isNewRecord) {
-        let record = await Teste.find({ where: { nome: data.nome } });
+        let record = await FerramentaInfor.find({ where: { nome: data.nome } });
         if (record && record.id != data.id) return res.status(400).send({ msg: `${record.nome} já cadastrado.` });
       }
-      const response = await Teste.build(data, { isNewRecord }).save();
+      const response = await FerramentaInfor.build(data, { isNewRecord }).save();
       res.send(response);
     } catch (err) {
       next(err);
