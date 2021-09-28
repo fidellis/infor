@@ -14,7 +14,7 @@ var _sequelize4 = _interopRequireDefault(_sequelize3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Model = _sequelize2.default.define('Tipo', {
+const Model = _sequelize2.default.define('TipoSolucao', {
   id: {
     type: _sequelize4.default.BIGINT,
     primaryKey: true,
@@ -32,10 +32,10 @@ const Model = _sequelize2.default.define('Tipo', {
     defaultValue: true
   }
 }, {
-  schema: 'teste',
-  tableName: 'tipo'
+  schema: 'controle_ferramentas_infor',
+  tableName: 'tipo_solucao'
 });
 
-Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'x​' })]));
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Solução 1​' }), Model.upsert({ id: 2, nome: 'Solução 2​' })]));
 
 exports.default = Model;

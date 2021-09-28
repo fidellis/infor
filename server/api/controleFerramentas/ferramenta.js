@@ -4,12 +4,18 @@ var _sequelize = require('common/sequelize');
 
 var _sequelize2 = _interopRequireDefault(_sequelize);
 
+var _params = require('common/sequelize/params');
+
+var _params2 = _interopRequireDefault(_params);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = router => {
 
   router.post('/', async (req, res, next) => {
-    const { Teste } = _sequelize2.default.models;
+    const { FerramentaInfor } = _sequelize2.default.models;
+    const modelParams = (0, _params2.default)(FerramentaInfor);
+    const params = modelParams(req);
     const usuario = req.session.usuario;
     const data = req.body;
     const isNewRecord = !data.id;
@@ -23,10 +29,10 @@ module.exports = router => {
 
     try {
       if (!isNewRecord) {
-        let record = await Teste.find({ where: { nome: data.nome } });
+        let record = await FerramentaInfor.find({ where: { nome: data.nome } });
         if (record && record.id != data.id) return res.status(400).send({ msg: `${record.nome} já cadastrado.` });
       }
-      const response = await Teste.build(data, { isNewRecord }).save();
+      const response = await FerramentaInfor.build(data, { isNewRecord }).save();
       res.send(response);
     } catch (err) {
       next(err);
