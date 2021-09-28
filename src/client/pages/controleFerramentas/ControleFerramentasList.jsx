@@ -6,7 +6,7 @@ import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
 import Button from '~/components/Button';
 import NavigationButton from '~/components/NavigationButton';
-import { getModelos, getUserConfig } from './controleFerramentasHook';
+import { getFerramentas, getUserConfig } from './controleFerramentasHook';
 
 const columns = {
   id: {
@@ -18,20 +18,26 @@ const columns = {
     label: 'Nome',
     search: true,
   },
-  'usuarioInclusao.nome': {
-    label: 'Usuário',
+  'demandante.nome': {
+    label: 'Demandante',
     width: 250,
+    search: true,
   },
-  dataHoraInclusao: {
-    label: 'Data',
-    type: 'DATE',
+  'responsavel.nome': {
+    label: 'Responsável',
+    width: 250,
+    search: true,
+  },
+  'status.nome': {
+    label: 'Situação',
     width: 100,
-  }
+    search: true,
+  },
 };
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [resolucoes, loading] = getModelos({ include: ['usuarioInclusao'] });
+  const [resolucoes, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status'] });
 
   useEffect(() => {
     setData(resolucoes);

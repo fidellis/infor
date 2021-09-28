@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getData, save, destroy } from '~/lib/api';
 import { formatInteger } from '~/lib/format';
 
-export function getModelos(params) {
+export function getFerramentas(params) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState();
 
@@ -22,7 +22,7 @@ export function getModelos(params) {
   return [data, loading];
 }
 
-export function getModelo({ id, ...params }) {
+export function getFerramenta({ id, ...params }) {
   const [data, setData] = useState({ sumario: [], backlog: [], sistemas: [], responsaveis: [] });
 
   async function change() {
