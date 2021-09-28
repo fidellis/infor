@@ -108,6 +108,18 @@ const Model = _sequelize2.default.define('FerramentaInfor', {
     allowNull: true
   }
 }, {
+  scopes: {
+    relatorio: {
+      attributes: [[_sequelize2.default.fn('count', _sequelize2.default.col('status_id')), 'quantidade']],
+
+      include: [{
+        model: _status2.default,
+        as: 'status',
+        attributes: ['id', 'nome']
+      }],
+      group: ['status_id', _sequelize2.default.literal('status.id'), _sequelize2.default.literal('status.nome')]
+    }
+  },
   schema: 'controle_ferramentas_infor',
   tableName: 'ferramenta'
 });
