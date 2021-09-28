@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { message } from '~/store/app';
-import Card from '~/components/Card';
+import moment from 'moment';
 import Form from '~/components/form/Form';
 import { TextInput, NumberInput, DateInput, Select, TextArea } from '~/components/form/form';
 import SelectTipoSolucao from '~/components/select/SelectTipoSolucao';
@@ -82,6 +82,26 @@ const Component = (props) => {
         ]}>
         <Grid container spacing={2}>
 
+          <Grid item xs={3}>
+            <TextInput
+              id="dataHoraInclusao"
+              label="Data"
+              value={moment(data.dataHoraInclusao).format('DD/MM/YYYY')}
+              disabled
+              hide={!id}
+            />
+          </Grid>
+
+          <Grid item xs={9}>
+            <TextInput
+              id="usuarioInclusao"
+              label="Usuário Inclusão"
+              value={data.usuarioInclusao.nome}
+              disabled
+              hide={!id}
+            />
+          </Grid>
+
           <Grid item xs={12}>
             <TextInput
               id="nome"
@@ -145,8 +165,6 @@ const Component = (props) => {
               label="Endereço Painel"
               value={data.link}
               onChange={onChange}
-              required
-              maxLength={100}
             />
           </Grid>
 

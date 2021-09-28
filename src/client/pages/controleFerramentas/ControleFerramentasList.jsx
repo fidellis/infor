@@ -37,18 +37,20 @@ const columns = {
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [resolucoes, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status'] });
+  const [response, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status'] });
 
   useEffect(() => {
-    setData(resolucoes);
-  }, [resolucoes]);
+    setData(response);
+  }, [response]);
 
   return (
     <div>
       <DataTable
         rows={data}
         columns={columns}
-        width="90%"
+        width="95%"
+        count
+        exportCsv
         onClick={({ row }) => props.history.push(`/controle-ferramentas-form/${row.id}`)}
       />
 
@@ -61,7 +63,7 @@ const Component = (props) => {
       />
     </div>
   );
-}
+};
 
 Component.propTypes = {};
 const mapStateToProps = ({ app: { usuario } }) => ({ usuario });

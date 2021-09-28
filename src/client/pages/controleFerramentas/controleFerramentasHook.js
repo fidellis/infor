@@ -23,7 +23,7 @@ export function getFerramentas(params) {
 }
 
 export function getFerramenta({ id, ...params }) {
-  const [data, setData] = useState({ sumario: [], backlog: [], sistemas: [], responsaveis: [] });
+  const [data, setData] = useState({ usuarioInclusao: {} });
 
   async function change() {
     const [response] = await Promise.all([
@@ -37,5 +37,25 @@ export function getFerramenta({ id, ...params }) {
   }, []);
 
   return data;
+}
+
+export function getRelatorio(params) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState();
+
+  async function change() {
+    setLoading(true);
+    const [response] = await Promise.all([
+      getData('/controleFerramentas/ferramenta', { ...params, scope: ['relatorio'] }),
+    ]);
+    setData(response);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    change();
+  }, [params.filter]);
+
+  return [data, loading];
 }
 

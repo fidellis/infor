@@ -83,6 +83,22 @@ const Model = sequelize.define(
     },
   },
   {
+    scopes: {
+      relatorio: {
+        attributes: [
+          [sequelize.fn('count', sequelize.col('status_id')), 'quantidade'],
+        ],
+
+        include: [
+          {
+            model: Status,
+            as: 'status',
+            attributes: ['id', 'nome'],
+          },
+        ],
+        group: ['status_id', sequelize.literal('status.id'), sequelize.literal('status.nome')],
+      },
+    },
     schema: 'controle_ferramentas_infor',
     tableName: 'ferramenta',
   },

@@ -28,8 +28,14 @@ const Model = sequelize.define(
 );
 
 Model.afterSync(() => Promise.all([
-  Model.upsert({ id: 1, nome: 'Solução 1​' }),
-  Model.upsert({ id: 2, nome: 'Solução 2​' }),
+  Model.upsert({ id: 1, nome: 'PowerBI' }),
+  Model.upsert({ id: 2, nome: 'Relatório' }),
+  Model.upsert({ id: 3, nome: 'Robô' }),
+  Model.upsert({ id: 4, nome: 'SAS/Excel' }),
+  Model.upsert({ id: 5, nome: 'SAS/PowerBI' }),
+  Model.upsert({ id: 6, nome: 'SAS/SpotFire' }),
+  Model.upsert({ id: 7, nome: 'SAS/Web' }),
+  Model.upsert({ id: 8, nome: 'Web' }),
 ]));
 
 export default Model;
