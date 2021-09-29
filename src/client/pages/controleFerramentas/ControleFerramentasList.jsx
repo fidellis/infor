@@ -9,11 +9,11 @@ import NavigationButton from '~/components/NavigationButton';
 import { getFerramentas, getUserConfig } from './controleFerramentasHook';
 
 const columns = {
-  id: {
-    label: '#',
-    search: true,
-    width: 50,
-  },
+  // id: {
+  //   label: '#',
+  //   search: true,
+  //   width: 50,
+  // },
   nome: {
     label: 'Nome',
     search: true,
