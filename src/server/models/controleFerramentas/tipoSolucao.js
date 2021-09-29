@@ -36,6 +36,7 @@ Model.afterSync(() => Promise.all([
   Model.upsert({ id: 6, nome: 'SAS/SpotFire' }),
   Model.upsert({ id: 7, nome: 'SAS/Web' }),
   Model.upsert({ id: 8, nome: 'Web' }),
+  Model.upsert({ id: 9, nome: 'Descontinuação' }),
 ]));
 
 export default Model;

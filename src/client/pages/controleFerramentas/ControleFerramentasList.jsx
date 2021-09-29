@@ -33,11 +33,21 @@ const columns = {
     width: 100,
     search: true,
   },
+  'tipoSolucao.nome': {
+    label: 'Tipo Solução',
+    width: 100,
+    search: true,
+  },
+  'tipoProvidencia.nome': {
+    label: 'Tipo Providência',
+    width: 100,
+    search: true,
+  },
 };
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status'] });
+  const [response, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status', 'tipoSolucao', 'tipoProvidencia'] });
 
   useEffect(() => {
     setData(response);
@@ -51,6 +61,7 @@ const Component = (props) => {
         width="95%"
         count
         exportCsv
+        headerHeight={80}
         onClick={({ row }) => props.history.push(`/controle-ferramentas-form/${row.id}`)}
       />
 
