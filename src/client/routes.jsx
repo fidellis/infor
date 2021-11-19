@@ -10,7 +10,7 @@ const isDev = process.env.AMBIENTE !== 'producao';
 function allow({ usuario }) {
   const PREFIXOS_AUTORIZADOS = [];
   const COMISSOES_AUTORIZADAS = [];
-  const MATRICULAS_AUTORIZADAS = [];
+  const MATRICULAS_AUTORIZADAS = ['F8351349'];
   const UORS_AUTORIZADAS = [283521];
   return UORS_AUTORIZADAS ||
     PREFIXOS_AUTORIZADOS.includes(usuario.prefixo) ||
