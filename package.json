@@ -105,7 +105,7 @@
     "lint": "eslint -c .eslintrc src",
     "lint:dev": "nodemon --exec \"yarn lint\"",
     "lint:fix": "eslint -c .eslintrc --fix src",
-    "start:server": "nodemon --exec 'npm run start:build:server' --watch src/server --watch ../common -e js,jsx --ignore node_modules/ --ignore ../common/node_modules",
+    "start:server": "nodemon --exec \"npm run start:build:server\" --watch src/server --watch ../common -e js,jsx --ignore node_modules/ --ignore ../common/node_modules",
     "start:client": "node scripts/start.js",
     "start:build:server": "babel-node src/server -i node_modules/",
     "start": "npm-run-all -p start:client start:server",

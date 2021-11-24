@@ -32,7 +32,7 @@ const Component = (props) => {
             <DataTable
                 rows={data}
                 columns={columns}
-                width="50%"
+                width="30%"
                 exportCsv
                 headerHeight={30}
             />
@@ -44,6 +44,8 @@ const Component = (props) => {
                 },
             ]}
             /> */}
+            <br />
+            <center><img src="https://diemp2.intranet.bb.com.br/arquivos/api/arquivo/2680" width="30%" /></center>
         </div>
     );
 };
