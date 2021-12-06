@@ -1,11 +1,27 @@
 import React, { PureComponent } from 'react';
 import Select from 'react-select/async';
 import ComponentContainer from './ComponentContainer';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import './react-select.css';
 
 function convertOptions({ options, optionValue, optionLabel, labelRenderer }) {
   return options.map(option => ({ ...option, value: option[optionValue], label: labelRenderer ? labelRenderer(option) : option[optionLabel] }));
 }
+
+
+function promiseOptions({ inputValue, getOptions, params, isDisabled }) {
+  // if (inputValue) {
+  return new Promise((resolve) => {
+    // setTimeout(() => {
+    resolve(isDisabled ? () => { } : getOptions(inputValue, params));
+    // }, 500);
+  });
+  // }
+  // return Promise.resolve();
+}
+
+const searchAPI = p => promiseOptions(p);
+const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
 
 class SelectAsync extends PureComponent {
   constructor(props) {
@@ -14,7 +30,8 @@ class SelectAsync extends PureComponent {
       value: props.value,
     };
 
-    this.promiseOptions = this.promiseOptions.bind(this);
+    // this.promiseOptions = this.promiseOptions.bind(this);
+    this.debounce = this.debounce.bind(this);
   }
 
   componentDidMount() {
@@ -37,14 +54,15 @@ class SelectAsync extends PureComponent {
   }
 
   promiseOptions(inputValue) {
-    // if (inputValue) {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.props.isDisabled ? () => {} : this.props.getOptions(inputValue, this.props.params));
-      }, 500);
+      resolve(this.props.isDisabled ? () => { } : this.props.getOptions(inputValue, this.props.params));
     });
-    // }
-    // return Promise.resolve();
+  }
+
+  async debounce(inputValue) {
+    const { getOptions, isDisabled, params } = this.props;
+    const result = await searchAPIDebounced({ inputValue, getOptions, params, isDisabled });
+    return result;
   }
 
   render() {
@@ -55,7 +73,7 @@ class SelectAsync extends PureComponent {
         <Select
           {...inputProps}
           closeMenuOnSelect={!isMulti}
-          loadOptions={this.promiseOptions}
+          loadOptions={this.debounce}
           value={this.state.value || ''}
           cacheOptions
           defaultOptions

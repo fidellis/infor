@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import moment from 'moment';
 import Form from '~/components/form/Form';
-import { TextInput, NumberInput, DateInput, Select, TextArea } from '~/components/form/form';
+import { TextInput, NumberInput, DateInput, Select, TextArea } from '~/components/form/form/inputs';
 import SelectTipoSolucao from '~/components/select/SelectTipoSolucao';
 import SelectTipoProvidencia from '~/components/select/SelectTipoProvidencia';
 import SelectUsuario from '~/components/select/SelectUsuario';
