@@ -57,7 +57,7 @@ const Component = (props) => {
 
       <NavigationButton buttons={[
         {
-          label: 'Adicionar Ferramenta',
+          label: 'Adicionar Painel',
           onClick: () => props.history.push('/painel/0'),
         },
       ]}
