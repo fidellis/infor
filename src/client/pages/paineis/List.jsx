@@ -6,21 +6,16 @@ import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
 import Button from '~/components/Button';
 import NavigationButton from '~/components/NavigationButton';
-import { getFerramentas } from './controleFerramentasHook';
+import { getDados } from './hook';
 
 const columns = {
-  // id: {
-  //   label: '#',
-  //   search: true,
-  //   width: 50,
-  // },
+  id: {
+    label: '#',
+    search: true,
+    width: 50,
+  },
   nome: {
     label: 'Nome',
-    search: true,
-  },
-  'demandante.nome': {
-    label: 'Demandante',
-    width: 250,
     search: true,
   },
   'responsavel.nome': {
@@ -28,18 +23,13 @@ const columns = {
     width: 250,
     search: true,
   },
+  'tipo.nome': {
+    label: 'Célula',
+    width: 100,
+    search: true,
+  },
   'status.nome': {
     label: 'Situação',
-    width: 100,
-    search: true,
-  },
-  'tipoSolucao.nome': {
-    label: 'Tipo Solução',
-    width: 100,
-    search: true,
-  },
-  'tipoProvidencia.nome': {
-    label: 'Tipo Providência',
     width: 100,
     search: true,
   },
@@ -47,7 +37,7 @@ const columns = {
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response, loading] = getFerramentas({ include: ['usuarioInclusao', 'responsavel', 'demandante', 'status', 'tipoSolucao', 'tipoProvidencia'] });
+  const [response, loading] = getDados({ include: ['usuarioInclusao', 'responsavel', 'responsavel2', 'status', 'tipo'] });
 
   useEffect(() => {
     setData(response);
@@ -62,13 +52,13 @@ const Component = (props) => {
         count
         exportCsv
         headerHeight={80}
-        onClick={({ row }) => props.history.push(`/controle-ferramentas-form/${row.id}`)}
+        onClick={({ row }) => props.history.push(`/painel/${row.id}`)}
       />
 
       <NavigationButton buttons={[
         {
           label: 'Adicionar Ferramenta',
-          onClick: () => props.history.push('/controle-ferramentas-form/0'),
+          onClick: () => props.history.push('/painel/0'),
         },
       ]}
       />

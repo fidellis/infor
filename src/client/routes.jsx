@@ -4,6 +4,8 @@ import { Redirect } from 'react-router-dom';
 import ControleFerramentasList from '~/pages/controleFerramentas/ControleFerramentasList';
 import ControleFerramentasForm from '~/pages/controleFerramentas/ControleFerramentasForm';
 import ControleFerramentasRelatorio from '~/pages/controleFerramentas/ControleFerramentasRelatorio';
+import PainelList from '~/pages/paineis/List';
+import PainelForm from '~/pages/paineis/Form';
 
 const isDev = process.env.AMBIENTE !== 'producao';
 
@@ -30,6 +32,20 @@ const routes = [
           { path: '/controle-ferramentas', label: 'Ferramentas', Component: ControleFerramentasList, allow },
           { path: '/controle-ferramentas-form/:id', label: 'Controle de Painéis e Ferramentas', Component: ControleFerramentasForm, allow, link: false },
           { path: '/controle-ferramentas-relatorio', label: 'Relatório', Component: ControleFerramentasRelatorio, allow },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Painéis',
+    icon: 'dashboard',
+    allow,
+    itens: [
+      {
+        label: '',
+        subitens: [
+          { path: '/paineis', label: 'Painéis Infor', Component: PainelList, allow },
+          { path: '/painel/:id', label: 'Painel', Component: PainelForm, allow, link: false },
         ],
       },
     ],
