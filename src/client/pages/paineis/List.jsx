@@ -28,16 +28,25 @@ const columns = {
     width: 100,
     search: true,
   },
+  dataCriacao: {
+    label: 'Data Criação',
+    type: 'date',
+    width: 100,
+  },
   'status.nome': {
     label: 'Situação',
     width: 100,
     search: true,
   },
+  tags: {
+    label: 'Tags',
+    cellRenderer: ({ row }) => row.tags.map(t => t.nome).join(' - '),
+  },
 };
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response, loading] = getDados({ include: ['usuarioInclusao', 'responsavel', 'responsavel2', 'status', 'tipo'] });
+  const [response, loading] = getDados({ include: ['usuarioInclusao', 'responsavel', 'responsavel2', 'status', 'tipo', 'tags'] });
 
   useEffect(() => {
     setData(response);

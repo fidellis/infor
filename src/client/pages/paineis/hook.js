@@ -23,13 +23,16 @@ export function getDados(params) {
 }
 
 export function getDado({ id, ...params }) {
-  const [data, setData] = useState({ usuarioInclusao: {} });
+  const [data, setData] = useState({ usuarioInclusao: {}, tags: [] });
 
   async function change() {
     const [response] = await Promise.all([
       getData(`/paineis/painel/${id}`, params),
     ]);
-    setData(response);
+    setData({
+      ...response,
+      tags: response.tags.map(t => t.id),
+    });
   }
 
   useEffect(() => {

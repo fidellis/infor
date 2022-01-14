@@ -9,6 +9,7 @@ import SelectTipoPainel from '~/components/select/SelectTipoPainel';
 import SelectTipoProvidencia from '~/components/select/SelectTipoProvidencia';
 import SelectUsuario from '~/components/select/SelectUsuario';
 import SelectStatusPainel from '~/components/select/SelectStatusPainel';
+import SelectTagPainel from '~/components/select/SelectTagPainel';
 import { Grid } from '@material-ui/core';
 import { save, destroy } from '~/lib/api';
 import qs from 'qs';
@@ -17,7 +18,7 @@ import { getDado } from './hook';
 const Component = (props) => {
 
   const id = Number(props.match.params.id);
-  const response = getDado({ id, include: ['usuarioInclusao'] });
+  const response = getDado({ id, include: ['usuarioInclusao', 'tags'] });
   const [data, setData] = useState(response);
 
   useEffect(() => {
@@ -26,11 +27,12 @@ const Component = (props) => {
 
 
   function onChange({ id, value }) {
+    console.log(id, value)
     setData({ ...data, [id]: value });
   }
 
   async function salvar() {
-    const response = await save('/paineis/painel', data);
+    const response = await save('/painel', data);
     if (response) {
       props.message('Salvo com sucesso');
       atualizar(response.id);
@@ -85,7 +87,7 @@ const Component = (props) => {
           <Grid item xs={3}>
             <TextInput
               id="dataHoraInclusao"
-              label="Data"
+              label="Data Inclusão"
               value={moment(data.dataHoraInclusao).format('DD/MM/YYYY')}
               disabled
               hide={!id}
@@ -135,6 +137,15 @@ const Component = (props) => {
           </Grid>
 
           <Grid item xs={4}>
+            <SelectTagPainel
+              value={data.tags}
+              onChange={onChange}
+              required
+              isMulti
+            />
+          </Grid>
+
+          <Grid item xs={2}>
             <SelectTipoPainel
               value={data.tipo_id}
               onChange={onChange}
@@ -142,7 +153,7 @@ const Component = (props) => {
             />
           </Grid>
 
-          <Grid item xs={9}>
+          <Grid item xs={10}>
             <TextInput
               id="link"
               label="Endereço Painel"
@@ -152,13 +163,30 @@ const Component = (props) => {
             />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <DateInput
               id="dataCriacao"
               label="Data Criação"
               value={data.dataCriacao}
               onChange={onChange}
               required
+            />
+          </Grid>
+
+          <Grid item xs={8}>
+            <TextInput
+              id="linkPop"
+              label="Link do POP"
+              value={data.linkPop}
+              onChange={onChange}
+            />
+          </Grid>
+
+
+          <Grid item xs={2}>
+            <SelectStatusPainel
+              value={data.tags.map(t => Number(t))}
+              onChange={onChange}
             />
           </Grid>
 
@@ -171,24 +199,6 @@ const Component = (props) => {
               maxLength={100}
               rows={4}
               required
-            />
-          </Grid>
-
-          <Grid item xs={9}>
-            <TextInput
-              id="linkPop"
-              label="Link do POP"
-              value={data.linkPop}
-              onChange={onChange}
-              required
-            />
-          </Grid>
-
-
-          <Grid item xs={3}>
-            <SelectStatusPainel
-              value={data.status_id}
-              onChange={onChange}
             />
           </Grid>
 

@@ -4,6 +4,7 @@ import Version from 'common/sequelize/version';
 import Usuario from 'common/models/portal/usuario';
 import Tipo from './tipo';
 import Status from './status';
+import PainelTag from './painelTag';
 
 const Model = sequelize.define(
     'PainelInfor',
@@ -17,6 +18,7 @@ const Model = sequelize.define(
         nome: {
             type: Sequelize.STRING(255),
             allowNull: false,
+            unique: true,
         },
 
         descricao: {
@@ -113,6 +115,7 @@ Model.belongsTo(Tipo, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
 Model.belongsTo(Usuario, { as: 'responsavel', foreignKey: 'responsavel_id' });
 Model.belongsTo(Usuario, { as: 'responsavel2', foreignKey: 'responsavel2_id' });
+// Model.hasMany(PainelTag, { as: 'painelTag', foreignKey: 'painel_id' });
 
 const ModelVersion = new Version(Model);
 ModelVersion.sync();
