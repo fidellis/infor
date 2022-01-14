@@ -28,6 +28,10 @@ var _status = require('./status');
 
 var _status2 = _interopRequireDefault(_status);
 
+var _painelTag = require('./painelTag');
+
+var _painelTag2 = _interopRequireDefault(_painelTag);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const Model = _sequelize2.default.define('PainelInfor', {
@@ -39,7 +43,8 @@ const Model = _sequelize2.default.define('PainelInfor', {
 
     nome: {
         type: _sequelize4.default.STRING(255),
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
 
     descricao: {
@@ -130,6 +135,7 @@ Model.belongsTo(_tipo2.default, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(_status2.default, { as: 'status', foreignKey: 'status_id' });
 Model.belongsTo(_usuario2.default, { as: 'responsavel', foreignKey: 'responsavel_id' });
 Model.belongsTo(_usuario2.default, { as: 'responsavel2', foreignKey: 'responsavel2_id' });
+// Model.hasMany(PainelTag, { as: 'painelTag', foreignKey: 'painel_id' });
 
 const ModelVersion = new _version2.default(Model);
 ModelVersion.sync();
