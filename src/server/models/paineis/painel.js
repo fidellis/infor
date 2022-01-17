@@ -119,5 +119,5 @@ Model.belongsTo(Usuario, { as: 'responsavel2', foreignKey: 'responsavel2_id' });
 
 const ModelVersion = new Version(Model);
 ModelVersion.sync();
-
+Model.sync();
 export default Model;

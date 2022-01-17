@@ -185,7 +185,7 @@ const Component = (props) => {
 
           <Grid item xs={2}>
             <SelectStatusPainel
-              value={data.tags.map(t => Number(t))}
+              value={data.status_id}
               onChange={onChange}
             />
           </Grid>
