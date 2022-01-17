@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 
 const Model = sequelize.define(
-    'TagPainel',
+    'TipoPeriodicidadeRotina',
     {
         id: {
             type: Sequelize.BIGINT,
@@ -22,14 +22,14 @@ const Model = sequelize.define(
         },
     },
     {
-        schema: 'paineis',
-        tableName: 'tag',
+        schema: 'rotina',
+        tableName: 'tipo_periodicidade',
     },
 );
 
 Model.afterSync(() => Promise.all([
-    Model.upsert({ id: 1, nome: 'Tag 1' }),
-    Model.upsert({ id: 2, nome: 'Tag 2' }),
+    Model.upsert({ id: 1, nome: 'Dia útil' }),
+    Model.upsert({ id: 2, nome: 'Dia corrido' }),
 ]));
 
 export default Model;

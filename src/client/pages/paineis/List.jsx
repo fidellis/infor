@@ -46,7 +46,7 @@ const columns = {
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response, loading] = getDados({ include: ['usuarioInclusao', 'responsavel', 'responsavel2', 'status', 'tipo', 'tags'] });
+  const [response, loading] = getDados({ include: ['usuarioInclusao', 'responsaveis', 'status', 'tipo', 'tags'] });
 
   useEffect(() => {
     setData(response);
@@ -61,13 +61,13 @@ const Component = (props) => {
         count
         exportCsv
         headerHeight={80}
-        onClick={({ row }) => props.history.push(`/painel/${row.id}`)}
+        onClick={({ row }) => props.history.push(`/rotina/rotina/${row.id}`)}
       />
 
       <NavigationButton buttons={[
         {
-          label: 'Adicionar Painel',
-          onClick: () => props.history.push('/painel/0'),
+          label: 'Adicionar Rotina',
+          onClick: () => props.history.push('/paineis/rotina/0'),
         },
       ]}
       />

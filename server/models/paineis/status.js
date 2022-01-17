@@ -36,6 +36,10 @@ const Model = _sequelize2.default.define('StatusPainel', {
     tableName: 'status'
 });
 
-Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Construção​' }), Model.upsert({ id: 2, nome: 'Homologação' }), Model.upsert({ id: 3, nome: 'Concluído' })]));
+// Model.afterSync(() => Promise.all([
+//     Model.upsert({ id: 1, nome: 'Construção​' }),
+//     Model.upsert({ id: 2, nome: 'Homologação' }),
+//     Model.upsert({ id: 3, nome: 'Concluído' }),
+// ]));
 
 exports.default = Model;

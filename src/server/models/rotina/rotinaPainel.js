@@ -1,41 +1,41 @@
 import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
-import Painel from './painel';
-import Tag from './tag';
+import Painel from '../painel/painel';
+import Rotina from './rotina';
 
 const Model = sequelize.define(
-    'PainelTag',
+    'RotinaPainel',
     {
-        painel_id: {
+        rotina_id: {
             type: Sequelize.BIGINT,
             primaryKey: true,
         },
 
-        tag_id: {
+        painel_id: {
             type: Sequelize.BIGINT,
             primaryKey: true,
         },
     },
     {
         scopes: {
-            tag: {
+            painel: {
                 include: [
                     {
-                        model: Tag,
-                        as: 'tag',
+                        model: Painel,
+                        as: 'painel',
                     }
                 ]
             }
         },
-        schema: 'paineis',
-        tableName: 'painel_tag',
+        schema: 'rotina',
+        tableName: 'rotina_painel',
     },
 );
 
-// Model.belongsTo(Tag, { as: 'tag', foreignKey: 'tag_id' });
+// Model.belongsTo(Painel, { as: 'painel', foreignKey: 'painel_id' });
 
 Model.beforeSync(() => {
-    Painel.belongsToMany(Tag, { through: Model, as: 'tags', foreignKey: 'painel_id', otherKey: 'tag_id' });
+    Rotina.belongsToMany(Painel, { through: Model, as: 'paineis', foreignKey: 'rotina_id', otherKey: 'painel_id' });
 });
 
 export default Model;

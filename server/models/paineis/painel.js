@@ -139,5 +139,5 @@ Model.belongsTo(_usuario2.default, { as: 'responsavel2', foreignKey: 'responsave
 
 const ModelVersion = new _version2.default(Model);
 ModelVersion.sync();
-
+Model.sync();
 exports.default = Model;

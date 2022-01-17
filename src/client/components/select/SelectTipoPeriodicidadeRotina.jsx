@@ -4,9 +4,9 @@ import Select from './SelectModel';
 const Component = props => <Select {...props} />;
 
 Component.defaultProps = {
-    url: '/paineis/status',
-    id: 'status_id',
-    label: 'Status',
+    url: '/rotina/tipoPeriodicidade',
+    id: 'tipoPeriodicidade_id',
+    label: 'Tipo Data',
     optionValue: 'id',
     optionLabel: 'nome',
     params: { order: ['nome'] },

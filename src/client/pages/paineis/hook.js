@@ -9,7 +9,7 @@ export function getDados(params) {
   async function change() {
     setLoading(true);
     const [response] = await Promise.all([
-      getData('/paineis/painel', { ...params, order: ['id'] }),
+      getData('/rotina/rotina', { ...params, order: ['id'] }),
     ]);
     setData(response);
     setLoading(false);
@@ -27,11 +27,12 @@ export function getDado({ id, ...params }) {
 
   async function change() {
     const [response] = await Promise.all([
-      getData(`/paineis/painel/${id}`, params),
+      getData(`/rotina/rotina/${id}`, params),
     ]);
     setData({
       ...response,
-      tags: response.tags.map(t => t.id),
+      tags: response.tags.map(d => d.id),
+      responsaveis: response.responsaveis.map(d => d.id),
     });
   }
 

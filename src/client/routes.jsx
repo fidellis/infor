@@ -42,10 +42,10 @@ const routes = [
     allow,
     itens: [
       {
-        label: '',
+        label: 'Rotinas',
         subitens: [
-          { path: '/paineis', label: 'Painéis Infor', Component: PainelList, allow },
-          { path: '/painel/:id', label: 'Painel', Component: PainelForm, allow, link: false },
+          { path: '/paineis/rotinas', label: 'Consultar', Component: PainelList, allow },
+          { path: '/paineis/rotina/:id', label: 'Rotina', Component: PainelForm, allow, link: false },
         ],
       },
     ],

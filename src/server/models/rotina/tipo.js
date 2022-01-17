@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 
 const Model = sequelize.define(
-  'TipoPainel',
+  'TipoRotina',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -22,7 +22,7 @@ const Model = sequelize.define(
     },
   },
   {
-    schema: 'paineis',
+    schema: 'rotina',
     tableName: 'tipo',
   },
 );
