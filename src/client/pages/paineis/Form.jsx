@@ -59,7 +59,6 @@ const Component = (props) => {
   return (
     <div>
       <Form
-        width="80%"
         action={salvar}
         actions={[
           {

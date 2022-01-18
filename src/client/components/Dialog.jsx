@@ -36,6 +36,8 @@ Component.propTypes = {
 Component.defaultProps = {
   title: undefined,
   actions: [],
+  fullScreen: false,
+  maxWidth: false,
 };
 
 export default Component;
