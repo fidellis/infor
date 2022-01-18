@@ -282,7 +282,7 @@ const Component = (props) => {
           </Grid>
 
           <Grid item xs={1}>
-            <Button>Incluir</Button>
+            <Button onClick={() => setFormPainel(true)}>Incluir</Button>
           </Grid>
 
 
@@ -295,8 +295,13 @@ const Component = (props) => {
 
           </Grid>
 
-          <Dialog>
-            <FormPainel getResponse={r => setPainel(r)} show={formPainel} />
+          <Dialog open={formPainel} onClose={() => (false)}>
+            <FormPainel
+              onClose={() => setFormPainel(false)}
+              getResponse={r => {
+                setPainel(r);
+                setFormPainel(false);
+              }} show={formPainel} />
           </Dialog>
 
           {/* <Grid item xs={3}>

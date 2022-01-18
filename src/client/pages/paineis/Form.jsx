@@ -78,7 +78,7 @@ const Component = (props) => {
           },
           {
             label: 'Voltar',
-            onClick: voltar,
+            onClick: props.onClose ? props.onClose : voltar,
           },
         ]}>
         <Grid container spacing={2}>
