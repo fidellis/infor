@@ -10,7 +10,6 @@ import Button from '~/components/Button';
 const Component = ({ children, title, actions, ...props }) => (
   <Dialog
     {...props}
-    style={{ width: '100%' }}
   >
     <DialogTitle >{title}</DialogTitle>
     <DialogContent>

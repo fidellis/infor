@@ -295,14 +295,17 @@ const Component = (props) => {
 
           </Grid>
 
-          <Dialog open={formPainel} onClose={() => (false)}>
-            <FormPainel
-              onClose={() => setFormPainel(false)}
-              getResponse={r => {
-                setPainel(r);
-                setFormPainel(false);
-              }} show={formPainel} />
-          </Dialog>
+          <Grid item xs={12}>
+            <Dialog open={formPainel} onClose={() => (false)}>
+              <FormPainel
+                onClose={() => setFormPainel(false)}
+                getResponse={r => {
+                  setPainel(r);
+                  setFormPainel(false);
+                }} show={formPainel} />
+            </Dialog>
+          </Grid>
+
 
           {/* <Grid item xs={3}>
             <TextInput
