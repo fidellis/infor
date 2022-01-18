@@ -29,8 +29,8 @@ module.exports = router => {
 
         try {
             let record = null;
-            record = await PainelInfor.find({ where: { id: { $notIn: [data.id || 0] }, nome: data.nome } });
-            if (record) return res.status(400).send({ msg: `${record.nome} já cadastrado.` });
+            // record = await PainelInfor.find({ where: { id: { $notIn: [data.id || 0] }, nome: data.nome } });
+            // if (record) return res.status(400).send({ msg: `${record.nome} já cadastrado.` });
             record = await PainelInfor.find({ where: { id: { $notIn: [data.id || 0] }, link: data.link } });
             if (record) return res.status(400).send({ msg: `Link já cadastrado no painel ${record.nome} (${record.id})` });
 
