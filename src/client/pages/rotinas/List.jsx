@@ -19,7 +19,7 @@ const columns = {
     search: true,
   },
   'tipo.nome': {
-    label: 'Tipo',
+    label: 'Célula',
     width: 100,
     search: true,
   },
@@ -33,14 +33,15 @@ const columns = {
     type: 'date',
     width: 100,
   },
-  link: {
-    label: 'Link',
+  tags: {
+    label: 'Tags',
+    cellRenderer: ({ row }) => row.tags.map(t => t.nome).join(' - '),
   },
 };
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response] = getDados({ include: ['usuarioInclusao'] });
+  const [response] = getDados({ include: ['usuarioInclusao', 'status', 'tipo', 'tags'] });
 
   useEffect(() => {
     setData(response);
@@ -55,13 +56,13 @@ const Component = (props) => {
         count
         exportCsv
         headerHeight={80}
-        onClick={({ row }) => props.history.push(`/painel/${row.id}`)}
+        onClick={({ row }) => props.history.push(`/rotina/${row.id}`)}
       />
 
       <NavigationButton buttons={[
         {
-          label: 'Adicionar Painel',
-          onClick: () => props.history.push('/painel/0'),
+          label: 'Adicionar Rotina',
+          onClick: () => props.history.push('/rotina/0'),
         },
       ]}
       />

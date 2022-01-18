@@ -4,6 +4,8 @@ import { Redirect } from 'react-router-dom';
 import ControleFerramentasList from '~/pages/controleFerramentas/ControleFerramentasList';
 import ControleFerramentasForm from '~/pages/controleFerramentas/ControleFerramentasForm';
 import ControleFerramentasRelatorio from '~/pages/controleFerramentas/ControleFerramentasRelatorio';
+import RotinaList from '~/pages/rotinas/List';
+import RotinaForm from '~/pages/rotinas/Form';
 import PainelList from '~/pages/paineis/List';
 import PainelForm from '~/pages/paineis/Form';
 
@@ -42,10 +44,12 @@ const routes = [
     allow,
     itens: [
       {
-        label: 'Rotinas',
+        label: '',
         subitens: [
-          { path: '/paineis/rotinas', label: 'Consultar', Component: PainelList, allow },
-          { path: '/paineis/rotina/:id', label: 'Rotina', Component: PainelForm, allow, link: false },
+          { path: '/rotinas', label: 'Rotinas', Component: RotinaList, allow },
+          { path: '/rotina/:id', label: 'Rotina', Component: RotinaForm, allow, link: false },
+          { path: '/paineis', label: 'Painéis', Component: PainelList, allow },
+          { path: '/painel/:id', label: 'Painel', Component: PainelForm, allow, link: false },
         ],
       },
     ],

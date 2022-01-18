@@ -5,15 +5,8 @@ import { message } from '~/store/app';
 import moment from 'moment';
 import Form from '~/components/form/Form';
 import { TextInput, NumberInput, DateInput, Select, TextArea, Switch } from '~/components/form/form/inputs';
-import SelectTipoProvidencia from '~/components/select/SelectTipoProvidencia';
-import SelectUsuario from '~/components/select/SelectUsuario';
-import SelectTipoRotina from '~/components/select/SelectTipoRotina';
+import SelectTipoPainel from '~/components/select/SelectTipoPainel';
 import SelectStatusRotina from '~/components/select/SelectStatusRotina';
-import SelectFerramentaRotina from '~/components/select/SelectFerramentaRotina';
-import SelectApresentacaoRotina from '~/components/select/SelectApresentacaoRotina';
-import SelectTagRotina from '~/components/select/SelectTagRotina';
-import SelectPeriodicidadeRotina from '~/components/select/SelectPeriodicidadeRotina';
-import SelectTipoPeriodicidadeRotina from '~/components/select/SelectTipoPeriodicidadeRotina';
 import { Grid } from '@material-ui/core';
 import { save, destroy } from '~/lib/api';
 import qs from 'qs';
@@ -22,13 +15,12 @@ import { getDado } from './hook';
 const Component = (props) => {
 
   const id = Number(props.match.params.id);
-  const response = getDado({ id, include: ['usuarioInclusao', 'tags'] });
+  const response = getDado({ id, include: ['usuarioInclusao'] });
   const [data, setData] = useState(response);
 
   useEffect(() => {
     setData(response);
   }, [response]);
-
 
   function onChange({ id, value }) {
     console.log(id, value)
@@ -36,7 +28,7 @@ const Component = (props) => {
   }
 
   async function salvar() {
-    const response = await save('/rotina/rotina', data);
+    const response = await save('/painel', data);
     if (response) {
       props.message('Salvo com sucesso');
       atualizar(response.id);
@@ -45,7 +37,7 @@ const Component = (props) => {
 
   async function excluir(id) {
     if (confirm('Excluir?')) {
-      const response = await destroy(`/rotina/rotina/${id}`);
+      const response = await destroy(`/painel/painel/${id}`);
       if (response) {
         props.message('Excluído com sucesso');
         voltar();
@@ -54,11 +46,11 @@ const Component = (props) => {
   }
 
   function atualizar(id) {
-    props.history.push(`/paineis/rotina/${id}`);
+    props.history.push(`/painel/${id}`);
   }
 
   function voltar() {
-    props.history.push(`/paineis/rotinas`);
+    props.history.push(`/paineis`);
   }
 
   return (
@@ -88,7 +80,7 @@ const Component = (props) => {
         ]}>
         <Grid container spacing={2}>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextInput
               id="nome"
               label="Título"
@@ -100,86 +92,21 @@ const Component = (props) => {
           </Grid>
 
           <Grid item xs={2}>
-            <DateInput
-              id="dataCriacao"
-              label="Data Criação"
-              value={data.dataCriacao}
-              onChange={onChange}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={2}>
-            <SelectTipoRotina
+            <SelectTipoPainel
               value={data.tipo_id}
               onChange={onChange}
               required
             />
           </Grid>
 
-          <Grid item xs={4}>
-            <SelectTagRotina
-              value={data.tags}
-              onChange={onChange}
-              required
-              isMulti
-            />
-          </Grid>
-
-          <Grid item xs={4}>
-            <SelectUsuario
-              id="responsaveis"
-              label="Responsáveis"
-              value={data.responsaveis}
-              onChange={onChange}
-              isMulti
-              params={{ uor_id: 283521, order: ['nome'] }}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={3}>
-            <SelectFerramentaRotina
-              value={data.ferramentas}
-              onChange={onChange}
-              required
-              isMulti
-            />
-          </Grid>
-
           <Grid item xs={2}>
-            <SelectApresentacaoRotina
-              value={data.apresentacao_id}
-              onChange={onChange}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={2}>
-            <SelectPeriodicidadeRotina
-              value={data.periodicidade_id}
-              onChange={onChange}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={2}>
-            <SelectTipoPeriodicidadeRotina
-              value={data.tiposPeriodicidade_id}
+            <DateInput
+              id="dataCriacao"
+              label="Data Criação"
+              value={data.dataCriacao}
               onChange={onChange}
             />
           </Grid>
-
-          <Grid item xs={1}>
-            <NumberInput
-              id="dia_mes"
-              label="Dia"
-              value={data.dia_mes}
-              onChange={onChange}
-              precision={0}
-            />
-          </Grid>
-
 
           <Grid item xs={2}>
             <SelectStatusRotina
@@ -190,22 +117,10 @@ const Component = (props) => {
 
           <Grid item xs={12}>
             <TextInput
-              id="linkPop"
-              label="Link do POP"
-              value={data.linkPop}
+              id="link"
+              label="Link"
+              value={data.link}
               onChange={onChange}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextArea
-              id="descricao"
-              label="Descrição"
-              value={data.descricao}
-              onChange={onChange}
-              maxLength={100}
-              rows={4}
               required
             />
           </Grid>
@@ -227,15 +142,6 @@ const Component = (props) => {
               value={data.usuarioInclusao.nome}
               disabled
               hide={!id}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Switch
-              id="automatica"
-              label="Automática"
-              checked={data.automatica}
-              onChange={onChange}
             />
           </Grid>
 

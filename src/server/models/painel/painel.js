@@ -33,6 +33,7 @@ const Model = sequelize.define(
         link: {
             type: Sequelize.TEXT,
             allowNull: true,
+            unique: true,
         },
 
         status_id: {
@@ -74,6 +75,18 @@ const Model = sequelize.define(
         },
     },
     {
+        defaultScope: {
+            include: [
+                {
+                    model: Tipo,
+                    as: 'tipo',
+                },
+                {
+                    model: Status,
+                    as: 'status',
+                }
+            ]
+        },
         schema: 'painel',
         tableName: 'painel',
     },
