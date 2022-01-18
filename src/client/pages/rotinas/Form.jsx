@@ -268,14 +268,6 @@ const Component = (props) => {
             />
           </Grid>
 
-          {/* <Grid item xs={12}>
-            <SelectPainel
-              label="Adicionar Painel"
-              value={data.paineis.map(p => p.id)}
-              onChange={onChangePainel}
-            />
-          </Grid> */}
-
           <Grid item xs={12}>
             <BasicTable title={
               <SelectPainel
