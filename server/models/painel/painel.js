@@ -39,8 +39,8 @@ const Model = _sequelize2.default.define('PainelInfor', {
 
     nome: {
         type: _sequelize4.default.STRING(255),
-        allowNull: false,
-        unique: true
+        allowNull: false
+        // unique: true,
     },
 
     descricao: {
