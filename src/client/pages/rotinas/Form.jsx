@@ -6,7 +6,7 @@ import moment from 'moment';
 import Form from '~/components/form/Form';
 import BasicTable from '~/components/data-table/BasicTable';
 import { TextInput, NumberInput, DateInput, Select, TextArea, Switch } from '~/components/form/form/inputs';
-import SelectTipoProvidencia from '~/components/select/SelectTipoProvidencia';
+import Dialog from '~/components/Dialog';
 import SelectPainel from '~/components/select/SelectPainel';
 import SelectUsuario from '~/components/select/SelectUsuario';
 import SelectTipoRotina from '~/components/select/SelectTipoRotina';
@@ -18,16 +18,20 @@ import SelectPeriodicidadeRotina from '~/components/select/SelectPeriodicidadeRo
 import SelectTipoPeriodicidadeRotina from '~/components/select/SelectTipoPeriodicidadeRotina';
 import SelectDiaSemana from '~/components/select/SelectDiaSemana';
 import Icon from '~/components/icons/Icon';
+import Button from '~/components/Button';
 import { Grid } from '@material-ui/core';
 import { save, destroy } from '~/lib/api';
 import qs from 'qs';
 import { getDado } from './hook';
+import FormPainel from '../paineis/Form';
 
 const Component = (props) => {
 
   const id = Number(props.match.params.id);
   const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas'] });
   const [data, setData] = useState(response);
+  const [painel, setPainel] = useState({});
+  const [formPainel, setFormPainel] = useState(false);
 
   useEffect(() => {
     setData(response);
@@ -129,7 +133,7 @@ const Component = (props) => {
             onClick: voltar,
           },
         ]}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems='flex-end'>
 
           <Grid item xs={12}>
             <TextInput
@@ -268,17 +272,32 @@ const Component = (props) => {
             />
           </Grid>
 
+          <Grid item xs={11}>
+            <SelectPainel
+              label="Vincular Painel"
+              values={data.paineis.map(p => p.id)}
+              onChange={onChangePainel}
+              painel={painel}
+            />
+          </Grid>
+
+          <Grid item xs={1}>
+            <Button>Incluir</Button>
+          </Grid>
+
+
           <Grid item xs={12}>
-            <BasicTable title={
-              <SelectPainel
-                label="Vincular Painel"
-                values={data.paineis.map(p => p.id)}
-                onChange={onChangePainel}
-              />}
+            <BasicTable
+              title="Painéis"
               rows={data.paineis}
               columns={Object.keys(columns.painel).map(key => ({ ...columns.painel[key], dataKey: key }))}
               striped />
+
           </Grid>
+
+          <Dialog>
+            <FormPainel getResponse={r => setPainel(r)} show={formPainel} />
+          </Dialog>
 
           {/* <Grid item xs={3}>
             <TextInput

@@ -13,8 +13,8 @@ import qs from 'qs';
 import { getDado } from './hook';
 
 const Component = (props) => {
+  const id = props.match ? Number(props.match.params.id) : 0;
 
-  const id = Number(props.match.params.id);
   const response = getDado({ id, include: ['usuarioInclusao'] });
   const [data, setData] = useState(response);
 
@@ -23,7 +23,6 @@ const Component = (props) => {
   }, [response]);
 
   function onChange({ id, value }) {
-    console.log(id, value)
     setData({ ...data, [id]: value });
   }
 
@@ -31,7 +30,11 @@ const Component = (props) => {
     const response = await save('/painel', data);
     if (response) {
       props.message('Salvo com sucesso');
-      atualizar(response.id);
+      if (props.getResponse) {
+        props.getResponse(response)
+      } else {
+        atualizar(response.id);
+      }
     }
   }
 
