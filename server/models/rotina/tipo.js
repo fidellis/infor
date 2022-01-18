@@ -14,7 +14,7 @@ var _sequelize4 = _interopRequireDefault(_sequelize3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Model = _sequelize2.default.define('TipoPainel', {
+const Model = _sequelize2.default.define('TipoRotina', {
   id: {
     type: _sequelize4.default.BIGINT,
     primaryKey: true,
@@ -32,7 +32,7 @@ const Model = _sequelize2.default.define('TipoPainel', {
     defaultValue: true
   }
 }, {
-  schema: 'paineis',
+  schema: 'rotina',
   tableName: 'tipo'
 });
 

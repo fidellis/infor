@@ -14,7 +14,7 @@ var _sequelize4 = _interopRequireDefault(_sequelize3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Model = _sequelize2.default.define('StatusPainel', {
+const Model = _sequelize2.default.define('TipoPainel', {
     id: {
         type: _sequelize4.default.BIGINT,
         primaryKey: true,
@@ -32,14 +32,10 @@ const Model = _sequelize2.default.define('StatusPainel', {
         defaultValue: true
     }
 }, {
-    schema: 'paineis',
-    tableName: 'status'
+    schema: 'painel',
+    tableName: 'tipo'
 });
 
-// Model.afterSync(() => Promise.all([
-//     Model.upsert({ id: 1, nome: 'Construção​' }),
-//     Model.upsert({ id: 2, nome: 'Homologação' }),
-//     Model.upsert({ id: 3, nome: 'Concluído' }),
-// ]));
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Web' }), Model.upsert({ id: 2, nome: 'Spotfire' }), Model.upsert({ id: 3, nome: 'PowerBI' }), Model.upsert({ id: 4, nome: 'Excel' }), Model.upsert({ id: 5, nome: 'Power Point' })]));
 
 exports.default = Model;
