@@ -35,6 +35,7 @@ const columns = {
   },
   link: {
     label: 'Link',
+    search: true,
   },
 };
 
