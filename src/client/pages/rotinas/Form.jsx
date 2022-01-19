@@ -298,18 +298,6 @@ const Component = (props) => {
 
           </Grid>
 
-          <Grid item xs={12}>
-            <Dialog open={formPainel} onClose={() => (false)}>
-              <FormPainel
-                onClose={() => setFormPainel(false)}
-                getResponse={r => {
-                  setPainel(r);
-                  setFormPainel(false);
-                }} show={formPainel} />
-            </Dialog>
-          </Grid>
-
-
           {/* <Grid item xs={3}>
             <TextInput
               id="dataHoraInclusao"
@@ -332,6 +320,16 @@ const Component = (props) => {
 
         </Grid>
       </Form>
+      <Dialog open={formPainel} onClose={() => (false)}>
+        <div style={{ width: 1200 }}>
+          <FormPainel
+            onClose={() => setFormPainel(false)}
+            getResponse={r => {
+              setPainel(r);
+              setFormPainel(false);
+            }} show={formPainel} />
+        </div>
+      </Dialog>
     </div>
   );
 }
