@@ -149,7 +149,7 @@ const Model = _sequelize2.default.define('RotinaInfor', {
 
 Model.belongsTo(_tipo2.default, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(_status2.default, { as: 'status', foreignKey: 'status_id' });
-Model.belongsTo(_periodicidade2.default, { as: 'periodicidades', foreignKey: 'periodicidade_id' });
+Model.belongsTo(_periodicidade2.default, { as: 'periodicidade', foreignKey: 'periodicidade_id' });
 Model.belongsTo(_tipoPeriodicidade2.default, { as: 'tiposPeriodicidade', foreignKey: 'tipoPeriodicidade_id' });
 // Model.belongsTo(RotinaPainel, { as: 'rotinaPainel', foreignKey: 'rotina_id' });
 // Model.belongsTo(RotinaResponsavel, { as: 'rotinaResponsavel', foreignKey: 'rotina_id' });
