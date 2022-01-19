@@ -58,7 +58,7 @@ const Model = sequelize.define(
 
         tipoPeriodicidade_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
         dia_mes: {

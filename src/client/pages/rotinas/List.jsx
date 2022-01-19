@@ -9,27 +9,23 @@ import NavigationButton from '~/components/NavigationButton';
 import { getDados } from './hook';
 
 const columns = {
-  // id: {
-  //   label: '#',
+  // 'tipo.nome': {
+  //   label: 'Célula',
+  //   width: 100,
   //   search: true,
-  //   width: 50,
   // },
-  'tipo.nome': {
-    label: 'Célula',
-    width: 100,
-    search: true,
-  },
-  'periodicidade.nome': {
-    label: 'Periodicidade',
-    width: 110,
-    search: true,
-  },
-  nome: {
-    label: 'Nome',
-    search: true,
-  },
+  // 'periodicidade.nome': {
+  //   label: 'Periodicidade',
+  //   width: 110,
+  //   search: true,
+  // },
+  // nome: {
+  //   label: 'Nome',
+  //   search: true,
+  // },
   responsaveis: {
     label: 'Responsáveis',
+    search: true,
     cellRenderer: ({ row }) => row.responsaveis.map(t => t.nome).join(' - '),
   },
 };
