@@ -93,7 +93,7 @@ const Model = _sequelize2.default.define('RotinaInfor', {
 
     tipoPeriodicidade_id: {
         type: _sequelize4.default.INTEGER,
-        allowNull: false
+        allowNull: true
     },
 
     dia_mes: {
