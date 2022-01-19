@@ -9,39 +9,34 @@ import NavigationButton from '~/components/NavigationButton';
 import { getDados } from './hook';
 
 const columns = {
-  id: {
-    label: '#',
-    search: true,
-    width: 50,
-  },
-  nome: {
-    label: 'Nome',
-    search: true,
-  },
+  // id: {
+  //   label: '#',
+  //   search: true,
+  //   width: 50,
+  // },
   'tipo.nome': {
     label: 'Célula',
     width: 100,
     search: true,
   },
-  'status.nome': {
-    label: 'Situação',
-    width: 100,
+  'periodicidade.nome': {
+    label: 'Periodicidade',
+    width: 110,
     search: true,
   },
-  dataCriacao: {
-    label: 'Data Criação',
-    type: 'date',
-    width: 100,
+  nome: {
+    label: 'Nome',
+    search: true,
   },
-  tags: {
-    label: 'Tags',
-    cellRenderer: ({ row }) => row.tags.map(t => t.nome).join(' - '),
+  responsaveis: {
+    label: 'Responsáveis',
+    cellRenderer: ({ row }) => row.responsaveis.map(t => t.nome).join(' - '),
   },
 };
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response] = getDados({ include: ['usuarioInclusao', 'status', 'tipo', 'tags'] });
+  const [response] = getDados({ include: ['usuarioInclusao', 'status', 'tipo', 'periodicidade', 'responsaveis'] });
 
   useEffect(() => {
     setData(response);

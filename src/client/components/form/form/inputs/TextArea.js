@@ -2,10 +2,10 @@ import React from 'react';
 import ComponentContainer from './ComponentContainer';
 
 const TextArea = (props) => {
-  const { label, maxLength, value, onChange, onBlur, style, ...inputProps } = props;
+  const { label, maxLength, value, onChange, onBlur, style, info, ...inputProps } = props;
   // const info = maxLength ? `${value.length} / ${maxLength}` : null;
   return (
-    <ComponentContainer label={label}>
+    <ComponentContainer label={label} info={info}>
       <textarea
         {...inputProps}
         onChange={e => onChange({ e, id: e.target.id, value: e.target.value })}

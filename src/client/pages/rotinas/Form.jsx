@@ -32,6 +32,7 @@ const Component = (props) => {
   const [data, setData] = useState(response);
   const [painel, setPainel] = useState({});
   const [formPainel, setFormPainel] = useState(false);
+  const descricao = data.descricao || '';
 
   useEffect(() => {
     setData(response);
@@ -260,6 +261,8 @@ const Component = (props) => {
               onChange={onChange}
               maxLength={100}
               rows={4}
+              error={descricao.length < 100 ? 'Mínimo de 100 caracteres' : null}
+              info={`${descricao.length} caracteres`}
             />
           </Grid>
 
