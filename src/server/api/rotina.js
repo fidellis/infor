@@ -23,18 +23,18 @@ module.exports = (router) => {
 
             const response = await RotinaInfor.build(data, { isNewRecord }).save();
 
-            if (data.paineis.length) {
-                await RotinaPainel.destroy({ where: { rotina_id: response.id } });
-                Promise.all(data.paineis.map(painel_id => RotinaPainel.build({ rotina_id: response.id, painel_id }).save()));
-            }
+            //if (data.paineis.length) {
+            await RotinaPainel.destroy({ where: { rotina_id: response.id } });
+            Promise.all(data.paineis.map(painel_id => RotinaPainel.build({ rotina_id: response.id, painel_id }).save()));
+            //}
             if (data.tags.length) {
                 await RotinaTag.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.tags.map(tag_id => RotinaTag.build({ rotina_id: response.id, tag_id }).save()));
             }
-            if (data.responsaveis.length) {
-                await RotinaResponsavel.destroy({ where: { rotina_id: response.id } });
-                Promise.all(data.responsaveis.map(responsavel => RotinaResponsavel.build({ rotina_id: response.id, ...responsavel }).save()));
-            }
+            //if (data.responsaveis.length) {
+            await RotinaResponsavel.destroy({ where: { rotina_id: response.id } });
+            Promise.all(data.responsaveis.map(responsavel => RotinaResponsavel.build({ rotina_id: response.id, ...responsavel }).save()));
+            //}
             if (data.ferramentas.length) {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.ferramentas.map(ferramenta_id => RotinaFerramenta.build({ rotina_id: response.id, ferramenta_id }).save()));
