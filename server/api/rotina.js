@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _sequelize = require('common/sequelize');
 
 var _sequelize2 = _interopRequireDefault(_sequelize);
@@ -43,7 +45,7 @@ module.exports = router => {
             }
             if (data.responsaveis.length) {
                 await RotinaResponsavel.destroy({ where: { rotina_id: response.id } });
-                Promise.all(data.responsaveis.map(responsavel_id => RotinaResponsavel.build({ rotina_id: response.id, responsavel_id }).save()));
+                Promise.all(data.responsaveis.map(responsavel => RotinaResponsavel.build(_extends({ rotina_id: response.id }, responsavel)).save()));
             }
             if (data.ferramentas.length) {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });
