@@ -400,7 +400,7 @@ const Component = (props) => {
             onClose={() => setOpenFormResponsavel(false)}
             values={data.responsaveis.map(d => d.id)}
             onSubmit={r => {
-              // onChangeResponsavel(r);
+              onChangeResponsavel(r);
               setOpenFormResponsavel(false);
             }} />
         </div>

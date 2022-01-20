@@ -17,7 +17,7 @@ const Component = (props) => {
         setData({ ...data, ...option });
     }
 
-    async function onSubmit() {
+    function onSubmit() {
         props.onSubmit(data)
     }
 
@@ -27,8 +27,8 @@ const Component = (props) => {
                 action={onSubmit}
                 actions={[
                     {
-                        type: 'submit',
                         label: 'OK',
+                        onClick: () => props.onSubmit(data),
                     },
                     {
                         label: 'Fechar',
