@@ -27,9 +27,8 @@ const Model = sequelize.define(
     },
 );
 
-Model.afterSync(() => Promise.all([
-    Model.upsert({ id: 1, nome: 'Tag 1' }),
-    Model.upsert({ id: 2, nome: 'Tag 2' }),
-]));
+// Model.afterSync(() => Promise.all([
+//     Model.upsert({ id: 1, nome: 'Tag 1' }),    
+// ]));
 
 export default Model;
