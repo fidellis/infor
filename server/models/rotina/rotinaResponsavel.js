@@ -20,6 +20,10 @@ var _rotina = require('./rotina');
 
 var _rotina2 = _interopRequireDefault(_rotina);
 
+var _tipoResponsavel = require('./tipoResponsavel');
+
+var _tipoResponsavel2 = _interopRequireDefault(_tipoResponsavel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const Model = _sequelize2.default.define('RotinaResponsavel', {
@@ -31,6 +35,12 @@ const Model = _sequelize2.default.define('RotinaResponsavel', {
     responsavel_id: {
         type: _sequelize4.default.BIGINT,
         primaryKey: true
+    },
+
+    tipo_id: {
+        type: _sequelize4.default.BIGINT,
+        primaryKey: true,
+        defaultValue: 1
     }
 }, {
     scopes: {
@@ -45,7 +55,8 @@ const Model = _sequelize2.default.define('RotinaResponsavel', {
     tableName: 'rotina_responsavel'
 });
 
-// Model.belongsTo(Responsavel, { as: 'responsavel', foreignKey: 'responsavel_id' });
+Model.belongsTo(_usuario2.default, { as: 'responsavel', foreignKey: 'responsavel_id' });
+Model.belongsTo(_tipoResponsavel2.default, { as: 'tipo', foreignKey: 'tipo_id' });
 
 Model.beforeSync(() => {
     _rotina2.default.belongsToMany(_usuario2.default, { through: Model, as: 'responsaveis', foreignKey: 'rotina_id', otherKey: 'responsavel_id' });
