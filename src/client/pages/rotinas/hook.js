@@ -33,7 +33,7 @@ export function getDado({ id, ...params }) {
     setData({
       ...response,
       // paineis: response.paineis.map(d => d.id),
-      // responsaveis: response.responsaveis.map(d => d.id),
+      responsaveis: response.responsaveis.map(d => ({ ...d, tipo_id: d.RotinaResponsavel.tipo_id })),
       tags: response.tags.map(d => d.id),
       ferramentas: response.ferramentas.map(d => d.id),
     });
@@ -42,7 +42,7 @@ export function getDado({ id, ...params }) {
   useEffect(() => {
     if (Number(id)) change();
   }, []);
-
+  console.log('dada', data)
   return data;
 }
 

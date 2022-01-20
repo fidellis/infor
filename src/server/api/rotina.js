@@ -33,7 +33,7 @@ module.exports = (router) => {
             }
             if (data.responsaveis.length) {
                 await RotinaResponsavel.destroy({ where: { rotina_id: response.id } });
-                Promise.all(data.responsaveis.map(responsavel_id => RotinaResponsavel.build({ rotina_id: response.id, responsavel_id }).save()));
+                Promise.all(data.responsaveis.map(responsavel => RotinaResponsavel.build({ rotina_id: response.id, ...responsavel }).save()));
             }
             if (data.ferramentas.length) {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });

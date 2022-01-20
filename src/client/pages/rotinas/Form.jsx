@@ -106,7 +106,7 @@ const Component = (props) => {
     const response = await save('/rotina', {
       ...data,
       paineis: data.paineis.map(d => d.id),
-      responsaveis: data.responsaveis.map(d => d.id),
+      responsaveis: data.responsaveis.map(d => ({ responsavel_id: d.id, tipo_id: d.tipo_id })),
     });
     if (response) {
       props.message('Salvo com sucesso');
