@@ -16,6 +16,7 @@ import SelectApresentacaoRotina from '~/components/select/SelectApresentacaoRoti
 import SelectTagRotina from '~/components/select/SelectTagRotina';
 import SelectPeriodicidadeRotina from '~/components/select/SelectPeriodicidadeRotina';
 import SelectTipoPeriodicidadeRotina from '~/components/select/SelectTipoPeriodicidadeRotina';
+import SelectTipoResponsavel from '~/components/select/SelectTipoResponsavel';
 import SelectDiaSemana from '~/components/select/SelectDiaSemana';
 import Icon from '~/components/icons/Icon';
 import Button from '~/components/Button';
@@ -75,7 +76,13 @@ const Component = (props) => {
         label: 'Funcionário'
       },
       tipo_id: {
-        label: 'Tipo'
+        label: 'Tipo',
+        cellRenderer: ({ row }) => <SelectTipoResponsavel
+          id="tipo_id"
+          value={row.tipo_id}
+          label=""
+        // onChange={option => onChange({ tipo_id: option.value })}        
+        />
       },
       delete: {
         cellRenderer: ({ row }) => <Icon onClick={() => onCDeleteResponsavel(row)}>delete</Icon>,
