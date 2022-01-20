@@ -24,7 +24,7 @@ const Model = sequelize.define(
         },
     },
     {
-        scopes: {
+        defaultScope: {
             responsavel: {
                 include: [
                     {

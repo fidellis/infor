@@ -5,6 +5,7 @@ import { message } from '~/store/app';
 import moment from 'moment';
 import Form from '~/components/form/Form';
 import SelectUsuario from '~/components/select/SelectUsuario';
+import SelectTipoResponsavel from '~/components/select/SelectTipoResponsavel';
 import { Grid } from '@material-ui/core';
 import { getDado } from './hook';
 
@@ -34,8 +35,8 @@ const Component = (props) => {
                         onClick: props.onClose,
                     },
                 ]}>
-                <Grid container spacing={2}>
-                    <Grid xs={12}>
+                <Grid container spacing={0}>
+                    <Grid xs={10}>
                         <SelectUsuario
                             id="responsavel_id"
                             label="Responsável"
@@ -43,6 +44,15 @@ const Component = (props) => {
                             onChange={option => onChange({ ...option, id: option.chave })}
                             params={{ uor_id: 283521, order: ['nome'] }}
                             isOptionDisabled={(option) => props.values.includes(option.id)}
+                            required
+                        />
+                    </Grid>
+                    <Grid xs={2}>
+                        <SelectTipoResponsavel
+                            id="tipo_id"
+                            label="Tipo"
+                            value={data.tipo_id}
+                            onChange={option => onChange({ tipo_id: option.value })}
                             required
                         />
                     </Grid>

@@ -380,7 +380,7 @@ const Component = (props) => {
         </div>
       </Dialog>
       <Dialog open={openFormResponsavel} onClose={() => (false)}>
-        <div style={{ width: 1200 }}>
+        <div style={{ width: 1200, height: 400 }}>
           <FormResponsavel
             onClose={() => setOpenFormResponsavel(false)}
             values={data.responsaveis.map(d => d.id)}
