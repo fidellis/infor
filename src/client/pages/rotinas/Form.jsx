@@ -81,7 +81,7 @@ const Component = (props) => {
           id="tipo_id"
           value={row.tipo_id}
           label=""
-        // onChange={option => onChange({ tipo_id: option.value })}        
+          onChange={option => onChangeTipoResponsavel(row, option)}
         />
       },
       delete: {
@@ -104,8 +104,16 @@ const Component = (props) => {
 
   async function onChangeResponsavel(option) {
     const rotina = JSON.parse(JSON.stringify(data));
-
     rotina.responsaveis.push({ ...option, rotina_id: id, responsavel_id: option.value });
+    setData(rotina)
+  }
+
+  async function onChangeTipoResponsavel(row, option) {
+    const rotina = JSON.parse(JSON.stringify(data));
+    const responsaveis = rotina.responsaveis;
+    const responsavel = responsaveis.find(r => r.id === row.id);
+    responsavel.tipo_id = option.value;
+    console.log('rotina', rotina)
     setData(rotina)
   }
 

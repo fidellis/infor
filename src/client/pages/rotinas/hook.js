@@ -42,7 +42,7 @@ export function getDado({ id, ...params }) {
   useEffect(() => {
     if (Number(id)) change();
   }, []);
-  console.log('dada', data)
+
   return data;
 }
 
