@@ -39,10 +39,32 @@ const columns = {
     label: 'Nome',
     search: true,
   },
-  responsaveis: {
-    label: 'Responsáveis',
+  responsave1: {
+    label: 'Responsável',
+    width: 200,
     search: true,
-    cellRenderer: ({ row }) => row.responsaveis.map(t => t.nome).join(' - '),
+    cellRenderer: ({ row }) => {
+      const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 1 : null);
+      return responsavel ? responsavel.nome : null;
+    },
+  },
+  responsave2: {
+    label: 'Responsável Lateral 1',
+    width: 200,
+    search: true,
+    cellRenderer: ({ row }) => {
+      const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 2 : null);
+      return responsavel ? responsavel.nome : null;
+    },
+  },
+  responsave3: {
+    label: 'Responsável Lateral 2',
+    width: 200,
+    search: true,
+    cellRenderer: ({ row }) => {
+      const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 3 : null);
+      return responsavel ? responsavel.nome : null;
+    },
   },
 };
 

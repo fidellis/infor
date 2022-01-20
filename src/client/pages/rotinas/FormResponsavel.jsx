@@ -28,7 +28,7 @@ const Component = (props) => {
                 actions={[
                     {
                         type: 'submit',
-                        label: 'Salvar',
+                        label: 'OK',
                     },
                     {
                         label: 'Fechar',
