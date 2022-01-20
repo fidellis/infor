@@ -43,7 +43,7 @@ const Model = _sequelize2.default.define('RotinaResponsavel', {
         defaultValue: 1
     }
 }, {
-    scopes: {
+    defaultScope: {
         responsavel: {
             include: [{
                 model: _usuario2.default,
