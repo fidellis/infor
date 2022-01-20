@@ -33,8 +33,8 @@ export function getDado({ id, ...params }) {
     setData({
       ...response,
       // paineis: response.paineis.map(d => d.id),
+      // responsaveis: response.responsaveis.map(d => d.id),
       tags: response.tags.map(d => d.id),
-      responsaveis: response.responsaveis.map(d => d.id),
       ferramentas: response.ferramentas.map(d => d.id),
     });
   }

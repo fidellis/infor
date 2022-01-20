@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import moment from 'moment';
 import Form from '~/components/form/Form';
+import Section from '~/components/form/Section';
 import BasicTable from '~/components/data-table/BasicTable';
 import { TextInput, NumberInput, DateInput, Select, TextArea, Switch } from '~/components/form/form/inputs';
 import Dialog from '~/components/Dialog';
 import SelectPainel from '~/components/select/SelectPainel';
-import SelectUsuario from '~/components/select/SelectUsuario';
 import SelectTipoRotina from '~/components/select/SelectTipoRotina';
 import SelectStatusRotina from '~/components/select/SelectStatusRotina';
 import SelectFerramentaRotina from '~/components/select/SelectFerramentaRotina';
@@ -24,6 +24,7 @@ import { save, destroy } from '~/lib/api';
 import qs from 'qs';
 import { getDado } from './hook';
 import FormPainel from '../paineis/Form';
+import FormResponsavel from './FormResponsavel';
 
 const Component = (props) => {
 
@@ -31,7 +32,8 @@ const Component = (props) => {
   const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas'] });
   const [data, setData] = useState(response);
   const [painel, setPainel] = useState({});
-  const [formPainel, setFormPainel] = useState(false);
+  const [openFormPainel, setOpenFormPainel] = useState(false);
+  const [openFormResponsavel, setOpenFormResponsavel] = useState(false);
   const descricao = data.descricao || '';
 
   useEffect(() => {
@@ -61,7 +63,23 @@ const Component = (props) => {
         cellRenderer: ({ row }) => <a href={row.link} target="_blank">{row.link}</a>
       },
       delete: {
-        cellRenderer: ({ row }) => <Icon onClick={() => onCDeletePainel(row)}>delete</Icon>
+        cellRenderer: ({ row }) => <Icon onClick={() => onCDeletePainel(row)}>delete</Icon>,
+        style: { width: 5 }
+      },
+    },
+    responsavel: {
+      id: {
+        label: 'Matrícula'
+      },
+      nome: {
+        label: 'Funcionário'
+      },
+      tipo_id: {
+        label: 'Tipo'
+      },
+      delete: {
+        cellRenderer: ({ row }) => <Icon onClick={() => onCDeleteResponsavel(row)}>delete</Icon>,
+        style: { width: 5 }
       },
     }
   }
@@ -77,8 +95,19 @@ const Component = (props) => {
     // await save('/rotina/rotinaPainel', { rotina_id: id, painel_id: option.value });
   }
 
+  async function onChangeResponsavel(option) {
+    const rotina = JSON.parse(JSON.stringify(data));
+
+    rotina.responsaveis.push({ ...option, rotina_id: id, responsavel_id: option.value });
+    setData(rotina)
+  }
+
   async function salvar() {
-    const response = await save('/rotina', { ...data, paineis: data.paineis.map(p => p.id) });
+    const response = await save('/rotina', {
+      ...data,
+      paineis: data.paineis.map(d => d.id),
+      responsaveis: data.responsaveis.map(d => d.id),
+    });
     if (response) {
       props.message('Salvo com sucesso');
       atualizar(response.id);
@@ -100,6 +129,12 @@ const Component = (props) => {
     rotina.paineis = rotina.paineis.filter(p => p.id !== row.id);
     setData(rotina)
     // await save('/rotina/rotinaPainel', { rotina_id: id, painel_id: option.value });
+  }
+
+  async function onCDeleteResponsavel(row) {
+    const rotina = JSON.parse(JSON.stringify(data));
+    rotina.responsaveis = rotina.responsaveis.filter(p => p.id !== row.id);
+    setData(rotina)
   }
 
   function atualizar(id) {
@@ -170,18 +205,6 @@ const Component = (props) => {
               onChange={onChange}
               required
               isMulti
-            />
-          </Grid>
-
-          <Grid item xs={4}>
-            <SelectUsuario
-              id="responsaveis"
-              label="Responsáveis"
-              value={data.responsaveis}
-              onChange={onChange}
-              isMulti
-              params={{ uor_id: 283521, order: ['nome'] }}
-              required
             />
           </Grid>
 
@@ -275,28 +298,54 @@ const Component = (props) => {
             />
           </Grid>
 
-          <Grid item xs={11}>
-            <SelectPainel
-              label="Vincular Painel"
-              values={data.paineis.map(p => p.id)}
-              onChange={onChangePainel}
-              painel={painel}
-            />
-          </Grid>
+          <Grid item xs={6}>
+            <Section title="Responsáveis">
+              <Grid container spacing={0} alignItems='flex-end' justifyContent='flex-end'>
 
-          <Grid item xs={1}>
-            <Button onClick={() => setFormPainel(true)}>Incluir</Button>
-          </Grid>
+                <Grid item xs={1} >
+                  <Button variant="outlined" onClick={() => setOpenFormResponsavel(true)}>Incluir</Button>
+                </Grid>
 
+                <Grid item xs={12}>
+                  <BasicTable
+                    rows={data.responsaveis}
+                    columns={Object.keys(columns.responsavel).map(key => ({ ...columns.responsavel[key], dataKey: key }))}
+                    striped />
+
+                </Grid>
+              </Grid>
+            </Section>
+          </Grid>
 
           <Grid item xs={12}>
-            <BasicTable
-              title="Painéis"
-              rows={data.paineis}
-              columns={Object.keys(columns.painel).map(key => ({ ...columns.painel[key], dataKey: key }))}
-              striped />
+            <Section title="Painéis">
+              <Grid container spacing={1} alignItems='flex-end'>
+                <Grid item xs={11}>
+                  <SelectPainel
+                    label="Vincular Painel"
+                    values={data.paineis.map(p => p.id)}
+                    onChange={onChangePainel}
+                    painel={painel}
+                  />
+                </Grid>
 
+                <Grid item xs={1}>
+                  <Button variant="outlined" onClick={() => setOpenFormPainel(true)}>Novo</Button>
+                </Grid>
+
+
+                <Grid item xs={12}>
+                  <BasicTable
+                    rows={data.paineis}
+                    columns={Object.keys(columns.painel).map(key => ({ ...columns.painel[key], dataKey: key }))}
+                    striped />
+
+                </Grid>
+              </Grid>
+            </Section>
           </Grid>
+
+
 
           {/* <Grid item xs={3}>
             <TextInput
@@ -320,14 +369,25 @@ const Component = (props) => {
 
         </Grid>
       </Form>
-      <Dialog open={formPainel} onClose={() => (false)}>
+      <Dialog open={openFormPainel} onClose={() => (false)}>
         <div style={{ width: 1200 }}>
           <FormPainel
-            onClose={() => setFormPainel(false)}
+            onClose={() => setOpenFormPainel(false)}
             getResponse={r => {
               setPainel(r);
-              setFormPainel(false);
-            }} show={formPainel} />
+              setOpenFormPainel(false);
+            }} />
+        </div>
+      </Dialog>
+      <Dialog open={openFormResponsavel} onClose={() => (false)}>
+        <div style={{ width: 1200 }}>
+          <FormResponsavel
+            onClose={() => setOpenFormResponsavel(false)}
+            values={data.responsaveis.map(d => d.id)}
+            onSubmit={r => {
+              onChangeResponsavel(r);
+              setOpenFormResponsavel(false);
+            }} />
         </div>
       </Dialog>
     </div>

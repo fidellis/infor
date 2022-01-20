@@ -112,7 +112,6 @@ const BasicTable = ({
     cellStyle,
     // rowRenderer,
     size,
-    title,
     ...props
 }) => {
     const classes = useStyles();
@@ -121,32 +120,20 @@ const BasicTable = ({
         columns = Object.keys(columns).map(key => ({ ...columns[key], dataKey: key }));
     }
     return (
-        <Paper>
-            <Toolbar>
-                <Typography
-                    style={{ width: '100%' }}
-                    variant="h6"
-                    sx={{ flex: '1 1 100%' }}
-                    component="div"
-                >
-                    {title}
-                </Typography>
-            </Toolbar>
-            <Table size={size} style={props.style}>
-                <TableHead>
-                    <TableRow>
-                        {columns.map(column => (
-                            <TableCell component="th" style={column.headerStyle}>
-                                {headerRenderer({ column })}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rowRenderer({ ...props, columns, striped, cellStyle, rowStyle, rows, classes })}
-                </TableBody>
-            </Table>
-        </Paper>
+        <Table size={size} style={props.style}>
+            <TableHead>
+                <TableRow>
+                    {columns.map(column => (
+                        <TableCell component="th" style={column.headerStyle}>
+                            {headerRenderer({ column })}
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {rowRenderer({ ...props, columns, striped, cellStyle, rowStyle, rows, classes })}
+            </TableBody>
+        </Table>
     );
 };
 

@@ -117,9 +117,9 @@ const Model = sequelize.define(
 Model.belongsTo(Tipo, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
 Model.belongsTo(Periodicidade, { as: 'periodicidade', foreignKey: 'periodicidade_id' });
-Model.belongsTo(TipoPeriodicidade, { as: 'tiposPeriodicidade', foreignKey: 'tipoPeriodicidade_id' });
-// Model.belongsTo(RotinaPainel, { as: 'rotinaPainel', foreignKey: 'rotina_id' });
-// Model.belongsTo(RotinaResponsavel, { as: 'rotinaResponsavel', foreignKey: 'rotina_id' });
+Model.belongsTo(TipoPeriodicidade, { as: 'tipoPeriodicidade', foreignKey: 'tipoPeriodicidade_id' });
+// Model.hasMany(RotinaPainel, { as: 'rotinaPainel', foreignKey: 'rotina_id' });
+Model.hasMany(RotinaResponsavel, { as: 'rotinaResponsavel', foreignKey: 'rotina_id' });
 // Model.hasMany(RotinaTag, { as: 'rotinaTag', foreignKey: 'rotina_id' });
 
 // const ModelVersion = new Version(Model);

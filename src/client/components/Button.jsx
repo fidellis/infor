@@ -10,6 +10,7 @@ const Component = props => (
 
 Component.defaultProps = {
   variant: 'contained',
+  // variant: 'outlined',  
   color: 'primary',
 };
 
