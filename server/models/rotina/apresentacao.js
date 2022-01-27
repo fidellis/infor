@@ -36,6 +36,11 @@ const Model = _sequelize2.default.define('ApresentacaoRotina', {
     tableName: 'apresentacao'
 });
 
-Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Painel' }), Model.upsert({ id: 2, nome: 'E-mail' }), Model.upsert({ id: 3, nome: 'BBM' }), Model.upsert({ id: 4, nome: 'Não se aplica' })]));
+// Model.afterSync(() => Promise.all([
+//     Model.upsert({ id: 1, nome: 'Painel' }),
+//     Model.upsert({ id: 2, nome: 'E-mail' }),
+//     Model.upsert({ id: 3, nome: 'BBM' }),
+//     Model.upsert({ id: 4, nome: 'Não se aplica' }),
+// ]));
 
 exports.default = Model;

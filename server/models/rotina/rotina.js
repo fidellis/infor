@@ -96,12 +96,22 @@ const Model = _sequelize2.default.define('RotinaInfor', {
         allowNull: true
     },
 
-    dia_mes: {
+    dia_semana: {
         type: _sequelize4.default.INTEGER,
         allowNull: true
     },
 
-    dia_semana: {
+    dia_mes_inicio: {
+        type: _sequelize4.default.INTEGER,
+        allowNull: true
+    },
+
+    dia_mes_fim: {
+        type: _sequelize4.default.INTEGER,
+        allowNull: true
+    },
+
+    mes_rotina: {
         type: _sequelize4.default.INTEGER,
         allowNull: true
     },
@@ -109,7 +119,7 @@ const Model = _sequelize2.default.define('RotinaInfor', {
     automatica: {
         type: _sequelize4.default.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: false
     },
 
     apresentacao_id: {
