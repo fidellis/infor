@@ -71,6 +71,7 @@ const columns = {
   linkPop: {
     label: 'Link POP',
     search: true,
+    onClick: () => null,
     cellRenderer: ({ row }) => {
       return <a href={row.linkPop} target="_blank">{row.linkPop}</a>
     },
