@@ -22,22 +22,7 @@ function allow({ usuario }) {
     MATRICULAS_AUTORIZADAS.includes(usuario.chave);
 }
 const routes = [
-  { path: '/', Component: () => <Redirect to="/controle-ferramentas" />, exact: true, link: false },
-  {
-    label: 'Controle de Ferramentas',
-    icon: 'list',
-    allow,
-    itens: [
-      {
-        label: '',
-        subitens: [
-          { path: '/controle-ferramentas', label: 'Ferramentas', Component: ControleFerramentasList, allow },
-          { path: '/controle-ferramentas-form/:id', label: 'Controle de Painéis e Ferramentas', Component: ControleFerramentasForm, allow, link: false },
-          { path: '/controle-ferramentas-relatorio', label: 'Relatório', Component: ControleFerramentasRelatorio, allow },
-        ],
-      },
-    ],
-  },
+  { path: '/', Component: () => <Redirect to="/rotinas" />, exact: true, link: false },
   {
     label: 'Painéis',
     icon: 'dashboard',
@@ -50,6 +35,21 @@ const routes = [
           { path: '/rotina/:id', label: 'Rotina', Component: RotinaForm, allow, link: false },
           { path: '/paineis', label: 'Painéis', Component: PainelList, allow },
           { path: '/painel/:id', label: 'Painel', Component: PainelForm, allow, link: false },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Controle de Ferramentas',
+    icon: 'list',
+    allow,
+    itens: [
+      {
+        label: '',
+        subitens: [
+          { path: '/controle-ferramentas', label: 'Ferramentas', Component: ControleFerramentasList, allow },
+          { path: '/controle-ferramentas-form/:id', label: 'Controle de Painéis e Ferramentas', Component: ControleFerramentasForm, allow, link: false },
+          { path: '/controle-ferramentas-relatorio', label: 'Relatório', Component: ControleFerramentasRelatorio, allow },
         ],
       },
     ],

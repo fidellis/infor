@@ -259,9 +259,31 @@ const Component = (props) => {
           {data.periodicidade_id == 3 &&
             <Grid item xs={1}>
               <NumberInput
-                id="dia_mes"
-                label="Dia"
-                value={data.dia_mes}
+                id="dia_mes_inicio"
+                label="Dia Início"
+                value={data.dia_mes_inicio}
+                onChange={onChange}
+                precision={0}
+              />
+            </Grid>}
+
+          {data.periodicidade_id == 3 &&
+            <Grid item xs={1}>
+              <NumberInput
+                id="dia_mes_fim"
+                label="Dia Fim"
+                value={data.dia_mes_fim}
+                onChange={onChange}
+                precision={0}
+              />
+            </Grid>}
+
+          {[4, 5, 6].includes(Number(data.periodicidade_id)) &&
+            <Grid item xs={1}>
+              <NumberInput
+                id="mes_rotina"
+                label="Mês Rotina"
+                value={data.mes_rotina}
                 onChange={onChange}
                 precision={0}
               />

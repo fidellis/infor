@@ -9,7 +9,7 @@ Component.defaultProps = {
     label: 'Periodicidade',
     optionValue: 'id',
     optionLabel: 'nome',
-    params: { order: ['nome'] },
+    params: { order: ['id'] },
 };
 
 export default Component;

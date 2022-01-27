@@ -61,12 +61,22 @@ const Model = sequelize.define(
             allowNull: true,
         },
 
-        dia_mes: {
+        dia_semana: {
             type: Sequelize.INTEGER,
             allowNull: true,
         },
 
-        dia_semana: {
+        dia_mes_inicio: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+
+        dia_mes_fim: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+
+        mes_rotina: {
             type: Sequelize.INTEGER,
             allowNull: true,
         },
@@ -74,7 +84,7 @@ const Model = sequelize.define(
         automatica: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
-            defaultValue: true,
+            defaultValue: false,
         },
 
         apresentacao_id: {

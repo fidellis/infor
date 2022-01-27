@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import { setFilter, setFilters } from '~/store/filter';
 import DataTable from '~/components/data-table/DataTable';
-import Aviso from '~/components/message/Aviso';
+import SelectTipoRotina from '~/components/select/SelectTipoRotina';
+import SelectStatusRotina from '~/components/select/SelectStatusRotina';
 import Button from '~/components/Button';
 import NavigationButton from '~/components/NavigationButton';
 import { Select } from '~/components/form/form/inputs';
@@ -20,6 +21,16 @@ const options = {
     {
       value: 2,
       label: 'Não Vigente',
+    },
+  ],
+  automatica: [
+    {
+      value: true,
+      label: 'Sim'
+    },
+    {
+      value: false,
+      label: 'Não',
     },
   ]
 };
@@ -57,15 +68,23 @@ const columns = {
       return responsavel ? responsavel.nome : null;
     },
   },
-  responsave3: {
-    label: 'Responsável Lateral 2',
-    width: 200,
+  linkPop: {
+    label: 'Link POP',
     search: true,
     cellRenderer: ({ row }) => {
-      const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 3 : null);
-      return responsavel ? responsavel.nome : null;
+      return <a href={row.linkPop} target="_blank">{row.linkPop}</a>
     },
   },
+
+  // responsave3: {
+  //   label: 'Responsável Lateral 2',
+  //   width: 200,
+  //   search: true,
+  //   cellRenderer: ({ row }) => {
+  //     const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 3 : null);
+  //     return responsavel ? responsavel.nome : null;
+  //   },
+  // },
 };
 
 const Component = (props) => {
@@ -80,11 +99,21 @@ const Component = (props) => {
     <div>
       <Grid container spacing={1} alignItems="flex-end">
         <Grid item xs={2}>
-          <Select
-            id="status_id"
-            label="Situação"
-            options={options.situacao}
+          <SelectStatusRotina
             value={props.filter.rotina.status_id}
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+        </Grid>
+        <Grid item xs={2}>
+          <Select
+            id="automatica"
+            label="Automática"
+            options={options.automatica}
+            value={props.filter.rotina.automatica}
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+        </Grid>
+        <Grid item xs={2}>
+          <SelectTipoRotina
+            value={props.filter.rotina.tipo_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
         </Grid>
         <Grid item xs={12}>
