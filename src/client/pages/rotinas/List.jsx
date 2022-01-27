@@ -6,7 +6,8 @@ import { setFilter, setFilters } from '~/store/filter';
 import DataTable from '~/components/data-table/DataTable';
 import SelectTipoRotina from '~/components/select/SelectTipoRotina';
 import SelectStatusRotina from '~/components/select/SelectStatusRotina';
-import Button from '~/components/Button';
+import ButtonLimparFiltros from '~/components/button/ButtonLimparFiltros';
+import Icon from '~/components/icons/Icon';
 import NavigationButton from '~/components/NavigationButton';
 import { Select } from '~/components/form/form/inputs';
 import { Grid } from '@material-ui/core';
@@ -36,11 +37,11 @@ const options = {
 };
 
 const columns = {
-  'tipo.nome': {
-    label: 'Célula',
-    width: 100,
-    search: true,
-  },
+  // 'tipo.nome': {
+  //   label: 'Célula',
+  //   width: 100,
+  //   search: true,
+  // },
   'periodicidade.nome': {
     label: 'Periodicidade',
     width: 110,
@@ -69,11 +70,12 @@ const columns = {
     },
   },
   linkPop: {
-    label: 'Link POP',
-    search: true,
+    label: 'POP',
+    width: 50,
+    align: 'center',
     onClick: () => null,
     cellRenderer: ({ row }) => {
-      return <a href={row.linkPop} target="_blank">{row.linkPop}</a>
+      return <Icon onClick={() => window.open(row.linkPop, '_blank')}>article</Icon>
     },
   },
 
@@ -116,6 +118,9 @@ const Component = (props) => {
           <SelectTipoRotina
             value={props.filter.rotina.tipo_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+        </Grid>
+        <Grid item xs={2}>
+          <ButtonLimparFiltros />
         </Grid>
         <Grid item xs={12}>
           <DataTable
