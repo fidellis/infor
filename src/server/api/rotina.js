@@ -3,7 +3,7 @@ import paramsConverter from 'common/sequelize/params';
 module.exports = (router) => {
 
     router.post('/', async (req, res, next) => {
-        const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta } = sequelize.models;
+        const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta, PeriodoRotina } = sequelize.models;
         //const modelParams = paramsConverter(RotinaInfor);
         //const params = modelParams(req);
         const usuario = req.session.usuario;
@@ -38,6 +38,10 @@ module.exports = (router) => {
             if (data.ferramentas.length) {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.ferramentas.map(ferramenta_id => RotinaFerramenta.build({ rotina_id: response.id, ferramenta_id }).save()));
+            }
+            if (data.periodos.length) {
+                await PeriodoRotina.destroy({ where: { rotina_id: response.id } });
+                Promise.all(data.periodos.map(periodo => PeriodoRotina.build({ rotina_id: response.id, ...periodo }).save()));
             }
             res.send(response);
         } catch (err) {

@@ -18,6 +18,7 @@ import SelectPeriodicidadeRotina from '~/components/select/SelectPeriodicidadeRo
 import SelectTipoPeriodicidadeRotina from '~/components/select/SelectTipoPeriodicidadeRotina';
 import SelectTipoResponsavel from '~/components/select/SelectTipoResponsavel';
 import SelectDiaSemana from '~/components/select/SelectDiaSemana';
+import SelectMes from '~/components/select/SelectMes';
 import Icon from '~/components/icons/Icon';
 import Button from '~/components/Button';
 import { Grid } from '@material-ui/core';
@@ -27,10 +28,16 @@ import { getDado } from './hook';
 import FormPainel from '../paineis/Form';
 import FormResponsavel from './FormResponsavel';
 
+const ID_PERIODICIDADE_SEMANAL = 2;
+const ID_PERIODICIDADE_MENSAL = 3;
+const ID_PERIODICIDADE_TRIMESTRAL = 4;
+const ID_PERIODICIDADE_SEMESTRAL = 5;
+const ID_PERIODICIDADE_ANUAL = 6;
+
 const Component = (props) => {
 
   const id = Number(props.match.params.id);
-  const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas'] });
+  const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas', 'periodos'] });
   const [data, setData] = useState(response);
   const [painel, setPainel] = useState({});
   const [openFormPainel, setOpenFormPainel] = useState(false);
@@ -95,6 +102,22 @@ const Component = (props) => {
     setData({ ...data, [id]: value });
   }
 
+  function onChangePeriodos({ value }) {
+    setData({ ...data, periodos: value.map(v => ({ mes: v })) });
+  }
+
+  function getError() {
+    const periodicidade_id = Number(data.periodicidade_id);
+    if (periodicidade_id === ID_PERIODICIDADE_TRIMESTRAL && data.periodos.length !== 4) {
+      return 'Selecione 4 meses';
+    } else if (periodicidade_id === ID_PERIODICIDADE_SEMESTRAL && data.periodos.length !== 2) {
+      return 'Selecione 2 meses';
+    } else if (periodicidade_id === ID_PERIODICIDADE_ANUAL && data.periodos.length !== 1) {
+      return 'Selecione apenas 1 mês';
+    }
+    return null;
+  }
+
   async function onChangePainel(option) {
     const rotina = JSON.parse(JSON.stringify(data));
     rotina.paineis.push({ ...option, id: option.value });
@@ -113,7 +136,7 @@ const Component = (props) => {
     const responsaveis = rotina.responsaveis;
     const responsavel = responsaveis.find(r => r.id === row.id);
     responsavel.tipo_id = option.value;
-    console.log('rotina', rotina)
+
     setData(rotina)
   }
 
@@ -186,7 +209,7 @@ const Component = (props) => {
         ]}>
         <Grid container spacing={2} alignItems='flex-end'>
 
-          <Grid item xs={12}>
+          <Grid item xs={8}>
             <TextInput
               id="nome"
               label="Título"
@@ -207,19 +230,17 @@ const Component = (props) => {
           </Grid>
 
           <Grid item xs={2}>
+            <SelectStatusRotina
+              value={data.status_id}
+              onChange={onChange}
+            />
+          </Grid>
+
+          <Grid item xs={2}>
             <SelectTipoRotina
               value={data.tipo_id}
               onChange={onChange}
               required
-            />
-          </Grid>
-
-          <Grid item xs={4}>
-            <SelectTagRotina
-              value={data.tags}
-              onChange={onChange}
-              required
-              isMulti
             />
           </Grid>
 
@@ -240,6 +261,15 @@ const Component = (props) => {
             />
           </Grid>
 
+          <Grid item xs={5}>
+            <SelectTagRotina
+              value={data.tags}
+              onChange={onChange}
+              required
+              isMulti
+            />
+          </Grid>
+
           <Grid item xs={2}>
             <SelectPeriodicidadeRotina
               value={data.periodicidade_id}
@@ -248,15 +278,27 @@ const Component = (props) => {
             />
           </Grid>
 
-          {data.periodicidade_id == 2 &&
-            <Grid item xs={1}>
+          {data.periodicidade_id == ID_PERIODICIDADE_SEMANAL &&
+            <Grid item xs={2}>
               <SelectDiaSemana
                 value={data.dia_semana}
                 onChange={onChange}
               />
             </Grid>}
 
-          {data.periodicidade_id == 3 &&
+          {[ID_PERIODICIDADE_TRIMESTRAL, ID_PERIODICIDADE_SEMESTRAL, ID_PERIODICIDADE_ANUAL].includes(Number(data.periodicidade_id)) &&
+            <Grid item xs={3}>
+              <SelectMes
+                id="periodos"
+                label="Meses da Rotina"
+                value={data.periodos.map(v => v.mes)}
+                onChange={onChangePeriodos}
+                isMulti
+                error={getError}
+              />
+            </Grid>}
+
+          {[ID_PERIODICIDADE_MENSAL, ID_PERIODICIDADE_TRIMESTRAL, ID_PERIODICIDADE_SEMESTRAL, ID_PERIODICIDADE_ANUAL].includes(Number(data.periodicidade_id)) &&
             <Grid item xs={1}>
               <NumberInput
                 id="dia_mes_inicio"
@@ -264,10 +306,12 @@ const Component = (props) => {
                 value={data.dia_mes_inicio}
                 onChange={onChange}
                 precision={0}
+                maxLength={2}
+                required
               />
             </Grid>}
 
-          {data.periodicidade_id == 3 &&
+          {[ID_PERIODICIDADE_MENSAL, ID_PERIODICIDADE_TRIMESTRAL, ID_PERIODICIDADE_SEMESTRAL, ID_PERIODICIDADE_ANUAL].includes(Number(data.periodicidade_id)) &&
             <Grid item xs={1}>
               <NumberInput
                 id="dia_mes_fim"
@@ -275,17 +319,8 @@ const Component = (props) => {
                 value={data.dia_mes_fim}
                 onChange={onChange}
                 precision={0}
-              />
-            </Grid>}
-
-          {[4, 5, 6].includes(Number(data.periodicidade_id)) &&
-            <Grid item xs={1}>
-              <NumberInput
-                id="mes_rotina"
-                label="Mês Rotina"
-                value={data.mes_rotina}
-                onChange={onChange}
-                precision={0}
+                maxLength={2}
+                required
               />
             </Grid>}
 
@@ -296,12 +331,7 @@ const Component = (props) => {
             />
           </Grid>
 
-          <Grid item xs={2}>
-            <SelectStatusRotina
-              value={data.status_id}
-              onChange={onChange}
-            />
-          </Grid>
+
 
           <Grid item xs={12}>
             <TextInput

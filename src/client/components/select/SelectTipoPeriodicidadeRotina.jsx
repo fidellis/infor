@@ -6,7 +6,7 @@ const Component = props => <Select {...props} />;
 Component.defaultProps = {
     url: '/rotina/tipoPeriodicidade',
     id: 'tipoPeriodicidade_id',
-    label: 'Tipo Data',
+    label: 'Tipo de Data',
     optionValue: 'id',
     optionLabel: 'nome',
     params: { order: ['nome'] },

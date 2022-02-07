@@ -8,6 +8,7 @@ import TipoPeriodicidade from './tipoPeriodicidade';
 import RotinaPainel from './rotinaPainel';
 import RotinaTag from './rotinaTag';
 import RotinaResponsavel from './rotinaResponsavel';
+import PeriodoRotina from './rotinaPeriodo';
 
 const Model = sequelize.define(
     'RotinaInfor',
@@ -130,6 +131,7 @@ Model.belongsTo(Periodicidade, { as: 'periodicidade', foreignKey: 'periodicidade
 Model.belongsTo(TipoPeriodicidade, { as: 'tipoPeriodicidade', foreignKey: 'tipoPeriodicidade_id' });
 // Model.hasMany(RotinaPainel, { as: 'rotinaPainel', foreignKey: 'rotina_id' });
 Model.hasMany(RotinaResponsavel, { as: 'rotinaResponsavel', foreignKey: 'rotina_id' });
+Model.hasMany(PeriodoRotina, { as: 'periodos', foreignKey: 'rotina_id' });
 // Model.hasMany(RotinaTag, { as: 'rotinaTag', foreignKey: 'rotina_id' });
 
 // const ModelVersion = new Version(Model);
