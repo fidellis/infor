@@ -15,7 +15,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = router => {
 
     router.post('/', async (req, res, next) => {
-        const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta } = _sequelize2.default.models;
+        const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta, PeriodoRotina } = _sequelize2.default.models;
         //const modelParams = paramsConverter(RotinaInfor);
         //const params = modelParams(req);
         const usuario = req.session.usuario;
@@ -50,6 +50,10 @@ module.exports = router => {
             if (data.ferramentas.length) {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.ferramentas.map(ferramenta_id => RotinaFerramenta.build({ rotina_id: response.id, ferramenta_id }).save()));
+            }
+            if (data.periodos.length) {
+                await PeriodoRotina.destroy({ where: { rotina_id: response.id } });
+                Promise.all(data.periodos.map(periodo => PeriodoRotina.build(_extends({ rotina_id: response.id }, periodo)).save()));
             }
             res.send(response);
         } catch (err) {

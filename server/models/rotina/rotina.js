@@ -44,6 +44,10 @@ var _rotinaResponsavel = require('./rotinaResponsavel');
 
 var _rotinaResponsavel2 = _interopRequireDefault(_rotinaResponsavel);
 
+var _rotinaPeriodo = require('./rotinaPeriodo');
+
+var _rotinaPeriodo2 = _interopRequireDefault(_rotinaPeriodo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const Model = _sequelize2.default.define('RotinaInfor', {
@@ -163,6 +167,7 @@ Model.belongsTo(_periodicidade2.default, { as: 'periodicidade', foreignKey: 'per
 Model.belongsTo(_tipoPeriodicidade2.default, { as: 'tipoPeriodicidade', foreignKey: 'tipoPeriodicidade_id' });
 // Model.hasMany(RotinaPainel, { as: 'rotinaPainel', foreignKey: 'rotina_id' });
 Model.hasMany(_rotinaResponsavel2.default, { as: 'rotinaResponsavel', foreignKey: 'rotina_id' });
+Model.hasMany(_rotinaPeriodo2.default, { as: 'periodos', foreignKey: 'rotina_id' });
 // Model.hasMany(RotinaTag, { as: 'rotinaTag', foreignKey: 'rotina_id' });
 
 // const ModelVersion = new Version(Model);
