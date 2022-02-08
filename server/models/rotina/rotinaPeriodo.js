@@ -17,6 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const Model = _sequelize2.default.define('PeriodoRotina', {
     rotina_id: {
         type: _sequelize4.default.BIGINT,
+        primaryKey: true,
         allowNull: false
     },
 
