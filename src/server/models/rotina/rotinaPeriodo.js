@@ -6,6 +6,7 @@ const Model = sequelize.define(
     {
         rotina_id: {
             type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
         },
 
