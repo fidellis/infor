@@ -38,11 +38,11 @@ class InputSelect extends PureComponent {
           styles={{
             container: provided => ({ ...provided, ...style }),
             menu: provided => ({ ...provided, zIndex: 999 }),
-            //control: provided => ({ ...provided, height: 18, minHeight: 18 }),
-            //placeholder: provided => ({ ...provided, height: 18, minHeight: 18 }),
-            //valueContainer: provided => ({ ...provided, height: 18, minHeight: 18 }),
-            //singleValue: provided => ({ ...provided, height: 18, minHeight: 18 }),
-            //input: provided => ({ ...provided, height: 18, minHeight: 18 }),										
+            // control: provided => ({ ...provided, height: 18, minHeight: 18 }),
+            // placeholder: provided => ({ ...provided, height: 18, minHeight: 18 }),
+            // valueContainer: provided => ({ ...provided }),
+            singleValue: provided => ({ ...provided, color: '#545454' }),
+            // input: provided => ({ ...provided }),
           }}
           onChange={(v) => {
             let nextValueFormatted = null;
