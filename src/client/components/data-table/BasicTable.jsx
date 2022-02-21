@@ -9,13 +9,11 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Box,
-    Paper,
-    Toolbar,
-    Typography
+    TableFooter,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { format } from '../data-table/data-table/utils';
+import { makeStyles } from '@material-ui/core/styles';
+import sum from 'lodash/sum';
 // import Formatters from '../formatters';
 
 
@@ -119,6 +117,7 @@ const BasicTable = ({
     if (!Array.isArray(props.columns)) {
         columns = Object.keys(columns).map(key => ({ ...columns[key], dataKey: key }));
     }
+    columns = columns.filter(c => !c.hide);
     return (
         <Table size={size} style={props.style}>
             <TableHead>
@@ -133,6 +132,16 @@ const BasicTable = ({
             <TableBody>
                 {rowRenderer({ ...props, columns, striped, cellStyle, rowStyle, rows, classes })}
             </TableBody>
+            {columns.some(c => c.sum) &&
+                <TableHead>
+                    <TableRow>
+                        {columns.map(column => (
+                            <TableCell style={getColumnTypeStyle(column)}>
+                                {column.sum ? formatValue(sum(rows.map(row => Number(row[column.dataKey]))), column) : null}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>}
         </Table>
     );
 };

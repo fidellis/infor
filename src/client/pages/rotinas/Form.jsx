@@ -40,6 +40,7 @@ const Component = (props) => {
   const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas', 'periodos'] });
   const [data, setData] = useState(response);
   const [painel, setPainel] = useState({});
+  const [formEditavel, setFormEditavel] = useState(false);
   const [openFormPainel, setOpenFormPainel] = useState(false);
   const [openFormResponsavel, setOpenFormResponsavel] = useState(false);
   const descricao = data.descricao || '';
@@ -72,7 +73,8 @@ const Component = (props) => {
       },
       delete: {
         cellRenderer: ({ row }) => <Icon onClick={() => onCDeletePainel(row)}>delete</Icon>,
-        style: { width: 5 }
+        style: { width: 5 },
+        hide: !formEditavel,
       },
     },
     responsavel: {
@@ -93,7 +95,8 @@ const Component = (props) => {
       },
       delete: {
         cellRenderer: ({ row }) => <Icon onClick={() => onCDeleteResponsavel(row)}>delete</Icon>,
-        style: { width: 5 }
+        style: { width: 5 },
+        hide: !formEditavel,
       },
     }
   }
@@ -196,11 +199,17 @@ const Component = (props) => {
           {
             type: 'submit',
             label: 'Salvar',
+            hide: !formEditavel,
+          },
+          {
+            label: 'Editar',
+            hide: formEditavel,
+            onClick: () => setFormEditavel(true)
           },
           {
             label: 'Excluir',
             onClick: () => onDelete(id),
-            hide: !id,
+            hide: !id || !formEditavel,
           },
           {
             label: 'Voltar',
@@ -217,6 +226,7 @@ const Component = (props) => {
               onChange={onChange}
               required
               maxLength={100}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -226,6 +236,7 @@ const Component = (props) => {
               label="Data Criação"
               value={data.dataCriacao}
               onChange={onChange}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -233,6 +244,7 @@ const Component = (props) => {
             <SelectStatusRotina
               value={data.status_id}
               onChange={onChange}
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -241,6 +253,7 @@ const Component = (props) => {
               value={data.tipo_id}
               onChange={onChange}
               required
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -250,6 +263,7 @@ const Component = (props) => {
               onChange={onChange}
               required
               isMulti
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -258,6 +272,7 @@ const Component = (props) => {
               value={data.apresentacao_id}
               onChange={onChange}
               required
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -267,6 +282,7 @@ const Component = (props) => {
               onChange={onChange}
               required
               isMulti
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -275,6 +291,7 @@ const Component = (props) => {
               value={data.periodicidade_id}
               onChange={onChange}
               required
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -283,6 +300,7 @@ const Component = (props) => {
               <SelectDiaSemana
                 value={data.dia_semana}
                 onChange={onChange}
+                isDisabled={!formEditavel}
               />
             </Grid>}
 
@@ -295,6 +313,7 @@ const Component = (props) => {
                 onChange={onChangePeriodos}
                 isMulti
                 error={getError}
+                isDisabled={!formEditavel}
               />
             </Grid>}
 
@@ -308,6 +327,7 @@ const Component = (props) => {
                 precision={0}
                 maxLength={2}
                 required
+                disabled={!formEditavel}
               />
             </Grid>}
 
@@ -321,6 +341,7 @@ const Component = (props) => {
                 precision={0}
                 maxLength={2}
                 required
+                disabled={!formEditavel}
               />
             </Grid>}
 
@@ -328,6 +349,7 @@ const Component = (props) => {
             <SelectTipoPeriodicidadeRotina
               value={data.tipoPeriodicidade_id}
               onChange={onChange}
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -340,6 +362,7 @@ const Component = (props) => {
               value={data.linkPop}
               onChange={onChange}
               required
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -353,6 +376,7 @@ const Component = (props) => {
               rows={4}
               error={descricao.length < 100 ? 'Mínimo de 100 caracteres' : null}
               info={`${descricao.length} caracteres`}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -362,6 +386,7 @@ const Component = (props) => {
               label="Automática"
               checked={data.automatica}
               onChange={onChange}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -369,9 +394,9 @@ const Component = (props) => {
             <Section title="Responsáveis">
               <Grid container spacing={0} alignItems='flex-end' justifyContent='flex-end'>
 
-                <Grid item xs={1} >
-                  <Button variant="outlined" onClick={() => setOpenFormResponsavel(true)}>Incluir</Button>
-                </Grid>
+                {formEditavel && <Grid item xs={1} >
+                  <Button variant="outlined" onClick={() => setOpenFormResponsavel(true)} disabled={!formEditavel}>Incluir</Button>
+                </Grid>}
 
                 <Grid item xs={12}>
                   <BasicTable
@@ -387,18 +412,19 @@ const Component = (props) => {
           <Grid item xs={12}>
             <Section title="Painéis">
               <Grid container spacing={1} alignItems='flex-end'>
-                <Grid item xs={11}>
+                {formEditavel && <Grid item xs={11}>
                   <SelectPainel
                     label="Vincular Painel"
                     values={data.paineis.map(p => p.id)}
                     onChange={onChangePainel}
                     painel={painel}
+                    isDisabled={!formEditavel}
                   />
-                </Grid>
+                </Grid>}
 
-                <Grid item xs={1}>
-                  <Button variant="outlined" onClick={() => setOpenFormPainel(true)}>Novo</Button>
-                </Grid>
+                {formEditavel && <Grid item xs={1}>
+                  <Button variant="outlined" onClick={() => setOpenFormPainel(true)} disabled={!formEditavel}>Novo</Button>
+                </Grid>}
 
 
                 <Grid item xs={12}>
