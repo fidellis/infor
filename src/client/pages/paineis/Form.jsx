@@ -17,6 +17,7 @@ const Component = (props) => {
 
   const response = getDado({ id, include: ['usuarioInclusao'] });
   const [data, setData] = useState(response);
+  const [formEditavel, setFormEditavel] = useState(false);
 
   useEffect(() => {
     setData(response);
@@ -69,11 +70,17 @@ const Component = (props) => {
           {
             type: 'submit',
             label: 'Salvar',
+            hide: !formEditavel,
+          },
+          {
+            label: 'Editar',
+            hide: formEditavel,
+            onClick: () => setFormEditavel(true)
           },
           {
             label: 'Excluir',
             onClick: () => excluir(id),
-            hide: !id,
+            hide: !id || !formEditavel,
           },
           {
             label: 'Voltar',
@@ -90,6 +97,7 @@ const Component = (props) => {
               onChange={onChange}
               required
               maxLength={100}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -98,6 +106,7 @@ const Component = (props) => {
               value={data.tipo_id}
               onChange={onChange}
               required
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -107,6 +116,7 @@ const Component = (props) => {
               label="Data Criação"
               value={data.dataCriacao}
               onChange={onChange}
+              disabled={!formEditavel}
             />
           </Grid>
 
@@ -114,6 +124,7 @@ const Component = (props) => {
             <SelectStatusRotina
               value={data.status_id}
               onChange={onChange}
+              isDisabled={!formEditavel}
             />
           </Grid>
 
@@ -124,6 +135,7 @@ const Component = (props) => {
               value={data.link}
               onChange={onChange}
               required
+              disabled={!formEditavel}
             />
           </Grid>
 
