@@ -36,9 +36,6 @@ const Model = _sequelize2.default.define('StatusRotina', {
     tableName: 'status'
 });
 
-// Model.afterSync(() => Promise.all([
-//     Model.upsert({ id: 1, nome: 'Vigente' }),
-//     Model.upsert({ id: 2, nome: 'Não Vigente' }),
-// ]));
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Vigente' }), Model.upsert({ id: 2, nome: 'Não Vigente' })]));
 
 exports.default = Model;

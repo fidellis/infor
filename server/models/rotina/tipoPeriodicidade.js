@@ -36,9 +36,6 @@ const Model = _sequelize2.default.define('TipoPeriodicidadeRotina', {
     tableName: 'tipo_periodicidade'
 });
 
-// Model.afterSync(() => Promise.all([
-//     Model.upsert({ id: 1, nome: 'Dia útil' }),
-//     Model.upsert({ id: 2, nome: 'Dia corrido' }),
-// ]));
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Dia útil' }), Model.upsert({ id: 2, nome: 'Dia corrido' })]));
 
 exports.default = Model;

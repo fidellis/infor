@@ -16,6 +16,10 @@ var _version = require('common/sequelize/version');
 
 var _version2 = _interopRequireDefault(_version);
 
+var _usuario = require('common/models/portal/usuario');
+
+var _usuario2 = _interopRequireDefault(_usuario);
+
 var _tipo = require('./tipo');
 
 var _tipo2 = _interopRequireDefault(_tipo);
@@ -47,6 +51,18 @@ var _rotinaResponsavel2 = _interopRequireDefault(_rotinaResponsavel);
 var _rotinaPeriodo = require('./rotinaPeriodo');
 
 var _rotinaPeriodo2 = _interopRequireDefault(_rotinaPeriodo);
+
+var _painel = require('../painel/painel');
+
+var _painel2 = _interopRequireDefault(_painel);
+
+var _tag = require('./tag');
+
+var _tag2 = _interopRequireDefault(_tag);
+
+var _ferramenta = require('./ferramenta');
+
+var _ferramenta2 = _interopRequireDefault(_ferramenta);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -157,6 +173,14 @@ const Model = _sequelize2.default.define('RotinaInfor', {
         allowNull: true
     }
 }, {
+    scopes: {
+        paineis: { include: [{ model: _painel2.default, as: 'paineis' }] },
+        tags: { include: [{ model: _tag2.default, as: 'tags' }] },
+        periodos: { include: [{ model: _rotinaPeriodo2.default, as: 'periodos' }] },
+        ferramentas: { include: [{ model: _ferramenta2.default, as: 'ferramentas' }] },
+        responsaveis: { include: [{ model: _usuario2.default, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+        usuarioInclusao: { include: [{ model: _usuario2.default, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] }
+    },
     schema: 'rotina',
     tableName: 'rotina'
 });

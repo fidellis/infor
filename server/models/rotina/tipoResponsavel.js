@@ -32,14 +32,13 @@ const Model = _sequelize2.default.define('TipoResponsavelRotina', {
         defaultValue: true
     }
 }, {
+    defaultScope: {
+        order: ['id']
+    },
     schema: 'rotina',
     tableName: 'tipo_responsavel'
 });
 
-// Model.afterSync(() => Promise.all([
-//     Model.upsert({ id: 1, nome: 'Principal' }),
-//     Model.upsert({ id: 2, nome: 'Lateral 1' }),
-//     Model.upsert({ id: 3, nome: 'Lateral 2' }),
-// ]));
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'Principal' }), Model.upsert({ id: 2, nome: 'Lateral 1' }), Model.upsert({ id: 3, nome: 'Lateral 2' })]));
 
 exports.default = Model;
