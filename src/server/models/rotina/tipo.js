@@ -27,11 +27,11 @@ const Model = sequelize.define(
   },
 );
 
-// Model.afterSync(() => Promise.all([
-//   Model.upsert({ id: 1, nome: 'PJ' }),
-//   Model.upsert({ id: 2, nome: 'PF' }),
-//   Model.upsert({ id: 3, nome: 'Imobiliário' }),
-//   Model.upsert({ id: 4, nome: 'Demais' }),
-// ]));
+Model.afterSync(() => Promise.all([
+  Model.upsert({ id: 1, nome: 'PJ' }),
+  Model.upsert({ id: 2, nome: 'PF' }),
+  Model.upsert({ id: 3, nome: 'Imobiliário' }),
+  Model.upsert({ id: 4, nome: 'Demais' }),
+]));
 
 export default Model;

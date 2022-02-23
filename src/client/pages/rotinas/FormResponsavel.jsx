@@ -36,7 +36,7 @@ const Component = (props) => {
                     },
                 ]}>
                 <Grid container spacing={0}>
-                    <Grid xs={10}>
+                    <Grid item xs={10}>
                         <SelectUsuario
                             id="responsavel_id"
                             label="Responsável"
@@ -47,7 +47,7 @@ const Component = (props) => {
                             required
                         />
                     </Grid>
-                    <Grid xs={2}>
+                    <Grid item xs={2}>
                         <SelectTipoResponsavel
                             id="tipo_id"
                             label="Tipo"

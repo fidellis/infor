@@ -1,6 +1,7 @@
 import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 import Version from 'common/sequelize/version';
+import Usuario from 'common/models/portal/usuario';
 import Tipo from './tipo';
 import Status from './status';
 import Periodicidade from './periodicidade';
@@ -9,6 +10,9 @@ import RotinaPainel from './rotinaPainel';
 import RotinaTag from './rotinaTag';
 import RotinaResponsavel from './rotinaResponsavel';
 import PeriodoRotina from './rotinaPeriodo';
+import Painel from '../painel/painel';
+import Tag from './tag';
+import Ferramenta from './ferramenta';
 
 const Model = sequelize.define(
     'RotinaInfor',
@@ -120,6 +124,14 @@ const Model = sequelize.define(
         },
     },
     {
+        scopes: {
+            paineis: { include: [{ model: Painel, as: 'paineis' }] },
+            tags: { include: [{ model: Tag, as: 'tags' }] },
+            periodos: { include: [{ model: PeriodoRotina, as: 'periodos' }] },
+            ferramentas: { include: [{ model: Ferramenta, as: 'ferramentas' }] },
+            responsaveis: { include: [{ model: Usuario, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+            usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
+        },
         schema: 'rotina',
         tableName: 'rotina',
     },

@@ -1,6 +1,22 @@
 import sequelize from 'common/sequelize';
 import paramsConverter from 'common/sequelize/params';
+import Usuario from 'common/models/portal/usuario';
+
 module.exports = (router) => {
+
+    router.get('/rotina/:id', async (req, res, next) => {
+        const { RotinaInfor } = sequelize.models;
+        const { id } = req.params;
+        try {
+            const response = await RotinaInfor.scope('paineis', 'tags', 'responsaveis', 'ferramentas', 'periodos', 'usuarioInclusao').findById(id, {
+                order: sequelize.literal('"responsaveis->RotinaResponsavel"."tipo_id", "paineis"."nome"')
+
+            });
+            res.send(response);
+        } catch (err) {
+            next(err);
+        }
+    });
 
     router.post('/', async (req, res, next) => {
         const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta, PeriodoRotina } = sequelize.models;
@@ -39,7 +55,7 @@ module.exports = (router) => {
                 await RotinaFerramenta.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.ferramentas.map(ferramenta_id => RotinaFerramenta.build({ rotina_id: response.id, ferramenta_id }).save()));
             }
-            if (data.periodos.length) {
+            if (data.periodos && data.periodos.length) {
                 await PeriodoRotina.destroy({ where: { rotina_id: response.id } });
                 Promise.all(data.periodos.map(periodo => PeriodoRotina.build({ rotina_id: response.id, ...periodo }).save()));
             }

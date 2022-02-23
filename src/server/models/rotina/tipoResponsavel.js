@@ -22,15 +22,18 @@ const Model = sequelize.define(
         },
     },
     {
+        defaultScope: {
+            order: ['id'],
+        },
         schema: 'rotina',
         tableName: 'tipo_responsavel',
     },
 );
 
-// Model.afterSync(() => Promise.all([
-//     Model.upsert({ id: 1, nome: 'Principal' }),
-//     Model.upsert({ id: 2, nome: 'Lateral 1' }),
-//     Model.upsert({ id: 3, nome: 'Lateral 2' }),
-// ]));
+Model.afterSync(() => Promise.all([
+    Model.upsert({ id: 1, nome: 'Principal' }),
+    Model.upsert({ id: 2, nome: 'Lateral 1' }),
+    Model.upsert({ id: 3, nome: 'Lateral 2' }),
+]));
 
 export default Model;

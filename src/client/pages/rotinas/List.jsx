@@ -5,7 +5,9 @@ import { message } from '~/store/app';
 import { setFilter, setFilters } from '~/store/filter';
 import DataTable from '~/components/data-table/DataTable';
 import SelectTipoRotina from '~/components/select/SelectTipoRotina';
+import SelectPeriodicidadeRotina from '~/components/select/SelectPeriodicidadeRotina';
 import SelectStatusRotina from '~/components/select/SelectStatusRotina';
+import SelectUsuario from '~/components/select/SelectUsuario';
 import ButtonLimparFiltros from '~/components/button/ButtonLimparFiltros';
 import Icon from '~/components/icons/Icon';
 import NavigationButton from '~/components/NavigationButton';
@@ -45,7 +47,7 @@ const columns = {
   'periodicidade.nome': {
     label: 'Periodicidade',
     width: 110,
-    search: true,
+    // search: true,
   },
   nome: {
     label: 'Nome',
@@ -104,7 +106,8 @@ const Component = (props) => {
         <Grid item xs={2}>
           <SelectStatusRotina
             value={props.filter.rotina.status_id}
-            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+            isMulti />
         </Grid>
         <Grid item xs={2}>
           <Select
@@ -112,14 +115,32 @@ const Component = (props) => {
             label="Automática"
             options={options.automatica}
             value={props.filter.rotina.automatica}
-            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+            isMulti />
         </Grid>
         <Grid item xs={2}>
           <SelectTipoRotina
             value={props.filter.rotina.tipo_id}
-            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })} />
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+            isMulti />
         </Grid>
         <Grid item xs={2}>
+          <SelectPeriodicidadeRotina
+            value={props.filter.rotina.periodicidade_id}
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+            isMulti />
+        </Grid>
+        <Grid item xs={3}>
+          <SelectUsuario
+            id="resposaveis"
+            label="Responsável"
+            value={props.filter.rotina.resposaveis}
+            onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+            params={{ uor_id: 283521, order: ['nome'] }}
+            isMulti
+          />
+        </Grid>
+        <Grid item xs={1}>
           <ButtonLimparFiltros />
         </Grid>
         <Grid item xs={12}>
@@ -132,9 +153,6 @@ const Component = (props) => {
             onClick={({ row }) => props.history.push(`/rotina/${row.id}`)}
           />
         </Grid>
-
-
-
       </Grid>
       <NavigationButton buttons={[
         {

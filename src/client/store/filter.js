@@ -4,7 +4,7 @@ export const clearFilters = () => dispatch => dispatch({ type: 'CLEAR_FILTERS', 
 
 const initialState = {
     rotina: {
-        status_id: 1,
+        status_id: ['1'],
     },
 };
 
