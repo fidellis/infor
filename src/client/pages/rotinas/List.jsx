@@ -130,7 +130,7 @@ const Component = (props) => {
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
-        <Grid item xs={3}>
+        {/* <Grid item xs={3}>
           <SelectUsuario
             id="resposaveis"
             label="Responsável"
@@ -139,7 +139,7 @@ const Component = (props) => {
             params={{ uor_id: 283521, order: ['nome'] }}
             isMulti
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={1}>
           <ButtonLimparFiltros />
         </Grid>

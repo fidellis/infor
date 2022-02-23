@@ -129,7 +129,7 @@ const Model = sequelize.define(
             tags: { include: [{ model: Tag, as: 'tags' }] },
             periodos: { include: [{ model: PeriodoRotina, as: 'periodos' }] },
             ferramentas: { include: [{ model: Ferramenta, as: 'ferramentas' }] },
-            responsaveis: { include: [{ model: Usuario, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+            responsaveis: () => ({ include: [{ model: Usuario, as: 'responsaveis', attributes: ['id', 'nome'] }] }),
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
         },
         schema: 'rotina',

@@ -35,7 +35,7 @@ const Component = (props) => {
                         onClick: props.onClose,
                     },
                 ]}>
-                <Grid container spacing={0}>
+                <Grid container spacing={1}>
                     <Grid item xs={10}>
                         <SelectUsuario
                             id="responsavel_id"

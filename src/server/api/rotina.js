@@ -10,7 +10,6 @@ module.exports = (router) => {
         try {
             const response = await RotinaInfor.scope('paineis', 'tags', 'responsaveis', 'ferramentas', 'periodos', 'usuarioInclusao').findById(id, {
                 order: sequelize.literal('"responsaveis->RotinaResponsavel"."tipo_id", "paineis"."nome"')
-
             });
             res.send(response);
         } catch (err) {

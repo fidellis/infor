@@ -37,10 +37,10 @@ const ID_PERIODICIDADE_ANUAL = 6;
 const Component = (props) => {
 
   const id = Number(props.match.params.id);
-  const response = getDado({ id, include: ['usuarioInclusao', 'paineis', 'tags', 'responsaveis', 'ferramentas', 'periodos'] });
+  const response = getDado({ id });
   const [data, setData] = useState(response);
   const [painel, setPainel] = useState({});
-  const [formEditavel, setFormEditavel] = useState(false);
+  const [formEditavel, setFormEditavel] = useState(!id);
   const [openFormPainel, setOpenFormPainel] = useState(false);
   const [openFormResponsavel, setOpenFormResponsavel] = useState(false);
   const descricao = data.descricao || '';
@@ -204,7 +204,8 @@ const Component = (props) => {
           {
             label: 'Editar',
             hide: formEditavel,
-            onClick: () => setFormEditavel(true)
+            onClick: () => setFormEditavel(true),
+            hide: !id,
           },
           {
             label: 'Excluir',
