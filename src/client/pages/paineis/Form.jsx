@@ -17,7 +17,7 @@ const Component = (props) => {
 
   const response = getDado({ id, include: ['usuarioInclusao'] });
   const [data, setData] = useState(response);
-  const [formEditavel, setFormEditavel] = useState(false);
+  const [formEditavel, setFormEditavel] = useState(!id);
 
   useEffect(() => {
     setData(response);
@@ -75,7 +75,8 @@ const Component = (props) => {
           {
             label: 'Editar',
             hide: formEditavel,
-            onClick: () => setFormEditavel(true)
+            onClick: () => setFormEditavel(true),
+            hide: !id,
           },
           {
             label: 'Excluir',
