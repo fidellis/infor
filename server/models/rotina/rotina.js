@@ -178,7 +178,7 @@ const Model = _sequelize2.default.define('RotinaInfor', {
         tags: { include: [{ model: _tag2.default, as: 'tags' }] },
         periodos: { include: [{ model: _rotinaPeriodo2.default, as: 'periodos' }] },
         ferramentas: { include: [{ model: _ferramenta2.default, as: 'ferramentas' }] },
-        responsaveis: { include: [{ model: _usuario2.default, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+        responsaveis: () => ({ include: [{ model: _usuario2.default, as: 'responsaveis', attributes: ['id', 'nome'] }] }),
         usuarioInclusao: { include: [{ model: _usuario2.default, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] }
     },
     schema: 'rotina',
