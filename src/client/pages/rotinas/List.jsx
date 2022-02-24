@@ -94,10 +94,11 @@ const columns = {
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response] = getDados({ filter: props.filter.rotina });
-
+  const filter = props.filter.rotina;
+  const [response] = getDados({ filter });
+  const filterResponsaveis = filter.responsavel_id;
   useEffect(() => {
-    setData(response);
+    setData(!filterResponsaveis ? response : response.filter(r => r.responsaveis.map(responsavel => responsavel.id).some(id => filterResponsaveis.includes(id))));
   }, [response]);
 
   return (
@@ -105,7 +106,7 @@ const Component = (props) => {
       <Grid container spacing={1} alignItems="flex-end">
         <Grid item xs={2}>
           <SelectStatusRotina
-            value={props.filter.rotina.status_id}
+            value={filter.status_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
@@ -114,19 +115,19 @@ const Component = (props) => {
             id="automatica"
             label="Automática"
             options={options.automatica}
-            value={props.filter.rotina.automatica}
+            value={filter.automatica}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
         <Grid item xs={2}>
           <SelectTipoRotina
-            value={props.filter.rotina.tipo_id}
+            value={filter.tipo_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
         <Grid item xs={2}>
           <SelectPeriodicidadeRotina
-            value={props.filter.rotina.periodicidade_id}
+            value={filter.periodicidade_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
@@ -134,7 +135,7 @@ const Component = (props) => {
           <SelectUsuario
             id="responsavel_id"
             label="Responsável"
-            value={props.filter.rotina.responsavel_id}
+            value={filter.responsavel_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             params={{ uor_id: 283521, order: ['nome'] }}
             isMulti

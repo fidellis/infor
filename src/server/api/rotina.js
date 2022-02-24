@@ -10,14 +10,7 @@ module.exports = (router) => {
         const params = paramsConverter(RotinaInfor, req);
 
         try {
-            const response = await RotinaInfor.scope('usuarioInclusao', 'status', 'tipo', 'periodicidade').findAll({
-                include: [{
-                    model: Usuario,
-                    as: 'responsaveis',
-                    where: query.responsavel_id ? { id: query.responsavel_id } : {},
-                }],
-                ...params
-            });
+            const response = await RotinaInfor.scope('usuarioInclusao', 'status', 'tipo', 'periodicidade', 'responsaveis').findAll(params);
             res.send(response);
         } catch (err) {
             next(err);
