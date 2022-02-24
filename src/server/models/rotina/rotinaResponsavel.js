@@ -34,6 +34,16 @@ const Model = sequelize.define(
                 ]
             }
         },
+        // scopes: {
+        //     responsavel: {
+        //         include: [
+        //             {
+        //                 model: Responsavel,
+        //                 as: 'responsavel',
+        //             }
+        //         ]
+        //     }
+        // },
         schema: 'rotina',
         tableName: 'rotina_responsavel',
     },

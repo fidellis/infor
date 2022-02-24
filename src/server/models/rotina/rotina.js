@@ -125,11 +125,15 @@ const Model = sequelize.define(
     },
     {
         scopes: {
+            tipo: { include: [{ model: Tipo, as: 'tipo' }] },
+            status: { include: [{ model: Status, as: 'status' }] },
+            periodicidade: { include: [{ model: Periodicidade, as: 'periodicidade' }] },
             paineis: { include: [{ model: Painel, as: 'paineis' }] },
             tags: { include: [{ model: Tag, as: 'tags' }] },
             periodos: { include: [{ model: PeriodoRotina, as: 'periodos' }] },
             ferramentas: { include: [{ model: Ferramenta, as: 'ferramentas' }] },
-            responsaveis: () => ({ include: [{ model: Usuario, as: 'responsaveis', attributes: ['id', 'nome'] }] }),
+            responsaveis: { include: [{ model: Usuario, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+            // rotinaResponsavel: { include: [{ model: RotinaResponsavel, as: 'rotinaResponsavel' }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
         },
         schema: 'rotina',

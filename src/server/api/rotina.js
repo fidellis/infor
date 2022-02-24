@@ -1,8 +1,28 @@
 import sequelize from 'common/sequelize';
-import paramsConverter from 'common/sequelize/params';
+import paramsConverter from 'common/sequelize/params/converter';
 import Usuario from 'common/models/portal/usuario';
 
 module.exports = (router) => {
+
+    router.get('/rotina', async (req, res, next) => {
+        const { query } = req;
+        const { RotinaInfor } = sequelize.models;
+        const params = paramsConverter(RotinaInfor, req);
+
+        try {
+            const response = await RotinaInfor.scope('usuarioInclusao', 'status', 'tipo', 'periodicidade').findAll({
+                include: [{
+                    model: Usuario,
+                    as: 'responsaveis',
+                    where: query.responsavel_id ? { id: query.responsavel_id } : {},
+                }],
+                ...params
+            });
+            res.send(response);
+        } catch (err) {
+            next(err);
+        }
+    });
 
     router.get('/rotina/:id', async (req, res, next) => {
         const { RotinaInfor } = sequelize.models;
@@ -19,8 +39,6 @@ module.exports = (router) => {
 
     router.post('/', async (req, res, next) => {
         const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta, PeriodoRotina } = sequelize.models;
-        //const modelParams = paramsConverter(RotinaInfor);
-        //const params = modelParams(req);
         const usuario = req.session.usuario;
         const data = req.body;
         const isNewRecord = !data.id;

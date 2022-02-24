@@ -9,7 +9,7 @@ export function getDados(params) {
   async function change() {
     setLoading(true);
     const [response] = await Promise.all([
-      getData('/rotina/rotina', { ...params, ...params.filter, order: ['id'] }),
+      getData('/rotina/rotina', { ...params, ...params.filter, order: ['nome'] }),
     ]);
     setData(response);
     setLoading(false);

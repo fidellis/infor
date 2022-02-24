@@ -94,7 +94,7 @@ const columns = {
 
 const Component = (props) => {
   const [data, setData] = useState([]);
-  const [response] = getDados({ include: ['usuarioInclusao', 'status', 'tipo', 'periodicidade', 'responsaveis'], filter: props.filter.rotina });
+  const [response] = getDados({ filter: props.filter.rotina });
 
   useEffect(() => {
     setData(response);
@@ -130,16 +130,16 @@ const Component = (props) => {
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
         </Grid>
-        {/* <Grid item xs={3}>
+        <Grid item xs={3}>
           <SelectUsuario
-            id="resposaveis"
+            id="responsavel_id"
             label="Responsável"
-            value={props.filter.rotina.resposaveis}
+            value={props.filter.rotina.responsavel_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             params={{ uor_id: 283521, order: ['nome'] }}
             isMulti
           />
-        </Grid> */}
+        </Grid>
         <Grid item xs={1}>
           <ButtonLimparFiltros />
         </Grid>
