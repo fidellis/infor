@@ -51,6 +51,16 @@ const Model = _sequelize2.default.define('RotinaResponsavel', {
             }]
         }
     },
+    // scopes: {
+    //     responsavel: {
+    //         include: [
+    //             {
+    //                 model: Responsavel,
+    //                 as: 'responsavel',
+    //             }
+    //         ]
+    //     }
+    // },
     schema: 'rotina',
     tableName: 'rotina_responsavel'
 });

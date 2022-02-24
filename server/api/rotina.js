@@ -6,9 +6,9 @@ var _sequelize = require('common/sequelize');
 
 var _sequelize2 = _interopRequireDefault(_sequelize);
 
-var _params = require('common/sequelize/params');
+var _converter = require('common/sequelize/params/converter');
 
-var _params2 = _interopRequireDefault(_params);
+var _converter2 = _interopRequireDefault(_converter);
 
 var _usuario = require('common/models/portal/usuario');
 
@@ -17,6 +17,25 @@ var _usuario2 = _interopRequireDefault(_usuario);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = router => {
+
+    router.get('/rotina', async (req, res, next) => {
+        const { query } = req;
+        const { RotinaInfor } = _sequelize2.default.models;
+        const params = (0, _converter2.default)(RotinaInfor, req);
+
+        try {
+            const response = await RotinaInfor.scope('usuarioInclusao', 'status', 'tipo', 'periodicidade').findAll(_extends({
+                include: [{
+                    model: _usuario2.default,
+                    as: 'responsaveis',
+                    where: query.responsavel_id ? { id: query.responsavel_id } : {}
+                }]
+            }, params));
+            res.send(response);
+        } catch (err) {
+            next(err);
+        }
+    });
 
     router.get('/rotina/:id', async (req, res, next) => {
         const { RotinaInfor } = _sequelize2.default.models;
@@ -33,8 +52,6 @@ module.exports = router => {
 
     router.post('/', async (req, res, next) => {
         const { RotinaInfor, RotinaPainel, RotinaTag, RotinaResponsavel, RotinaFerramenta, PeriodoRotina } = _sequelize2.default.models;
-        //const modelParams = paramsConverter(RotinaInfor);
-        //const params = modelParams(req);
         const usuario = req.session.usuario;
         const data = req.body;
         const isNewRecord = !data.id;

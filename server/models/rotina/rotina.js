@@ -174,11 +174,15 @@ const Model = _sequelize2.default.define('RotinaInfor', {
     }
 }, {
     scopes: {
+        tipo: { include: [{ model: _tipo2.default, as: 'tipo' }] },
+        status: { include: [{ model: _status2.default, as: 'status' }] },
+        periodicidade: { include: [{ model: _periodicidade2.default, as: 'periodicidade' }] },
         paineis: { include: [{ model: _painel2.default, as: 'paineis' }] },
         tags: { include: [{ model: _tag2.default, as: 'tags' }] },
         periodos: { include: [{ model: _rotinaPeriodo2.default, as: 'periodos' }] },
         ferramentas: { include: [{ model: _ferramenta2.default, as: 'ferramentas' }] },
-        responsaveis: () => ({ include: [{ model: _usuario2.default, as: 'responsaveis', attributes: ['id', 'nome'] }] }),
+        responsaveis: { include: [{ model: _usuario2.default, as: 'responsaveis', attributes: ['id', 'nome'] }] },
+        // rotinaResponsavel: { include: [{ model: RotinaResponsavel, as: 'rotinaResponsavel' }] },
         usuarioInclusao: { include: [{ model: _usuario2.default, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] }
     },
     schema: 'rotina',

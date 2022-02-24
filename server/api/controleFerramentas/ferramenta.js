@@ -4,18 +4,12 @@ var _sequelize = require('common/sequelize');
 
 var _sequelize2 = _interopRequireDefault(_sequelize);
 
-var _params = require('common/sequelize/params');
-
-var _params2 = _interopRequireDefault(_params);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = router => {
 
   router.post('/', async (req, res, next) => {
     const { FerramentaInfor } = _sequelize2.default.models;
-    const modelParams = (0, _params2.default)(FerramentaInfor);
-    const params = modelParams(req);
     const usuario = req.session.usuario;
     const data = req.body;
     const isNewRecord = !data.id;
