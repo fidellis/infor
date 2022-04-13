@@ -360,7 +360,7 @@ const Component = (props) => {
             <TextInput
               id="linkPop"
               label="Link do POP"
-              value={data.linkPop}
+              value={<a href={data.linkPop} target="_blank">{data.linkPop}</a>}
               onChange={onChange}
               required
               disabled={!formEditavel}
