@@ -357,14 +357,16 @@ const Component = (props) => {
 
 
           <Grid item xs={12}>
-            <TextInput
-              id="linkPop"
-              label="Link do POP"
-              value={<a href={data.linkPop} target="_blank">{data.linkPop}</a>}
-              onChange={onChange}
-              required
-              disabled={!formEditavel}
-            />
+            <a href={data.linkPop} target="_blank">
+              <TextInput
+                id="linkPop"
+                label="Link do POP"
+                value={data.linkPop}
+                onChange={onChange}
+                required
+                disabled={!formEditavel}
+              />
+            </a>
           </Grid>
 
           <Grid item xs={12}>
