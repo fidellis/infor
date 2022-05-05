@@ -93,7 +93,7 @@ export const filter = (initialRows, filteredColumns) => {
 
   return rows.filter(row => filteredColumns.every((column) => {
     const value = get(row, column.key);
-    const formatValue = column.cellRenderer ? column.cellRenderer({ row }) : format(value, column.type);
+    const formatValue = (column.cellRenderer ? column.cellRenderer({ row }) : format(value, column.type)) || '';
 
     function compare(v) {
       const regex = new RegExp(removeSymbols(v.toString()), 'ig');
