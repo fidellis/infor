@@ -93,8 +93,7 @@ class InputSelect extends Component {
 	render() {
 		const { id, label, placeholder, optionValue, optionLabel, labelRenderer, width, style, styleContainer, ...inputProps } = this.props;
 		const { options } = this.state;
-		console.log('1', this.state.selectedOptions)
-		console.log('2', this.renderSelectedLabel())
+
 		return (
 			<div id={`multiselect-${id}`} className="multiselect" style={styleContainer}>
 				<div id={`selectBox-${id}`} className="selectBox" onClick={() => this.showCheckboxes(id)}>
