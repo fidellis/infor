@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Form from './form/Form';
-import Button from '~/components/Button';
 import PropTypes from 'prop-types';
-import Progress from '@material-ui/core/CircularProgress';
+import Form from './form/Form';
+import Button from '~/components/button/Button';
+import Loading from '~/components/Loading';
 import { connect } from 'react-redux';
 
 export const msg = txt => dispatch => dispatch({ type: 'SUCCESS', msg: txt });
@@ -58,21 +58,20 @@ class Formulario extends Component {
     const { children, isValid, actions, width, showLoading, ...props } = this.props;
 
     return (
-      showLoading ?
-        <center><Progress /></center>
-        :
-        <div style={{ ...styles.container, width }}>
-          <Form
-            {...props}
-            isValid={v => this.setState({ isValid: v }, () => (isValid ? isValid(v) : null))}
-            hideError={!this.state.submited}
-          >
-            {children}
-          </Form>
-          <div style={styles.actions}>
-            {actions.filter(a => a.hide !== true).map(({ label, ...actionProps }) => <Button {...actionProps} key={label} onClick={() => this.onClickAction({ label, ...actionProps })} style={styles.button} >{label}</Button>)}
-          </div>
+
+      <div style={{ ...styles.container, width }}>
+        {showLoading && <Loading />}
+        <Form
+          {...props}
+          isValid={v => this.setState({ isValid: v }, () => (isValid ? isValid(v) : null))}
+          hideError={!this.state.submited}
+        >
+          {children}
+        </Form>
+        <div style={styles.actions}>
+          {actions.filter(a => a.hide !== true).map(({ label, disabled, ...actionProps }) => <Button disabled={disabled || showLoading} {...actionProps} key={label} onClick={() => this.onClickAction({ label, ...actionProps })} style={styles.button} >{label}</Button>)}
         </div>
+      </div>
     );
   }
 }
@@ -92,4 +91,4 @@ Formulario.defaultProps = {
 };
 
 const mapStateToProps = ({ app: { showLoading } }) => ({ showLoading });
-export default connect(() => { }, { msg })(Formulario);
+export default connect(mapStateToProps, { msg })(Formulario);

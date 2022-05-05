@@ -88,16 +88,20 @@ export function cellRenderer({ column, row }) {
   return format(value, type);
 }
 
-
 export const filter = (initialRows, filteredColumns) => {
   const rows = initialRows;
 
   return rows.filter(row => filteredColumns.every((column) => {
-    const searchValue = column.searchValue.toString();
     const value = get(row, column.key);
-    const regex = new RegExp(removeSymbols(searchValue), 'ig');
-    const formatValue = column.cellRenderer ? column.cellRenderer({ row }) : format(value, column.type);
-    return regex.test(removeSymbols(formatValue.toString()));
+    if (Array.isArray(column.searchValue)) {
+      if (!column.searchValue.length) return true;
+      return column.searchValue.includes(value);
+    } else {
+      const searchValue = column.searchValue.toString();
+      const regex = new RegExp(removeSymbols(searchValue), 'ig');
+      const formatValue = column.cellRenderer ? column.cellRenderer({ row }) : format(value, column.type);
+      return regex.test(removeSymbols(formatValue.toString()));
+    }
   }));
 };
 
@@ -143,7 +147,7 @@ export function getColumnsGroup(c) {
 }
 
 export function exportCsv(data, filename = 'data-csv') {
-  let csvContent = 'data:text/csv;charset=utf-8,';
+  let csvContent = 'data:text/csv;charset=utf-8,\uFEFF';
   const keys = Object.keys(data[0]).filter(k => k);
   csvContent += `${keys.join(';')};\r\n`;
   data.forEach((d) => {

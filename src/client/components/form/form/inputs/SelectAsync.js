@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import Select from 'react-select/async';
 import ComponentContainer from './ComponentContainer';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
+// import _debounce from 'lodash/debounce';
 import './react-select.css';
 
 function convertOptions({ options, optionValue, optionLabel, labelRenderer }) {
@@ -20,8 +21,8 @@ function promiseOptions({ inputValue, getOptions, params, isDisabled }) {
   // return Promise.resolve();
 }
 
-const searchAPI = p => promiseOptions(p);
-const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
+// const searchAPIDebounced = _debounce(p => promiseOptions(p), 500);
+const searchAPIDebounced = AwesomeDebouncePromise(p => promiseOptions(p), 500);
 
 class SelectAsync extends PureComponent {
   constructor(props) {
@@ -53,16 +54,16 @@ class SelectAsync extends PureComponent {
     });
   }
 
-  promiseOptions(inputValue) {
-    return new Promise((resolve) => {
-      resolve(this.props.isDisabled ? () => { } : this.props.getOptions(inputValue, this.props.params));
-    });
-  }
+  // promiseOptions(inputValue) {
+  // return new Promise((resolve) => {
+  // resolve(this.props.isDisabled ? () => { } : this.props.getOptions(inputValue, this.props.params));
+  // });
+  // }
 
   async debounce(inputValue) {
-    const { getOptions, isDisabled, params } = this.props;
+    const { getOptions, isDisabled, params, optionValue, optionLabel, labelRenderer } = this.props;
     const result = await searchAPIDebounced({ inputValue, getOptions, params, isDisabled });
-    return result;
+    return convertOptions({ options: result, optionValue, optionLabel, labelRenderer });
   }
 
   render() {
@@ -77,7 +78,7 @@ class SelectAsync extends PureComponent {
           value={this.state.value || ''}
           cacheOptions
           defaultOptions
-          onChange={v => onChange({ ...v, id })}
+          onChange={v => onChange({ ...v, id, value: v[optionValue] })}
           styles={{ container: provided => ({ ...provided, ...style }), menu: provided => ({ ...provided, zIndex: 999 }) }}
         />
       </ComponentContainer>
@@ -96,7 +97,7 @@ SelectAsync.defaultProps = {
   noResultsText: 'Nenhum resultado encontrado.',
   onChange: () => console.log('onchange não definido'),
   // params: {
-  //   limit: 10,
+  // limit: 10,
   // },
   // getOptionLabel: option => null,
 };

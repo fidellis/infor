@@ -20,7 +20,7 @@ import SelectTipoResponsavel from '~/components/select/SelectTipoResponsavel';
 import SelectDiaSemana from '~/components/select/SelectDiaSemana';
 import SelectMes from '~/components/select/SelectMes';
 import Icon from '~/components/icons/Icon';
-import Button from '~/components/Button';
+import Button from '~/components/button/Button';
 import { Grid } from '@material-ui/core';
 import { save, destroy } from '~/lib/api';
 import qs from 'qs';
@@ -91,6 +91,7 @@ const Component = (props) => {
           value={row.tipo_id}
           label=""
           onChange={option => onChangeTipoResponsavel(row, option)}
+        // isDisabled={!formEditavel}
         />
       },
       delete: {
@@ -357,16 +358,14 @@ const Component = (props) => {
 
 
           <Grid item xs={12}>
-            <a href={data.linkPop} target="_blank">
-              <TextInput
-                id="linkPop"
-                label="Link do POP"
-                value={data.linkPop}
-                onChange={onChange}
-                required
-                disabled={!formEditavel}
-              />
-            </a>
+            <TextInput
+              id="linkPop"
+              label={<div>Link do POP <Icon fontSize="small" onClick={() => window.open(data.linkPop, '_blank')}>open_in_new</Icon></div>}
+              value={data.linkPop}
+              onChange={onChange}
+              required
+              disabled={!formEditavel}
+            />
           </Grid>
 
           <Grid item xs={12}>

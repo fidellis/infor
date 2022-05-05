@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
-import Button from '~/components/Button';
+import Button from '~/components/button/Button';
 import NavigationButton from '~/components/NavigationButton';
 import { getRelatorio } from './controleFerramentasHook';
 

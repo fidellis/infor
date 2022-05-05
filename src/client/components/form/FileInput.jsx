@@ -4,7 +4,7 @@ import api, { uploadApi, getData } from '~/lib/api';
 import config from '~/config';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '~/components/Button';
+import Button from '~/components/button/Button';
 import ImageArquivos from '~/components/ImageArquivos';
 import Icon from '~/components/icons/Icon';
 import { TextInput } from '~/components/form/form/inputs';
@@ -35,9 +35,9 @@ export const msg = txt => dispatch => dispatch({ type: 'SUCCESS', msg: txt });
 const Input = (props) => {
   const classes = useStyles();
   const [arquivo, setArquivo] = useState({});
-
   async function getArquivo() {
     const a = await getData(`/arquivo/arquivo/${props.value}`);
+    console.log('arquivo', a)
     setArquivo(a);
   }
   useEffect(() => {
@@ -73,14 +73,12 @@ const Input = (props) => {
           type="file"
         />
         <label htmlFor="contained-button-file" className={classes.button}>
-          <Button variant="contained" color="primary" component="span">
+          <Button variant="contained" color="primary" component="span" {...props.buttonProps}>
             {props.label}
           </Button>
         </label>
 
-        <TextInput
-          value={arquivo.nome}
-        />
+        {props.showInput && <TextInput value={arquivo.nome} />}
 
         {arquivo.id && <Icon onClick={() => window.open(`${config.arquivoUrl}/${arquivo.id}`)}>search</Icon>}
 
@@ -97,6 +95,8 @@ Input.propTypes = {
 
 Input.defaultProps = {
   label: 'Upload',
+  showImage: false,
+  showInput: true,
 };
 
 export default connect(() => { }, { msg })(Input);

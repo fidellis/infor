@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '../Button';
+import Button from './Button';
 import { clearFilters } from '~/store/filter';
 
 const styles = {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import uniq from 'lodash/uniq';
+import SelectCheckbox from './SelectCheckbox';
+import { cellRenderer } from './utils';
 
 const Label = ({ children, onSort, column }) => {
   const styles = {
@@ -24,10 +26,10 @@ const Label = ({ children, onSort, column }) => {
       <span onClick={onClick} style={{ textAlign: 'center', cursor: sortable ? 'pointer' : null }}>{children}</span> {sortIcon}
     </div>
   )
-  ;
+    ;
 };
 
-const Input = ({ column, onSearch }) => {
+const Input = ({ column, rows, onSearch }) => {
   const styles = {
     container: {
       display: 'flex',
@@ -35,8 +37,10 @@ const Input = ({ column, onSearch }) => {
       justifyContent: 'center',
       height: '100%',
     },
-    input: {
+    inputContainer: {
       width: 'calc(100% - 10px)',
+    },
+    input: {
       marginTop: 2,
       marginBottom: 2,
       border: 1,
@@ -48,13 +52,27 @@ const Input = ({ column, onSearch }) => {
     },
   };
 
+  const options = column.lookup ? uniq(rows.map(row => cellRenderer({ column, row }))).sort().map(value => ({ value, label: value })) : [];
+
   return (
     <div style={styles.container}>
-      <input
-        onChange={e => onSearch({ value: e.target.value, column })}
-        value={column.searchValue || ''}
-        style={styles.input}
-      />
+      {column.lookup ?
+        <SelectCheckbox
+          id={column.key}
+          value={column.searchValue || []}
+          onChange={e => onSearch({ value: e.value, column })}
+          options={options}
+          style={styles.input}
+          styleContainer={styles.inputContainer}
+        />
+        :
+        <input
+          onChange={e => onSearch({ value: e.target.value, column })}
+          value={column.searchValue || ''}
+          style={{ ...styles.input, ...styles.inputContainer }}
+        />
+      }
+
     </div>
   );
 };
@@ -80,12 +98,12 @@ const Container = ({ children, height, headerStyle }) => {
   );
 };
 
-const Cell = ({ children, column, height, onSort, onSearch }) => {
+const Cell = ({ children, column, rows, height, onSort, onSearch }) => {
   const { search, headerStyle } = column;
   return (
     <Container height={height} headerStyle={headerStyle}>
       <Label column={column} onSort={onSort}>{children}</Label>
-      {search && <Input column={column} onSearch={onSearch} />}
+      {search && <Input column={column} rows={rows} onSearch={onSearch} />}
     </Container>);
 };
 
@@ -124,7 +142,7 @@ class Header extends Component {
   }
 
   render() {
-    const { children, column, height, onSearch, group } = this.props;
+    const { children, column, rows, height, onSearch, group } = this.props;
 
     return (
       group ?
@@ -137,6 +155,7 @@ class Header extends Component {
         :
         <Cell
           column={column}
+          rows={rows}
           height={height}
           onSort={this.onSort}
           onSearch={onSearch}

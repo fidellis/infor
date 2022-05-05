@@ -5,6 +5,7 @@ import { encrypt } from '~/lib/util/encrypt';
 
 const defaultOptions = { withCredentials: true };
 const devOptions = process.env.AMBIENTE === 'desenvolvimento' ? {
+
   headers: {
     Authorization: encrypt() || process.env.DISEM_TOKEN,
   },
@@ -60,9 +61,11 @@ export const uploadApi = createApi(config.arquivoUrl);
 const api = createApi(config.apiUrl);
 
 export const getData = async (url, params) => {
+  loading(true);
   const response = await api
     .get(url, { params: { ...params } })
     .catch(err => console.error(err));
+  loading(false);
   return response.data;
 };
 
@@ -75,12 +78,16 @@ export const getPromiseData = async (promises) => {
 };
 
 export const save = async (url, data, params) => {
+  loading(true);
   const response = await api.post(url, data, { params }).catch(err => console.error(err));
+  loading(false);
   return response ? response.data : null;
 };
 
 export const destroy = async (url, params) => {
+  loading(true);
   const response = await api.delete(url, { params }).catch(err => console.error(err));
+  loading(false);
   return response.data;
 };
 

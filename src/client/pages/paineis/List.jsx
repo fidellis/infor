@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import DataTable from '~/components/data-table/DataTable';
 import Aviso from '~/components/message/Aviso';
-import Button from '~/components/Button';
+import Button from '~/components/button/Button';
 import NavigationButton from '~/components/NavigationButton';
 import { getDados } from './hook';
 
@@ -22,11 +22,13 @@ const columns = {
     label: 'Tipo',
     width: 100,
     search: true,
+    lookup: true,
   },
   'status.nome': {
     label: 'Situação',
     width: 100,
     search: true,
+    lookup: true,
   },
   dataCriacao: {
     label: 'Data Criação',

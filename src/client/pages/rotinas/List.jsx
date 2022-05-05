@@ -57,6 +57,7 @@ const columns = {
     label: 'Responsável',
     width: 200,
     search: true,
+    lookup: true,
     cellRenderer: ({ row }) => {
       const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 1 : null);
       return responsavel ? responsavel.nome : null;
@@ -66,6 +67,7 @@ const columns = {
     label: 'Responsável Lateral 1',
     width: 200,
     search: true,
+    lookup: true,
     cellRenderer: ({ row }) => {
       const responsavel = row.responsaveis.find(r => r.RotinaResponsavel ? Number(r.RotinaResponsavel.tipo_id) === 2 : null);
       return responsavel ? responsavel.nome : null;

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table, ColumnGroup, Column } from 'fixed-data-table-2';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import ReactLoading from 'react-loading';
+// import ReactLoading from 'react-loading';
 import clone from 'lodash/clone';
-import Header from './Header';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import Cell from './Cell';
+import Header from './Header';
 import { getColumnsGroup, filter, sort } from './utils';
 import './data-table.css';
 
@@ -49,7 +50,8 @@ function prepareGroupColumns({ columns, ...props }) {
   return cols;
 }
 
-const Loading = () => <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}><ReactLoading type="spin" color="#626466" height={50} width={50} /></div>;
+// const Loading = () => <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}><ReactLoading type="spin" color="#626466" height={50} width={50} /></div>;
+const screenHeight = window.screen.height - 200;
 
 class DataTable extends Component {
   constructor(props) {
@@ -57,10 +59,13 @@ class DataTable extends Component {
     const { rows, columns, getRows } = props;
 
     this.startRows = rows.slice();
-    this.columns = this.getColumns(props);
+    // this.columns = this.getColumns(props);
     this.state = {
-      rows: this.getRows(),
+      // rows: this.getRows(),
+      columns: this.getColumns(props),
     };
+
+    this.state.rows = this.getRows();
 
     if (getRows) getRows(this.state.rows);
 
@@ -68,14 +73,16 @@ class DataTable extends Component {
     this.onSort = this.onSort.bind(this);
     this.renderGroup = this.renderGroup.bind(this);
     this.renderColumn = this.renderColumn.bind(this);
+    this.setColumn = this.setColumn.bind(this);
+    this.debounce = this.debounce.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { rows, getRows } = nextProps;
     if (rows !== this.props.rows) {
       this.startRows = rows.slice();
-      this.columns = this.getColumns(nextProps);
-      this.setState({ rows: this.getRows() }, () => (getRows ? getRows(this.state.rows) : null));
+      // this.columns = this.getColumns(nextProps);
+      this.setState({ rows: this.getRows(), columns: this.getColumns(nextProps) }, () => (getRows ? getRows(this.state.rows) : null));
     }
   }
 
@@ -86,7 +93,7 @@ class DataTable extends Component {
   }
 
   getFilteredColumns() {
-    const columns = getColumnsGroup(this.columns);
+    const columns = getColumnsGroup(this.state.columns);
     const filteredColumns = Object.keys(columns).filter(key => columns[key].searchValue).map(key => columns[key]);
     return filteredColumns;
   }
@@ -100,16 +107,35 @@ class DataTable extends Component {
     return this.getFilteredRows();
   }
 
-  onSearch({ value, column }) {
-    const { getRows } = this.props;
-    column.searchValue = value;
-    this.setState({ rows: this.getRows() }, () => (getRows ? getRows(this.state.rows) : null));
+  async debounce() {
+    const result = await AwesomeDebouncePromise(() => this.getRows(), 500)();
+    return result;
+  }
+
+  setColumn(params) {
+    const key = params.column.key;
+    const columns = JSON.parse(JSON.stringify(this.state.columns));
+    const column = columns[key];
+    column.searchValue = params.value;
+    columns[key] = column;
+    this.setState({ columns }, () => {
+      this.onSearch();
+    });
+  }
+
+  async onSearch() {
+    const { getRows, getColumns } = this.props;
+    const rows = await this.debounce();
+    this.setState({ rows }, () => {
+      if (getRows) getRows(this.state.rows);
+      if (getColumns) getColumns(this.state.columns);
+    });
   }
 
   onSort(column) {
     if (column.sortable === false) return;
-    const { columns, state } = this;
-    const { rows } = state;
+    const { state } = this;
+    const { rows, columns } = state;
 
     column.sorted = !column.sorted;
     Object.keys(columns).forEach((key) => {
@@ -143,7 +169,8 @@ class DataTable extends Component {
         header={
           <Header
             column={column}
-            onSearch={this.onSearch}
+            rows={this.startRows}
+            onSearch={this.setColumn}
             onSort={this.onSort}
           >
             {label}
@@ -164,33 +191,36 @@ class DataTable extends Component {
   }
 
   renderColumns() {
-    const { columns } = this;
+    const { columns } = this.state;
     const render = this.hasGroup ? this.renderGroup : this.renderColumn;
 
     return Object.keys(columns).map(key => render(columns[key]));
   }
 
   render() {
-    const { width, height, maxHeight, toolbar, loading } = this.props;
+    const { height, fullWidth, toolbar, ...props } = this.props;
     const { contentHeight } = this.state;
-
+    if (fullWidth) {
+      props.height = height;
+    } else {
+      props.maxHeight = height;
+    }
     return (
-      <div style={{ width, marginLeft: 'auto', marginRight: 'auto' }}>
+      <div style={{ width: props.width, marginLeft: 'auto', marginRight: 'auto' }}>
         {toolbar}
-        <div style={{ height: height || (contentHeight < maxHeight ? contentHeight : maxHeight) }} >
-          {loading ? <Loading /> :
+        <div style={{ height: contentHeight > height ? height : contentHeight }} >
           <AutoSizer key="table">
-              {({ width }) => (
+            {({ width }) => (
               <Table
-                  {...this.props}
-                  width={width}
-                  rowsCount={this.state.rows.length}
-                  onContentHeightChange={h => this.setState({ contentHeight: h })}
-                >
-                  {this.renderColumns()}
-                </Table>
-              )}
-            </AutoSizer>}
+                {...props}
+                width={width}
+                rowsCount={this.state.rows.length}
+                onContentHeightChange={h => this.setState({ contentHeight: h })}
+              >
+                {this.renderColumns()}
+              </Table>
+            )}
+          </AutoSizer>
         </div>
       </div>
     );
@@ -212,7 +242,8 @@ DataTable.propTypes = {
 DataTable.defaultProps = {
   columns: {},
   rows: [],
-  maxHeight: 850,
+  height: screenHeight > 747 ? 747 : screenHeight,
+  fullWidth: true,
   headerHeight: 70,
   rowHeight: 40,
   groupHeaderHeight: 40,
@@ -221,6 +252,8 @@ DataTable.defaultProps = {
   loading: false,
   getRows: null,
   onClick: null,
+  footerHeight: 0,
 };
+
 
 export default DataTable;

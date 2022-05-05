@@ -26,6 +26,7 @@ const DateInput = ({ label, onChange, id, closeOnSelect, timeFormat, isValidDate
     <ComponentContainer label={label}>
       {!disabled ?
         <input
+          {...inputProps}
           type="date"
           id={id}
           // value={value ? moment(value).utc() : null}
@@ -53,7 +54,7 @@ const DateInput = ({ label, onChange, id, closeOnSelect, timeFormat, isValidDate
           className='input input-date'
           //dateFormat="DD/MM/YYYY"
           locale="pt-br"
-        /> : <TextInput value={moment(value).format('DD/MM/YYYY')} textAlign="right" disabled />}
+        /> : <TextInput value={value ? moment(value).format('DD/MM/YYYY') : null} textAlign="right" disabled />}
     </ComponentContainer>
   )
 };
