@@ -39,15 +39,24 @@ const options = {
 };
 
 const columns = {
-  // 'tipo.nome': {
-  //   label: 'Célula',
-  //   width: 100,
-  //   search: true,
-  // },
+  'tipo.nome': {
+    label: 'Célula',
+    width: 100,
+    search: true,
+    lookup: true,
+  },
   'periodicidade.nome': {
     label: 'Periodicidade',
     width: 110,
-    // search: true,
+    search: true,
+    lookup: true,
+  },
+  automatica: {
+    label: 'Automática',
+    width: 110,
+    type: 'BOOLEAN',
+    search: true,
+    lookup: true,
   },
   nome: {
     label: 'Nome',
@@ -106,13 +115,13 @@ const Component = (props) => {
   return (
     <div>
       <Grid container spacing={1} alignItems="flex-end">
-        <Grid item xs={2}>
+        {/* <Grid item xs={2}>
           <SelectStatusRotina
             value={filter.status_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
-        </Grid>
-        <Grid item xs={2}>
+        </Grid> */}
+        {/* <Grid item xs={2}>
           <Select
             id="automatica"
             label="Automática"
@@ -120,20 +129,20 @@ const Component = (props) => {
             value={filter.automatica}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
-        </Grid>
-        <Grid item xs={2}>
+        </Grid> */}
+        {/* <Grid item xs={2}>
           <SelectTipoRotina
             value={filter.tipo_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
-        </Grid>
-        <Grid item xs={2}>
+        </Grid> */}
+        {/* <Grid item xs={2}>
           <SelectPeriodicidadeRotina
             value={filter.periodicidade_id}
             onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
             isMulti />
-        </Grid>
-        <Grid item xs={3}>
+        </Grid> */}
+        {/* <Grid item xs={3}>
           <SelectUsuario
             id="responsavel_id"
             label="Responsável"
@@ -142,10 +151,10 @@ const Component = (props) => {
             params={{ uor_id: 283521, order: ['nome'] }}
             isMulti
           />
-        </Grid>
-        <Grid item xs={1}>
+        </Grid> */}
+        {/* <Grid item xs={1}>
           <ButtonLimparFiltros />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <DataTable
             rows={data}
@@ -154,6 +163,14 @@ const Component = (props) => {
             exportCsv
             headerHeight={80}
             onClick={({ row }) => props.history.push(`/rotina/${row.id}`)}
+            actions={[
+              <SelectStatusRotina
+                label=""
+                value={filter.status_id}
+                onChange={({ id, value }) => props.setFilter({ id, value, filter: 'rotina' })}
+                isMulti
+                style={{ width: 200 }} />
+            ]}
           />
         </Grid>
       </Grid>
