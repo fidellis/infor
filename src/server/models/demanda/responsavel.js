@@ -1,7 +1,6 @@
 import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
-import UOR from 'common/models/uor/uor';
-import Status from './status';
+import Usuario from 'common/models/portal/usuario';
 
 const Model = sequelize.define(
     'movimentacaoDemanda',
@@ -17,21 +16,9 @@ const Model = sequelize.define(
             primaryKey: true,
         },
 
-        uorOrigem_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
+        usuario_id: {
+            type: Sequelize.STRING(9),
             primaryKey: true,
-        },
-
-        uorDestino_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-
-        status_id: {
-            type: Sequelize.BIGINT,
-            allowNull: false,
         },
 
         usuarioInclusao_id: {
@@ -51,17 +38,14 @@ const Model = sequelize.define(
     },
     {
         scopes: {
-            status: { include: [{ model: Status, as: 'status' }] },
-            uorOrigem: { include: [{ model: UOR, as: 'uorOrigem' }] },
-            uorDestino: { include: [{ model: UOR, as: 'uorDestino' }] },
+            usuario: { include: [{ model: Usuario, as: 'usuario' }] },
         },
         schema: 'demanda',
-        tableName: 'movimentacao',
+        tableName: 'responsavel',
     },
 );
 
 
-Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
-Model.belongsTo(UOR, { as: 'uorOrigem', foreignKey: 'uorOrigem_id' });
-Model.belongsTo(UOR, { as: 'uorDestino', foreignKey: 'uorDestino_id' });
+Model.belongsTo(Usuario, { as: 'usuario', foreignKey: 'usuario_id' });
+
 export default Model;
