@@ -41,6 +41,7 @@ Model.afterSync(() => Promise.all([
     Model.upsert({ id: 6, nome: 'Homologado', statusMovimentaca_id: [2] }),
     Model.upsert({ id: 7, nome: 'Finalizado' }),
     Model.upsert({ id: 8, nome: 'Cancelado' }),
+    Model.upsert({ id: 9, nome: 'Reaberto' }),
 ]));
 
 export default Model;

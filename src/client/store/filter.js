@@ -6,6 +6,9 @@ const initialState = {
     rotina: {
         status_id: ['1'],
     },
+    demanda: {
+        status_id: [],
+    },
 };
 
 const reducer = (state = initialState, action) => {

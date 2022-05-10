@@ -8,6 +8,8 @@ import RotinaList from '~/pages/rotinas/List';
 import RotinaForm from '~/pages/rotinas/Form';
 import PainelList from '~/pages/paineis/List';
 import PainelForm from '~/pages/paineis/Form';
+import DemandaList from '~/pages/demanda/List';
+import DemandaForm from '~/pages/demanda/Form';
 
 const isDev = process.env.AMBIENTE !== 'producao';
 
@@ -22,7 +24,21 @@ function allow({ usuario }) {
     MATRICULAS_AUTORIZADAS.includes(usuario.chave);
 }
 const routes = [
-  { path: '/', Component: () => <Redirect to="/rotinas" />, exact: true, link: false },
+  { path: '/', Component: () => <Redirect to="/demandas" />, exact: true, link: false },
+  {
+    label: 'Demandas',
+    icon: 'dashboard',
+    allow,
+    itens: [
+      {
+        label: '',
+        subitens: [
+          { path: '/demandas', label: 'Demandas', Component: DemandaList, allow },
+          { path: '/demanda/:id', label: 'Demanda', Component: DemandaForm, allow, link: false },
+        ],
+      },
+    ],
+  },
   {
     label: 'Painéis',
     icon: 'dashboard',

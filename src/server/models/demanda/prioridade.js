@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 
 const Model = sequelize.define(
-    'statusMovimentacaoDemanad',
+    'prioridadeDemanda',
     {
         id: {
             type: Sequelize.BIGINT,
@@ -20,25 +20,17 @@ const Model = sequelize.define(
             allowNull: false,
             defaultValue: true,
         },
-
-        status_id: {
-            type: Sequelize.ARRAY(Sequelize.INTEGER),
-            allowNull: false,
-        },
-
-
     },
     {
         schema: 'demanda',
-        tableName: 'status_movimentacao',
+        tableName: 'prioridade',
     },
 );
 
 Model.afterSync(() => Promise.all([
-    Model.upsert({ id: 1, nome: 'Encaminhado', status_id: [1, 2, 4] }),
-    Model.upsert({ id: 2, nome: 'Encaminhado para homologação', status_id: [5, 6] }),
-    Model.upsert({ id: 3, nome: 'Devolvido para complemento informações', status_id: [3] }),
-    Model.upsert({ id: 4, nome: 'Devolvido para ajustes', status_id: [1, 2, 4] }),
+    Model.upsert({ id: 1, nome: 'Baixa' }),
+    Model.upsert({ id: 2, nome: 'Normal' }),
+    Model.upsert({ id: 3, nome: 'Alta' }),
 ]));
 
 export default Model;
