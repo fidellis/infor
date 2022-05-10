@@ -27,14 +27,14 @@ const routes = [
   { path: '/', Component: () => <Redirect to="/demandas" />, exact: true, link: false },
   {
     label: 'Demandas',
-    icon: 'dashboard',
+    icon: 'open_in_new',
     allow,
     itens: [
       {
         label: '',
         subitens: [
           { path: '/demandas', label: 'Demandas', Component: DemandaList, allow },
-          { path: '/demanda/:id', label: 'Demanda', Component: DemandaForm, allow, link: false },
+          { path: '/demanda/:id', label: ({ params }) => `Demanda ${params.id}`, Component: DemandaForm, allow, link: false },
         ],
       },
     ],

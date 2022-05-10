@@ -9,7 +9,8 @@ Component.defaultProps = {
   label: 'UOR',
   optionValue: 'id',
   optionLabel: 'nome',
-  params: { prefixo: 9973, order: ['nome'] }  
+  params: { prefixo: 9973, order: ['nome'], attributes: ['id', 'nome'], cache: 28800 },
+  formatOptionLabel: p => `${p.id} - ${p.nome.replace('DIEMP/', '')}`,
 };
 
 export default Component;

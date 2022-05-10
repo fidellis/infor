@@ -19,7 +19,18 @@ module.exports = (router) => {
     router.get('/demanda/:id', async (req, res, next) => {
         const params = paramsConverter(Demanda, req);
         try {
-            const response = await Demanda.scope('usuarioInclusao').findById(req.params.id, params);
+            const response = await Promise.all([
+                Demanda.scope('uorResponsavel').findById(req.params.id, params),
+                Descricao.scope('status', 'usuarioInclusao').findAll({
+                    include: [
+                        {
+                            model: Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao'),
+                            as: 'movimentacao',
+                            where: { demanda_id: req.params.id },
+                        }
+                    ],
+                }),
+            ]);
             res.send(response);
         } catch (err) {
             next(err);
@@ -48,12 +59,21 @@ module.exports = (router) => {
 
             const demanda = await Demanda.build(data, { isNewRecord }).save();
 
-            const movimentacao = await Movimentacao.build({
-                demanda_id: demanda.id,
-                uorOrigem_id: usuarioUor,
-                uorDestino_id: data.uorResponsavel_id,
-                usuarioInclusao_id: usuarioId,
-            }, { isNewRecord: true }).save();
+            if (isNewRecord) {
+                const movimentacao = await Movimentacao.build({
+                    demanda_id: demanda.id,
+                    uorOrigem_id: usuarioUor,
+                    uorDestino_id: data.uorResponsavel_id,
+                    usuarioInclusao_id: usuarioId,
+                }, { isNewRecord: true }).save();
+
+                const descricao = await Descricao.build({
+                    movimentacao_id: movimentacao.id,
+                    descricao: data.descricao,
+                    usuarioInclusao_id: usuarioId,
+                }, { isNewRecord: true }).save();
+            }
+
 
             res.send(demanda);
         } catch (err) {

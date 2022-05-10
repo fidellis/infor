@@ -157,7 +157,7 @@ BasicTable.defaultProps = {
   columns: [],
   rows: [],
   size: 'small',
-  striped: false,
+  striped: true,
   rowRenderer,
 };
 

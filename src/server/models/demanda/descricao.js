@@ -1,6 +1,6 @@
 import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
-import UOR from 'common/models/uor/uor';
+import Usuario from 'common/models/portal/usuario';
 import Status from './status';
 
 const Model = sequelize.define(
@@ -19,6 +19,7 @@ const Model = sequelize.define(
         status_id: {
             type: Sequelize.BIGINT,
             allowNull: false,
+            defaultValue: 1,
         },
 
         descricao: {
@@ -44,6 +45,7 @@ const Model = sequelize.define(
     {
         scopes: {
             status: { include: [{ model: Status, as: 'status' }] },
+            usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
         },
         schema: 'demanda',
         tableName: 'descricao',

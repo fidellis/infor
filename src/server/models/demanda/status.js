@@ -33,15 +33,15 @@ const Model = sequelize.define(
 );
 
 Model.afterSync(() => Promise.all([
-    Model.upsert({ id: 1, nome: 'Aguardando atendimento', statusMovimentaca_id: [1, 4] }),
-    Model.upsert({ id: 2, nome: 'Em análise', statusMovimentaca_id: [1, 4] }),
-    Model.upsert({ id: 3, nome: 'Devolvido', statusMovimentaca_id: [3] }),
-    Model.upsert({ id: 4, nome: 'Em execução', statusMovimentaca_id: [1, 4] }),
-    Model.upsert({ id: 5, nome: 'Em homologação', statusMovimentaca_id: [2] }),
-    Model.upsert({ id: 6, nome: 'Homologado', statusMovimentaca_id: [2] }),
-    Model.upsert({ id: 7, nome: 'Finalizado' }),
-    Model.upsert({ id: 8, nome: 'Cancelado' }),
-    Model.upsert({ id: 9, nome: 'Reaberto' }),
+    Model.upsert({ id: 1, nome: 'AGUARDANDO ATENDIMENTO', statusMovimentaca_id: [1, 4] }),
+    Model.upsert({ id: 2, nome: 'EM ANÁLISE', statusMovimentaca_id: [1, 4] }),
+    Model.upsert({ id: 3, nome: 'DEVOLVIDO', statusMovimentaca_id: [3] }),
+    Model.upsert({ id: 4, nome: 'EM EXECUÇÃO', statusMovimentaca_id: [1, 4] }),
+    Model.upsert({ id: 5, nome: 'EM HOMOLOGAÇÃO', statusMovimentaca_id: [2] }),
+    Model.upsert({ id: 6, nome: 'HOMOLOGADO', statusMovimentaca_id: [2] }),
+    Model.upsert({ id: 7, nome: 'FINALIZADO' }),
+    Model.upsert({ id: 8, nome: 'CANCELADO' }),
+    Model.upsert({ id: 9, nome: 'REABERTO' }),
 ]));
 
 export default Model;

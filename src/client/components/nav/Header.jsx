@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
-const Header = ({ label, menuLabel, itemLabel }) => (
+const Header = ({ label, menuLabel, itemLabel, ...props }) => (
   <header>
     <div className="main-container">
       <div className="main-container-label">
@@ -9,7 +10,7 @@ const Header = ({ label, menuLabel, itemLabel }) => (
           <span>{menuLabel} {itemLabel && '|'} {itemLabel}</span>
         </span>
         <div className="main-container-label-main">
-          <h1>{label}</h1>
+          <h1>{typeof label === 'function' ? label({ params: props.match.params }) : label}</h1>
         </div>
       </div>
     </div>
@@ -29,4 +30,4 @@ Header.defaultProps = {
   itemLabel: null,
 };
 
-export default Header;
+export default withRouter(Header);

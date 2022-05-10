@@ -5,7 +5,7 @@ import 'react-datetime/css/react-datetime.css';
 import { TextInput } from '~/components/form/form/inputs';
 import ComponentContainer from './ComponentContainer';
 
-const DateInput = ({ label, onChange, id, closeOnSelect, timeFormat, isValidDate, minDate, maxDate, value, disabled, ...inputProps }) => {
+const DateInput = ({ label, onChange, id, closeOnSelect, timeFormat, isValidDate, minDate, maxDate, value, disabled, format, ...inputProps }) => {
 
   setTimeout(() => {
     let dateInputs = document.querySelectorAll('[type="date"]');
@@ -54,7 +54,7 @@ const DateInput = ({ label, onChange, id, closeOnSelect, timeFormat, isValidDate
           className='input input-date'
           //dateFormat="DD/MM/YYYY"
           locale="pt-br"
-        /> : <TextInput value={value ? moment(value).format('DD/MM/YYYY') : null} textAlign="right" disabled />}
+        /> : <TextInput value={value ? moment(value).format(format) : null} textAlign="right" disabled />}
     </ComponentContainer>
   )
 };
@@ -63,6 +63,7 @@ DateInput.defaultProps = {
   closeOnSelect: true,
   timeFormat: false,
   isValidDate: () => true,
+  format: 'DD/MM/YYYY',
 };
 
 export default DateInput;
