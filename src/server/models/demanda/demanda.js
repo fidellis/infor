@@ -7,6 +7,7 @@ import Status from './status';
 import StatusMovimentacao from './statusMovimentacao';
 import Prioridade from './prioridade';
 import Movimentacao from './movimentacao';
+import Responsavel from './responsavel';
 
 
 const Model = sequelize.define(
@@ -90,6 +91,7 @@ const Model = sequelize.define(
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
             prioridade: { include: [{ model: Prioridade, as: 'prioridade' }] },
             movimentacoes: { include: [{ model: Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao'), as: 'movimentacoes' }] },
+            responsaveis: { include: [{ model: Responsavel.scope('usuario'), as: 'responsaveis' }] },
         },
         schema: 'demanda',
         tableName: 'demanda',
@@ -102,6 +104,7 @@ Model.belongsTo(UOR, { as: 'uorInclusao', foreignKey: 'uorInclusao_id' });
 Model.belongsTo(UOR, { as: 'uorResponsavel', foreignKey: 'uorResponsavel_id' });
 Model.belongsTo(Prioridade, { as: 'prioridade', foreignKey: 'prioridade_id' });
 Model.hasMany(Movimentacao, { as: 'movimentacoes', foreignKey: 'demanda_id' });
+Model.hasMany(Responsavel, { as: 'responsaveis', foreignKey: 'demanda_id' });
 
 const ModelVersion = new Version(Model);
 ModelVersion.sync();

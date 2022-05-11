@@ -3,6 +3,43 @@ import paramsConverter from 'common/sequelize/params/converter';
 import Demanda from '../models/demanda/demanda';
 import Movimentacao from '../models/demanda/movimentacao';
 import Descricao from '../models/demanda/descricao';
+import Responsavel from '../models/demanda/responsavel';
+
+async function addResponsaveis({ demanda, usuario, responsaveis }) {
+    await Responsavel.destroy({ where: { demanda_id: demanda.id } });
+    const response = await Responsavel.bulkCreate(responsaveis.map(responsavel => {
+        return {
+            demanda_id: demanda.id,
+            usuario_id: responsavel,
+            usuarioInclusao_id: usuario.id,
+        };
+    }), { returning: true });
+
+    return response;
+};
+
+async function addMovimentacao({ demanda, usuario }) {
+    const response = await Movimentacao.build({
+        demanda_id: demanda.id,
+        uorOrigem_id: usuario.uor_id,
+        uorDestino_id: demanda.uorResponsavel_id,
+        usuarioInclusao_id: usuario.id,
+    }, { isNewRecord: true }).save();
+
+    return response;
+};
+
+async function addDescricao({ movimentacao_id, usuario, descricao }) {
+    const response = await Descricao.build({
+        movimentacao_id,
+        descricao,
+        usuarioInclusao_id: usuario.id,
+    }, { isNewRecord: true }).save();
+
+    return response;
+};
+
+
 
 module.exports = (router) => {
     router.get('/', async (req, res, next) => {
@@ -20,7 +57,7 @@ module.exports = (router) => {
         const params = paramsConverter(Demanda, req);
         try {
             const response = await Promise.all([
-                Demanda.scope('uorResponsavel').findById(req.params.id, params),
+                Demanda.scope('uorResponsavel', 'responsaveis').findById(req.params.id, params),
                 Descricao.scope('status', 'usuarioInclusao').findAll({
                     include: [
                         {
@@ -39,17 +76,15 @@ module.exports = (router) => {
 
     router.post('/', async (req, res, next) => {
         const usuario = req.session.usuario;
-        const usuarioUor = usuario.uor_id;
-        const usuarioId = usuario.id;
         const data = req.body;
         const id = Number(data.id);
         const isNewRecord = !id;
 
         if (isNewRecord) {
-            data.usuarioInclusao_id = usuarioId;
-            data.uorInclusao_id = usuarioUor;
+            data.usuarioInclusao_id = usuario.id;
+            data.uorInclusao_id = usuario.uor_id;
         } else {
-            data.usuarioAlteracao_id = usuarioId;
+            data.usuarioAlteracao_id = usuario.id;
             data.dataHoraAlteracao = new Date();
         };
 
@@ -59,23 +94,27 @@ module.exports = (router) => {
 
             const demanda = await Demanda.build(data, { isNewRecord }).save();
 
-            if (isNewRecord) {
-                const movimentacao = await Movimentacao.build({
-                    demanda_id: demanda.id,
-                    uorOrigem_id: usuarioUor,
-                    uorDestino_id: data.uorResponsavel_id,
-                    usuarioInclusao_id: usuarioId,
-                }, { isNewRecord: true }).save();
+            const responsaveis = data.responsaveis;
+            if (responsaveis) addResponsaveis({ demanda, usuario, responsaveis });
 
-                const descricao = await Descricao.build({
-                    movimentacao_id: movimentacao.id,
-                    descricao: data.descricao,
-                    usuarioInclusao_id: usuarioId,
-                }, { isNewRecord: true }).save();
+            if (isNewRecord) {
+                const movimentacao = await addMovimentacao({ demanda, usuario });
+                const descricao = await addDescricao({ movimentacao_id: movimentacao.id, usuario, descricao: data.descricao });
             }
 
-
             res.send(demanda);
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    router.post('/descricao', async (req, res, next) => {
+        const usuario = req.session.usuario;
+        const data = req.body;
+
+        try {
+            const descricao = await addDescricao({ movimentacao_id: data.movimentacao_id, usuario, descricao: data.descricao });
+            res.send(descricao);
         } catch (err) {
             next(err);
         }

@@ -7,11 +7,11 @@ import {
   AVATAR_URL,
 } from '~/lib/constants';
 
-const AvatarUsuario = ({ chave, ...props }) => (
+const AvatarUsuario = ({ chave, title, ...props }) => (
   <a href={`${HUMANOGRAMA_URL}/${chave}`} target="_blank">
     <Avatar
       src={`${AVATAR_URL}${chave}`}
-      title={chave}
+      title={title || chave}
       {...props}
     />
   </a>
@@ -20,6 +20,10 @@ const AvatarUsuario = ({ chave, ...props }) => (
 
 AvatarUsuario.propTypes = {
   chave: PropTypes.string.isRequired,
+};
+
+AvatarUsuario.defaultProps = {
+  style: { marginLeft: 'auto', marginRight: 'auto' },
 };
 
 export default AvatarUsuario;

@@ -1,7 +1,10 @@
 import React from 'react';
 import Select from './SelectModel';
 
-const Component = props => <Select {...props} />;
+const Component = props => {
+    console.log('******', props.statusMovimentacao_id)
+    return <Select {...props} />
+};
 
 Component.defaultProps = {
     url: '/demanda/status',
@@ -9,7 +12,7 @@ Component.defaultProps = {
     label: 'Situação',
     optionValue: 'id',
     optionLabel: 'nome',
-    params: { order: ['nome'] },
+    params: { order: ['nome'], cache: 28800 },
 };
 
 export default Component;

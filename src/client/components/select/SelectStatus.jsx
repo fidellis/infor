@@ -9,7 +9,7 @@ Component.defaultProps = {
     label: 'Status',
     optionValue: 'id',
     optionLabel: 'nome',
-    params: { order: ['nome'] },
+    params: { order: ['nome'], cache: 28800 },
 };
 
 export default Component;

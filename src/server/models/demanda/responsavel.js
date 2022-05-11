@@ -38,7 +38,7 @@ const Model = sequelize.define(
     },
     {
         scopes: {
-            usuario: { include: [{ model: Usuario, as: 'usuario' }] },
+            usuario: { include: [{ model: Usuario, as: 'usuario', attributes: ['id', 'nome'] }] },
         },
         schema: 'demanda',
         tableName: 'responsavel',

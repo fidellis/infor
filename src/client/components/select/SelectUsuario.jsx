@@ -9,7 +9,8 @@ Component.defaultProps = {
   label: 'Nome',
   optionValue: 'id',
   optionLabel: 'nome',
-  params: { prefixo: 9973, order: ['nome'] }  
+  params: { prefixo: 9973, order: ['nome'], cache: 28800 },
+  style: { width: 'fit-content', minWidth: '20%' },
 };
 
 export default Component;
