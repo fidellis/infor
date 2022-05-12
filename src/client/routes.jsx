@@ -10,6 +10,7 @@ import PainelList from '~/pages/paineis/List';
 import PainelForm from '~/pages/paineis/Form';
 import DemandaList from '~/pages/demanda/List';
 import DemandaForm from '~/pages/demanda/Form';
+import Demanda from '~/pages/demanda/Demanda';
 
 const isDev = process.env.AMBIENTE !== 'producao';
 
@@ -34,7 +35,9 @@ const routes = [
         label: '',
         subitens: [
           { path: '/demandas', label: 'Demandas', Component: DemandaList, allow },
-          { path: '/demanda/:id', label: ({ params }) => `Demanda ${params.id}`, Component: DemandaForm, allow, link: false },
+          { path: '/demanda/edit/:id', label: ({ params }) => `Demanda ${params.id}`, Component: DemandaForm, allow, link: false },
+          { path: '/demanda/edit/0', label: 'Nova Demanda', Component: DemandaForm, allow, link: true },
+          { path: '/demanda/:id', label: ({ params }) => `Demanda ${params.id}`, Component: Demanda, allow, link: false },
         ],
       },
     ],

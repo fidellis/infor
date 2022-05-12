@@ -4,7 +4,7 @@ import Usuario from 'common/models/portal/usuario';
 import Status from './status';
 
 const Model = sequelize.define(
-    'descricaoDemanda',
+    'DescricaoDemanda',
     {
         id: {
             type: Sequelize.BIGINT,
@@ -54,5 +54,11 @@ const Model = sequelize.define(
 
 
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
+
+Model.hook("afterSave", async (descricao, { transaction }) => {
+    const { Demanda, MovimentacaoDemanda } = sequelize.models;
+    const movimentacao = await MovimentacaoDemanda.find({ where: { id: descricao.movimentacao_id } });
+    await Demanda.update({ status_id: descricao.status_id }, { where: { id: movimentacao.demanda_id } });
+});
 
 export default Model;

@@ -11,7 +11,7 @@ import Responsavel from './responsavel';
 
 
 const Model = sequelize.define(
-    'demanda',
+    'Demanda',
     {
         id: {
             type: Sequelize.BIGINT,

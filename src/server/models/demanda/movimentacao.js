@@ -6,7 +6,7 @@ import Status from './statusMovimentacao';
 import Descricao from './descricao';
 
 const Model = sequelize.define(
-    'movimentacaoDemanda',
+    'MovimentacaoDemanda',
     {
         id: {
             type: Sequelize.BIGINT,
@@ -65,6 +65,11 @@ const Model = sequelize.define(
         tableName: 'movimentacao',
     },
 );
+
+Model.hook("afterSave", async (movimentacao, { transaction }) => {
+    const { Demanda } = sequelize.models;
+    await Demanda.update({ statusMovimentacao_id: movimentacao.status_id, uorResponsavel_id: movimentacao.uorDestino_id }, { where: { id: movimentacao.demanda_id } });
+});
 
 
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });

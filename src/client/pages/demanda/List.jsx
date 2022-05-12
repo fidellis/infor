@@ -59,7 +59,7 @@ const Component = ({ history, filter, ...props }) => (
 
     <NavigationButton buttons={[{
       label: 'Adicionar',
-      onClick: () => history.push('/demanda/0'),
+      onClick: () => history.push('/demanda/edit/0'),
     }]}
     />
   </div>

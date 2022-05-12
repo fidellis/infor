@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 
 const Model = sequelize.define(
-    'prioridadeDemanda',
+    'PrioridadeDemanda',
     {
         id: {
             type: Sequelize.BIGINT,

@@ -2,8 +2,12 @@ import React from 'react';
 import Select from './SelectModel';
 
 const Component = props => {
-    console.log('******', props.statusMovimentacao_id)
-    return <Select {...props} />
+    const statusMovimentacao_id = props.statusMovimentacao_id;
+    return <Select
+        filterOptions={options => options.filter(o => !statusMovimentacao_id ? true : !o.statusMovimentacao_id ? false : o.statusMovimentacao_id.includes(Number(statusMovimentacao_id)))}
+        {...props}
+
+    />
 };
 
 Component.defaultProps = {
@@ -12,7 +16,7 @@ Component.defaultProps = {
     label: 'Situação',
     optionValue: 'id',
     optionLabel: 'nome',
-    params: { order: ['nome'], cache: 28800 },
+    params: { order: ['id'], cache: 0 },
 };
 
 export default Component;

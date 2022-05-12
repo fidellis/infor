@@ -18,20 +18,21 @@ async function addResponsaveis({ demanda, usuario, responsaveis }) {
     return response;
 };
 
-async function addMovimentacao({ demanda, usuario }) {
+async function addMovimentacao({ demanda_id, usuario, uorDestino_id }) {
     const response = await Movimentacao.build({
-        demanda_id: demanda.id,
+        demanda_id,
         uorOrigem_id: usuario.uor_id,
-        uorDestino_id: demanda.uorResponsavel_id,
+        uorDestino_id,
         usuarioInclusao_id: usuario.id,
     }, { isNewRecord: true }).save();
 
     return response;
 };
 
-async function addDescricao({ movimentacao_id, usuario, descricao }) {
+async function addDescricao({ movimentacao_id, status_id, usuario, descricao }) {
     const response = await Descricao.build({
         movimentacao_id,
+        status_id,
         descricao,
         usuarioInclusao_id: usuario.id,
     }, { isNewRecord: true }).save();
@@ -56,16 +57,28 @@ module.exports = (router) => {
     router.get('/demanda/:id', async (req, res, next) => {
         const params = paramsConverter(Demanda, req);
         try {
+            const response = await Demanda.scope('uorResponsavel', 'responsaveis').findById(req.params.id, params);
+            res.send(response);
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    router.get('/descricao/:id', async (req, res, next) => {
+        const demandaId = req.params.id;
+        const params = paramsConverter(Demanda, req);
+        try {
             const response = await Promise.all([
-                Demanda.scope('uorResponsavel', 'responsaveis').findById(req.params.id, params),
+                Demanda.scope('uorResponsavel', 'responsaveis').findById(demandaId, params),
                 Descricao.scope('status', 'usuarioInclusao').findAll({
                     include: [
                         {
                             model: Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao'),
                             as: 'movimentacao',
-                            where: { demanda_id: req.params.id },
+                            where: { demanda_id: demandaId },
                         }
                     ],
+                    order: ['id'],
                 }),
             ]);
             res.send(response);
@@ -89,16 +102,13 @@ module.exports = (router) => {
         };
 
         try {
-            //   const record = await Demanda.find({ where: { id: { $not: id || null }, nome: data.nome }, attributes: ['nome'] });
-            //   if (record) return res.status(400).send({ msg: `${record.nome} jรก cadastrado.` });
-
             const demanda = await Demanda.build(data, { isNewRecord }).save();
 
             const responsaveis = data.responsaveis;
             if (responsaveis) addResponsaveis({ demanda, usuario, responsaveis });
 
             if (isNewRecord) {
-                const movimentacao = await addMovimentacao({ demanda, usuario });
+                const movimentacao = await addMovimentacao({ demanda_id: demanda.id, uorDestino_id: demanda.uorResponsavel_id, usuario });
                 const descricao = await addDescricao({ movimentacao_id: movimentacao.id, usuario, descricao: data.descricao });
             }
 
@@ -113,11 +123,25 @@ module.exports = (router) => {
         const data = req.body;
 
         try {
-            const descricao = await addDescricao({ movimentacao_id: data.movimentacao_id, usuario, descricao: data.descricao });
+            const descricao = await addDescricao({ movimentacao_id: data.movimentacao_id, status_id: data.status_id, usuario, descricao: data.descricao });
             res.send(descricao);
         } catch (err) {
             next(err);
         }
     });
+
+    router.post('/movimentacao', async (req, res, next) => {
+        const usuario = req.session.usuario;
+        const data = req.body;
+
+        try {
+            const movimentacao = await addMovimentacao({ demanda_id: data.demanda_id, uorDestino_id: data.uorDestino_id, usuario });
+            const descricao = await addDescricao({ movimentacao_id: movimentacao.id, status_id: 1, usuario, descricao: data.descricao });
+            res.send(movimentacao);
+        } catch (err) {
+            next(err);
+        }
+    });
+
 
 };

@@ -3,7 +3,7 @@ import Sequelize from 'common/sequelize/sequelize';
 import Usuario from 'common/models/portal/usuario';
 
 const Model = sequelize.define(
-    'responsavelDemanda',
+    'ResponsavelDemanda',
     {
         // id: {
         //     type: Sequelize.BIGINT,
