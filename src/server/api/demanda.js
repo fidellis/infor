@@ -160,10 +160,15 @@ module.exports = (router) => {
     router.post('/movimentacao', async (req, res, next) => {
         const usuario = req.session.usuario;
         const data = req.body;
+        let statusDemandaId = 1;
+
+        if (data.statusMovimentacao_id == 2) {
+            statusDemandaId = 5;
+        };
 
         try {
             const movimentacao = await addMovimentacao({ demanda_id: data.demanda_id, uorDestino_id: data.uorDestino_id, status_id: data.statusMovimentacao_id, usuario });
-            const movimentacaoStatus = await addMovimentacaoStatus({ movimentacao_id: movimentacao.id, status_id: 1, usuario });
+            const movimentacaoStatus = await addMovimentacaoStatus({ movimentacao_id: movimentacao.id, status_id: statusDemandaId, usuario });
             if (data.descricao) await addDescricao({ movimentacaoStatus_id: movimentacaoStatus.id, descricao: data.descricao, usuario });
             res.send(movimentacao);
         } catch (err) {
