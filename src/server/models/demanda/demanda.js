@@ -43,7 +43,22 @@ const Model = sequelize.define(
             defaultValue: 2,
         },
 
-        uorInclusao_id: {
+        uorOrigem_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+
+        uorDestino_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+
+        uorOrigemAtual_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+
+        uorDestinoAtual_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
@@ -60,11 +75,6 @@ const Model = sequelize.define(
             type: Sequelize.DATE,
             allowNull: false,
             defaultValue: Sequelize.NOW,
-        },
-
-        uorResponsavel_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
         },
 
         usuarioAlteracao_id: {
@@ -86,8 +96,9 @@ const Model = sequelize.define(
         scopes: {
             status: { include: [{ model: Status, as: 'status' }] },
             statusMovimentacao: { include: [{ model: StatusMovimentacao, as: 'statusMovimentacao' }] },
-            uorInclusao: { include: [{ model: UOR, as: 'uorInclusao' }] },
-            uorResponsavel: { include: [{ model: UOR, as: 'uorResponsavel' }] },
+            uorInclusao: { include: [{ model: UOR, as: 'uorInclusao', attributes: ['id', 'nome', 'nomeReduzido'] }] },
+            uorResponsavel: { include: [{ model: UOR, as: 'uorResponsavel', attributes: ['id', 'nome', 'nomeReduzido'] }] },
+            uorAtual: { include: [{ model: UOR, as: 'uorAtual', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
             prioridade: { include: [{ model: Prioridade, as: 'prioridade' }] },
             movimentacoes: { include: [{ model: Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao'), as: 'movimentacoes' }] },
@@ -100,8 +111,9 @@ const Model = sequelize.define(
 
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
 Model.belongsTo(StatusMovimentacao, { as: 'statusMovimentacao', foreignKey: 'statusMovimentacao_id' });
-Model.belongsTo(UOR, { as: 'uorInclusao', foreignKey: 'uorInclusao_id' });
-Model.belongsTo(UOR, { as: 'uorResponsavel', foreignKey: 'uorResponsavel_id' });
+Model.belongsTo(UOR, { as: 'uorInclusao', foreignKey: 'uorOrigem_id' });
+Model.belongsTo(UOR, { as: 'uorResponsavel', foreignKey: 'uorDestino_id' });
+Model.belongsTo(UOR, { as: 'uorAtual', foreignKey: 'uorDestinoAtual_id' });
 Model.belongsTo(Prioridade, { as: 'prioridade', foreignKey: 'prioridade_id' });
 Model.hasMany(Movimentacao, { as: 'movimentacoes', foreignKey: 'demanda_id' });
 Model.hasMany(Responsavel, { as: 'responsaveis', foreignKey: 'demanda_id' });

@@ -8,11 +8,10 @@ import AvatarUsuario from '~/components/avatar/AvatarUsuario';
 import Grid from '~/components/Grid';
 import { TextInput, TextArea, NumberInput, DateInput, Select } from '~/components/form/form/inputs';
 import SelectStatusDemanda from '~/components/select/SelectStatusDemanda';
+import SelectStatusMovimentacaoDemanda from '~/components/select/SelectStatusMovimentacaoDemanda';
 import SelectUor from '~/components/select/SelectUor';
-import moment from 'moment';
-import { Table, TableHead, TableRow, TableCell, TableBody, } from '@material-ui/core';
 import DialogForm from './DialogForm';
-
+import TableDemanda from './TableDemanda';
 
 const TextAreaDescricao = props => (
     <TextArea
@@ -23,52 +22,82 @@ const TextAreaDescricao = props => (
     />
 );
 
-const Component = ({ match, message, history }) => {
+const Component = ({ match, message, history, usuario }) => {
     const id = Number(match.params.id);
-    const [demanda, setDemanda] = useState({});
-    const [descricoes, setDescricoes] = useState([]);
-    const [descricao, setDescricao] = useState({ movimentacao: {} });
+
+    const [demanda, setDemanda] = useState({ uorInclusao: {}, uorResponsavel: {}, responsaveis: [] });
+    const [movimentacoes, setMovimentacoes] = useState([]);
+    console.log('demanda', demanda.uorDestinoAtual_id, usuario.uor_id);
+
     const [movimentacao, setMovimentacao] = useState({});
+    const [status, setStatus] = useState({});
+    const [descricao, setDescricao] = useState({ movimentacao: {} });
+
     const [exibeDialog, setExibeDialog] = useState({});
 
+    const uorUsuarioId = usuario.uor_id;
+
+    const isSolicitante = uorUsuarioId === demanda.uorOrigem_id;
+    const isResponsavel = uorUsuarioId === demanda.uorDestinoAtual_id;
+
+    const acessos = {
+        descricao: isResponsavel,
+        status: isResponsavel,
+        movimentacao: isResponsavel,
+    };
+
     async function change() {
-        const [Demanda, Descricoes] = await getData(`/demanda/descricao/${id}`);
-        setDemanda(Demanda);
-        setDescricoes(Descricoes);
+        const [d, m] = await getData(`/demanda/movimentacao/${id}`);
+        setDemanda(d);
+        setMovimentacoes(m);
     }
 
     useEffect(() => {
         if (id) change();
     }, []);
 
-
     function onChangeDescricao({ id, value }) {
         setDescricao({ ...descricao, [id]: value });
+    }
+
+    function onChangestatus({ id, value }) {
+        setStatus({ ...status, [id]: value });
     }
 
     function onChangeMovimentacao({ id, value }) {
         setMovimentacao({ ...movimentacao, [id]: value });
     }
 
-
     function onChangeDialog(id) {
         setExibeDialog({ [id]: !exibeDialog[id] });
     }
 
-    function onClickActionDescricao({ form, ...params }) {
+    function onClickActionDescricao(params) {
         setDescricao(params);
-        onChangeDialog(form)
+        onChangeDialog('descricao')
     }
 
-    function onClickActionMovimentacao({ form, ...params }) {
-        setMovimentacao({ demanda_id: id, ...params });
-        onChangeDialog(form)
+    function onClickActionStatus(params) {
+        setStatus(params);
+        onChangeDialog('status')
+    }
+    function onClickActionMovimentacao(statusMovimentacao_id) {
+        setMovimentacao({ demanda_id: id, uorDestino_id: demanda.uorOrigem_id, statusMovimentacao_id });
+        onChangeDialog('movimentacao')
     }
 
     async function salvarDescricao() {
         const response = await save('/demanda/descricao', descricao);
         if (response) {
             message('Observação salva com sucesso');
+            atualizar(id);
+        }
+    }
+
+    async function salvarStatus() {
+        const response = await save('/demanda/movimentacaoStatus', status);
+        if (response) {
+            message('Status salvo com sucesso');
             atualizar(id);
         }
     }
@@ -91,46 +120,19 @@ const Component = ({ match, message, history }) => {
 
     return (
         <div>
-            <Card>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell component="th" align="center" style={{ width: '5%' }}></TableCell>
-                            <TableCell component="th" align="center" style={{ width: '8%' }}>De</TableCell>
-                            <TableCell component="th" align="center" style={{ width: '8%' }}>Para</TableCell>
-                            <TableCell component="th" align="center" style={{ width: '5%' }}>Status</TableCell>
-                            <TableCell component="th" align="center" style={{ width: '5%' }}>Funcionário</TableCell>
-                            <TableCell component="th" align="center" style={{ width: '5%' }}>Data</TableCell>
-                            <TableCell component="th" align="center">Descrição</TableCell>
-                            <TableCell component="th" align="center" style={{ width: '1%' }}></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {descricoes.map((descricao, i) => {
-                            const { movimentacao, usuarioInclusao, usuarioInclusao_id, dataHoraInclusao, status } = descricao;
-                            const descricaoAnterioro = descricoes[i - 1];
-                            const exibirMovimentacao = !descricaoAnterioro ? true : descricaoAnterioro.movimentacao.id !== descricao.movimentacao.id;
-                            const exibirStatus = !descricaoAnterioro ? true : descricaoAnterioro.status_id !== descricao.status_id;
-                            const ultimaLInha = descricoes.length === i + 1;
+            <div>Título: {demanda.titulo}</div>
+            <div>UOR Solicitante: {demanda.uorInclusao.nome}</div>
+            <div>UOR Responsável: {demanda.uorResponsavel.nome}</div>
 
-                            return (
-                                <TableRow>
-                                    <TableCell>{exibirMovimentacao && movimentacao.status.nome}</TableCell>
-                                    <TableCell>{exibirMovimentacao && movimentacao.uorOrigem.nomeReduzido}</TableCell>
-                                    <TableCell>{exibirMovimentacao && movimentacao.uorDestino.nomeReduzido}</TableCell>
-                                    <TableCell>{exibirStatus && status.nome}</TableCell>
-                                    <TableCell align="center"><AvatarUsuario chave={usuarioInclusao_id} title={`${usuarioInclusao_id} - ${usuarioInclusao.nome}`} /></TableCell>
-                                    <TableCell align="center">{moment(dataHoraInclusao).format('DD/MM/YYYY HH:mm')}</TableCell>
-                                    <TableCell>{descricao.descricao}</TableCell>
-                                    <TableCell>
-                                        {ultimaLInha && <Icon fontSize="small" title="Adicionar Observação" onClick={() => onClickActionDescricao({ form: 'descricao', movimentacao_id: movimentacao.id, status_id: descricao.status_id, movimentacao })}>add_circle</Icon>}
-                                        {ultimaLInha && <Icon fontSize="small" title="Alterar status" onClick={() => onClickActionDescricao({ form: 'status', movimentacao_id: movimentacao.id, status_id: descricao.status_id, movimentacao })}>edit</Icon>}
-                                        {ultimaLInha && <Icon fontSize="small" title="Encaminhar" onClick={() => onClickActionMovimentacao({ form: 'movimentacao', movimentacao_id: movimentacao.id, status_id: movimentacao.status_id, uorDestino_id: movimentacao.uorDestino_id })}>send</Icon>}
-                                    </TableCell>
-                                </TableRow>)
-                        })}
-                    </TableBody>
-                </Table>
+
+            <Card>
+                <TableDemanda
+                    movimentacoes={movimentacoes}
+                    acessos={acessos}
+                    onClickActionDescricao={onClickActionDescricao}
+                    onClickActionStatus={onClickActionStatus}
+                    onClickActionMovimentacao={onClickActionMovimentacao}
+                />
             </Card>
 
             <DialogForm
@@ -152,36 +154,36 @@ const Component = ({ match, message, history }) => {
 
             <DialogForm
                 formId="status"
-                action={salvarDescricao}
+                action={salvarStatus}
                 onChangeDialog={onChangeDialog}
                 exibeDialog={exibeDialog}
-                isValid={descricao.status_id != demanda.status_id}
+                isValid={status.status_id != demanda.status_id}
             >
                 <Grid container spacing={1}>
                     <Grid item xs={4}>
                         <SelectStatusDemanda
-                            value={descricao.status_id}
-                            onChange={onChangeDescricao}
+                            value={status.status_id}
+                            onChange={onChangestatus}
                             required
-                            statusMovimentacao_id={descricao.movimentacao.status_id}
+                            statusMovimentacao_id={status.statusMovimentacao_id}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
                         <TextAreaDescricao
-                            value={descricao.descricao}
-                            onChange={onChangeDescricao}
+                            value={status.descricao}
+                            onChange={onChangestatus}
                         />
                     </Grid>
                 </Grid>
             </DialogForm>
-            {console.log(movimentacao.uorDestino_id, demanda.uorResponsavel_id)}
+
             <DialogForm
                 formId="movimentacao"
                 action={salvarMovimentacao}
                 onChangeDialog={onChangeDialog}
                 exibeDialog={exibeDialog}
-                isValid={movimentacao.uorDestino_id != demanda.uorResponsavel_id}
+                isValid={movimentacao.uorDestino_id != demanda.uorDestinoAtual_id}
             >
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
@@ -192,6 +194,15 @@ const Component = ({ match, message, history }) => {
                             required
                         />
                     </Grid>
+
+                    {/* <Grid item xs={4}>
+                        <SelectStatusMovimentacaoDemanda
+                            value={movimentacao.status_id}
+                            onChange={onChangeMovimentacao}
+                            required
+                        // statusMovimentacao_id={movimentacao.statusMovimentacao_id}
+                        />
+                    </Grid> */}
 
                     <Grid item xs={12}>
                         <TextAreaDescricao

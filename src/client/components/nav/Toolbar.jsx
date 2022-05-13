@@ -1,101 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { PROFILE_URL, CORREIO_URL, LOGOFF_URL, AVATAR_URL } from '~/lib/constants';
+import { PROFILE_URL, CORREIO_URL, LOGOFF_URL, ARQUIVO_URL } from '~/lib/constants';
 import { isMobile } from 'react-device-detect';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconMenu from '~/components/icons/IconMenu';
 import Icon from '~/components/icons/Icon';
 import Avatar from '~/components/avatar/AvatarUsuario';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Classificacao from './Classificacao';
 import './Nav.scss';
 
-class Nav extends React.Component {
-  constructor(props) {
-    super(props);
+const Nav = ({ usuario, baseUrl, search }) => {
+  const { chave } = usuario;
 
-    this.state = {
-      openMenu: false,
-    };
-  }
-
-  handleClick = (event) => {
-    this.setState({ openMenu: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ openMenu: false });
-  };
-
-  render() {
-    const { usuario, baseUrl, search } = this.props;
-    const { chave } = usuario;
-    const { openMenu } = this.state;
-
-
-    const actions = [
-      <Classificacao usuario={usuario} />,
-      // <Button href={CORREIO_URL} key="mail" icon className="icon">mail</Button>,
-      <Icon key="mail" onClick={() => window.open(CORREIO_URL)}>mail</Icon>,
-      <Avatar
-        key="avatar"
-        chave={chave}
-        href={`${PROFILE_URL}${chave}`}
-      />,
-      <Icon key="menu" onClick={this.handleClick}>more_vert</Icon>,
-    ];
-    return (
-
-      <div className="toolbar">
-        <div className="logo"><img src="https://diemp2.intranet.bb.com.br/arquivos/api/arquivo/105" width="100%" /></div>
-        <div className="toolbar-container">
-          <div className="toolbar-title-container">
-            {isMobile && <i className="material-icons">menu</i>}
-            <div className="toolbar-title">DIEMP</div>
-            <div className="form">{search}</div>
-          </div>
-          <div className="actions">
-            {actions.map(action => <div className="action">{action}</div>)}
-          </div>
+  const actions = [
+    <Classificacao usuario={usuario} />,
+    <Icon key="mail" onClick={() => window.open(CORREIO_URL)}>mail</Icon>,
+    <Avatar key="avatar" chave={chave} href={`${PROFILE_URL}${chave}`} />,
+    <IconMenu
+      id="menu-bar"
+      icon="more_vert"
+      actions={[
+        {
+          label: 'Meu Perfil',
+          icon: 'account_box',
+          onClick: () => window.open(`${PROFILE_URL}${chave}`, '_blank')
+        },
+        {
+          label: 'Correio',
+          icon: 'mail',
+          onClick: () => window.open(CORREIO_URL, '_blank')
+        },
+        {
+          label: 'Sair',
+          icon: 'exit_to_app',
+          onClick: () => window.open(`${baseUrl}${LOGOFF_URL}${location.href}`, '_blank')
+        },
+      ]}
+    />,
+  ];
+  return (
+    <div className="toolbar">
+      <div className="logo"><img src={`${ARQUIVO_URL}/105`} width="100%" /></div>
+      <div className="toolbar-container">
+        <div className="toolbar-title-container">
+          {isMobile && <i className="material-icons">menu</i>}
+          <div className="toolbar-title">DIEMP</div>
+          <div className="form">{search}</div>
         </div>
-        <Menu
-          id="simple-menu"
-          anchorEl={openMenu}
-          keepMounted
-          open={openMenu}
-          onClose={this.handleClose}
-        >
-          <a href={`${PROFILE_URL}${chave}`} target="_blank" rel="noopener noreferrer">
-            <MenuItem>
-              <ListItemIcon>
-                <Icon fontSize="small" >account_box</Icon>
-              </ListItemIcon>
-              Meu Perfil
-            </MenuItem>
-          </a>
-          <a href={CORREIO_URL} target="blank">
-            <MenuItem >
-              <ListItemIcon>
-                <Icon fontSize="small" >mail</Icon>
-              </ListItemIcon>
-              Correio
-            </MenuItem>
-          </a>
-          <a href={`${baseUrl}${LOGOFF_URL}${location.href}`}>
-            <MenuItem>
-              <ListItemIcon>
-                <Icon fontSize="small" >exit_to_app</Icon>
-              </ListItemIcon>
-              Sair
-            </MenuItem>
-          </a>
-        </Menu>
+        <div className="actions">
+          {actions.map(action => <div className="action">{action}</div>)}
+        </div>
       </div>
-
-
-    );
-  }
+    </div>);
 }
 
 Nav.propTypes = {

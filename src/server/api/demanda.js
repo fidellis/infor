@@ -2,14 +2,15 @@ import sequelize from 'common/sequelize';
 import paramsConverter from 'common/sequelize/params/converter';
 import Demanda from '../models/demanda/demanda';
 import Movimentacao from '../models/demanda/movimentacao';
+import MovimentacaoStatus from '../models/demanda/movimentacaoStatus';
 import Descricao from '../models/demanda/descricao';
 import Responsavel from '../models/demanda/responsavel';
 
-async function addResponsaveis({ demanda, usuario, responsaveis }) {
-    await Responsavel.destroy({ where: { demanda_id: demanda.id } });
+async function addResponsaveis({ demanda_id, responsaveis, usuario }) {
+    await Responsavel.destroy({ where: { demanda_id } });
     const response = await Responsavel.bulkCreate(responsaveis.map(responsavel => {
         return {
-            demanda_id: demanda.id,
+            demanda_id,
             usuario_id: responsavel,
             usuarioInclusao_id: usuario.id,
         };
@@ -18,21 +19,31 @@ async function addResponsaveis({ demanda, usuario, responsaveis }) {
     return response;
 };
 
-async function addMovimentacao({ demanda_id, usuario, uorDestino_id }) {
+async function addMovimentacao({ demanda_id, uorDestino_id, status_id, usuario }) {
     const response = await Movimentacao.build({
         demanda_id,
-        uorOrigem_id: usuario.uor_id,
         uorDestino_id,
+        uorOrigem_id: usuario.uor_id,
+        status_id,
         usuarioInclusao_id: usuario.id,
     }, { isNewRecord: true }).save();
 
     return response;
 };
 
-async function addDescricao({ movimentacao_id, status_id, usuario, descricao }) {
-    const response = await Descricao.build({
+async function addMovimentacaoStatus({ movimentacao_id, status_id, usuario }) {
+    const response = await MovimentacaoStatus.build({
         movimentacao_id,
         status_id,
+        usuarioInclusao_id: usuario.id,
+    }, { isNewRecord: true }).save();
+
+    return response;
+};
+
+async function addDescricao({ movimentacaoStatus_id, descricao, usuario }) {
+    const response = await Descricao.build({
+        movimentacaoStatus_id,
         descricao,
         usuarioInclusao_id: usuario.id,
     }, { isNewRecord: true }).save();
@@ -57,30 +68,30 @@ module.exports = (router) => {
     router.get('/demanda/:id', async (req, res, next) => {
         const params = paramsConverter(Demanda, req);
         try {
-            const response = await Demanda.scope('uorResponsavel', 'responsaveis').findById(req.params.id, params);
+            const response = await Demanda.scope('usuarioInclusao', 'uorResponsavel', 'responsaveis').findById(req.params.id, params);
             res.send(response);
         } catch (err) {
             next(err);
         }
     });
 
-    router.get('/descricao/:id', async (req, res, next) => {
-        const demandaId = req.params.id;
+    router.get('/movimentacao/:demanadId', async (req, res, next) => {
+        const demandaId = req.params.demanadId;
         const params = paramsConverter(Demanda, req);
         try {
             const response = await Promise.all([
-                Demanda.scope('uorResponsavel', 'responsaveis').findById(demandaId, params),
-                Descricao.scope('status', 'usuarioInclusao').findAll({
-                    include: [
-                        {
-                            model: Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao'),
-                            as: 'movimentacao',
-                            where: { demanda_id: demandaId },
-                        }
+                Demanda.scope('usuarioInclusao', 'uorResponsavel', 'uorInclusao', 'responsaveis').findById(demandaId, params),
+                Movimentacao.scope('status', 'uorOrigem', 'uorDestino', 'usuarioInclusao', 'movimentacoesStatus').findAll({
+                    where: { demanda_id: demandaId },
+                    raw: true,
+                    order: [
+                        'id',
+                        [{ model: MovimentacaoStatus, as: 'movimentacoesStatus' }, 'id'],
+                        [{ model: MovimentacaoStatus, as: 'movimentacoesStatus' }, { model: Descricao, as: 'descricoes' }, 'id'],
                     ],
-                    order: ['id'],
                 }),
             ]);
+
             res.send(response);
         } catch (err) {
             next(err);
@@ -95,7 +106,9 @@ module.exports = (router) => {
 
         if (isNewRecord) {
             data.usuarioInclusao_id = usuario.id;
-            data.uorInclusao_id = usuario.uor_id;
+            data.uorOrigem_id = usuario.uor_id;
+            data.uorOrigemAtual_id = usuario.uor_id;
+            data.uorDestinoAtual_id = data.uorDestino_id;
         } else {
             data.usuarioAlteracao_id = usuario.id;
             data.dataHoraAlteracao = new Date();
@@ -105,11 +118,12 @@ module.exports = (router) => {
             const demanda = await Demanda.build(data, { isNewRecord }).save();
 
             const responsaveis = data.responsaveis;
-            if (responsaveis) addResponsaveis({ demanda, usuario, responsaveis });
+            if (responsaveis) addResponsaveis({ demanda_id: demanda.id, responsaveis, usuario });
 
             if (isNewRecord) {
-                const movimentacao = await addMovimentacao({ demanda_id: demanda.id, uorDestino_id: demanda.uorResponsavel_id, usuario });
-                const descricao = await addDescricao({ movimentacao_id: movimentacao.id, usuario, descricao: data.descricao });
+                const movimentacao = await addMovimentacao({ demanda_id: demanda.id, uorDestino_id: demanda.uorDestino_id, usuario });
+                const movimentacaoStatus = await addMovimentacaoStatus({ movimentacao_id: movimentacao.id, usuario });
+                const descricao = await addDescricao({ movimentacaoStatus_id: movimentacaoStatus.id, descricao: data.descricao, usuario });
             }
 
             res.send(demanda);
@@ -123,8 +137,21 @@ module.exports = (router) => {
         const data = req.body;
 
         try {
-            const descricao = await addDescricao({ movimentacao_id: data.movimentacao_id, status_id: data.status_id, usuario, descricao: data.descricao });
+            const descricao = await addDescricao({ movimentacaoStatus_id: data.movimentacaoStatus_id, descricao: data.descricao, usuario });
             res.send(descricao);
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    router.post('/movimentacaoStatus', async (req, res, next) => {
+        const usuario = req.session.usuario;
+        const data = req.body;
+
+        try {
+            const movimentacaoStatus = await addMovimentacaoStatus({ movimentacao_id: data.movimentacao_id, status_id: data.status_id, usuario });
+            if (data.descricao) await addDescricao({ movimentacaoStatus_id: movimentacaoStatus.id, descricao: data.descricao, usuario });
+            res.send(movimentacaoStatus);
         } catch (err) {
             next(err);
         }
@@ -135,8 +162,9 @@ module.exports = (router) => {
         const data = req.body;
 
         try {
-            const movimentacao = await addMovimentacao({ demanda_id: data.demanda_id, uorDestino_id: data.uorDestino_id, usuario });
-            const descricao = await addDescricao({ movimentacao_id: movimentacao.id, status_id: 1, usuario, descricao: data.descricao });
+            const movimentacao = await addMovimentacao({ demanda_id: data.demanda_id, uorDestino_id: data.uorDestino_id, status_id: data.statusMovimentacao_id, usuario });
+            const movimentacaoStatus = await addMovimentacaoStatus({ movimentacao_id: movimentacao.id, status_id: 1, usuario });
+            if (data.descricao) await addDescricao({ movimentacaoStatus_id: movimentacaoStatus.id, descricao: data.descricao, usuario });
             res.send(movimentacao);
         } catch (err) {
             next(err);

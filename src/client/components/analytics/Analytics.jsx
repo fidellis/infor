@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import config from '~/config';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-const ANALYTICS_API = isDev ? 'http://localhost.bb.com.br:4100/api/analytics' : 'https://diemp2.intranet.bb.com.br/intranet/api/analytics';
+const ANALYTICS_API = isDev ? `${config.intranetUrl}/api/analytics` : `${config.intranetUrl}/intranet/api/analytics`;
 
 function sendInfo() {
   const url = location.href;

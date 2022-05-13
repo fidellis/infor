@@ -7,7 +7,7 @@ const Component = ({ children, formId, isValid, action, onChangeDialog, exibeDia
     return (
         <Dialog open={exibeDialog[formId]} onClose={() => onChangeDialog(formId)}>
             <Form
-                width={800}
+                width={1000}
                 id={`form-${formId}`}
                 action={action}
                 actions={[

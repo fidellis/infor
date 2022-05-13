@@ -21,7 +21,7 @@ import moment from 'moment';
 const Component = ({ match, message, history }) => {
   const id = Number(match.params.id);
   //const query = qs.parse(props.location.search.replace('?', ''));
-  const [formEditavel, setFormEditavel] = useState(!id);
+  const [formEditavel, setFormEditavel] = useState(true);
   const [data, setData] = useState({ usuarioInclusao: {}, uorResponsavel: {}, movimentacoes: [], responsaveis: null });
 
   async function change() {
@@ -75,12 +75,12 @@ const Component = ({ match, message, history }) => {
             // width="80%"
             action={salvar}
             actions={[
-              {
-                label: 'Editar',
-                onClick: () => setFormEditavel(!formEditavel),
-                hide: formEditavel,
-                // startIcon: 'edit',
-              },
+              // {
+              //   label: 'Editar',
+              //   onClick: () => setFormEditavel(!formEditavel),
+              //   hide: formEditavel,
+              //   // startIcon: 'edit',
+              // },
               {
                 type: 'submit',
                 label: 'Salvar',
@@ -93,12 +93,12 @@ const Component = ({ match, message, history }) => {
                 hide: !id || !formEditavel,
                 startIcon: 'delete',
               },
-              {
-                label: 'Cancelar',
-                onClick: () => setFormEditavel(false),
-                hide: !id || !formEditavel,
-                startIcon: 'cancel',
-              },
+              // {
+              //   label: 'Cancelar',
+              //   onClick: () => setFormEditavel(false),
+              //   hide: !id || !formEditavel,
+              //   startIcon: 'cancel',
+              // },
               {
                 label: 'Nova',
                 onClick: () => atualizar(0),
@@ -141,7 +141,7 @@ const Component = ({ match, message, history }) => {
                 <Grid item xs={10}>
                   <SelectUsuario
                     id="responsaveis"
-                    label="Responsáveis"
+                    label="Responsáveis (colocar controle de acesso)"
                     value={data.responsaveis}
                     onChange={onChange}
                     required
@@ -153,9 +153,9 @@ const Component = ({ match, message, history }) => {
               {!id &&
                 <Grid item xs={4}>
                   <SelectUor
-                    id="uorResponsavel_id"
+                    id="uorDestino_id"
                     label="UOR Destino"
-                    value={data.uorResponsavel_id}
+                    value={data.uorDestino_id}
                     onChange={onChange}
                     required
                   />

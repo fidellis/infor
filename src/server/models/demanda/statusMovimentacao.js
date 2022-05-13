@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 
 const Model = sequelize.define(
-    'StatusMovimentacaoDemanad',
+    'StatusMovimentacaoDemanada',
     {
         id: {
             type: Sequelize.BIGINT,

@@ -4,10 +4,11 @@ import store from '~/store';
 import { encrypt } from '~/lib/util/encrypt';
 
 const defaultOptions = { withCredentials: true };
+// F9154346 silmara
+// F3154375 fabiano
 const devOptions = process.env.AMBIENTE === 'desenvolvimento' ? {
-
   headers: {
-    Authorization: encrypt() || process.env.DISEM_TOKEN,
+    Authorization: encrypt('F9154346') || process.env.DISEM_TOKEN,
   },
   withCredentials: false,
 } : {};

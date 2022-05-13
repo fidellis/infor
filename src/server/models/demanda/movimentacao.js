@@ -3,7 +3,7 @@ import Sequelize from 'common/sequelize/sequelize';
 import Usuario from 'common/models/portal/usuario';
 import UOR from 'common/models/uor/uor';
 import Status from './statusMovimentacao';
-import Descricao from './descricao';
+import MovimentacaoStatus from './movimentacaoStatus';
 
 const Model = sequelize.define(
     'MovimentacaoDemanda',
@@ -52,10 +52,10 @@ const Model = sequelize.define(
     {
         scopes: {
             status: { include: [{ model: Status, as: 'status' }] },
-            uorOrigem: { include: [{ model: UOR, as: 'uorOrigem' }] },
-            uorDestino: { include: [{ model: UOR, as: 'uorDestino' }] },
+            uorOrigem: { include: [{ model: UOR, as: 'uorOrigem', attributes: ['id', 'nome', 'nomeReduzido'] }] },
+            uorDestino: { include: [{ model: UOR, as: 'uorDestino', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
-            descricoes: { include: [{ model: Descricao.scope('status'), as: 'descricoes' }] },
+            movimentacoesStatus: { include: [{ model: MovimentacaoStatus.scope('status', 'usuarioInclusao', 'descricoes'), as: 'movimentacoesStatus' }] },
         },
         // indexes: [{
         //     unique: true,
@@ -68,14 +68,14 @@ const Model = sequelize.define(
 
 Model.hook("afterSave", async (movimentacao, { transaction }) => {
     const { Demanda } = sequelize.models;
-    await Demanda.update({ statusMovimentacao_id: movimentacao.status_id, uorResponsavel_id: movimentacao.uorDestino_id }, { where: { id: movimentacao.demanda_id } });
+    await Demanda.update({ statusMovimentacao_id: movimentacao.status_id, uorOrigemAtual_id: movimentacao.uorOrigem_id, uorDestinoAtual_id: movimentacao.uorDestino_id }, { where: { id: movimentacao.demanda_id } });
 });
 
 
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
 Model.belongsTo(UOR, { as: 'uorOrigem', foreignKey: 'uorOrigem_id' });
 Model.belongsTo(UOR, { as: 'uorDestino', foreignKey: 'uorDestino_id' });
-Model.hasMany(Descricao, { as: 'descricoes', foreignKey: 'movimentacao_id' });
-Descricao.belongsTo(Model, { as: 'movimentacao', foreignKey: 'movimentacao_id' });
+Model.hasMany(MovimentacaoStatus, { as: 'movimentacoesStatus', foreignKey: 'movimentacao_id' });
+// MovimentacaoStatus.belongsTo(Model, { as: 'movimentacao', foreignKey: 'movimentacao_id' });
 
 export default Model;

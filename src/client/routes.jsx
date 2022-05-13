@@ -35,7 +35,7 @@ const routes = [
         label: '',
         subitens: [
           { path: '/demandas', label: 'Demandas', Component: DemandaList, allow },
-          { path: '/demanda/edit/:id', label: ({ params }) => `Demanda ${params.id}`, Component: DemandaForm, allow, link: false },
+          { path: '/demanda/edit/:id', label: ({ params }) => Number(params.id) ? `Demanda ${params.id}` : 'Nova Demanda', Component: DemandaForm, allow, link: false },
           { path: '/demanda/edit/0', label: 'Nova Demanda', Component: DemandaForm, allow, link: true },
           { path: '/demanda/:id', label: ({ params }) => `Demanda ${params.id}`, Component: Demanda, allow, link: false },
         ],
