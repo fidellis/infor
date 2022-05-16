@@ -2,10 +2,10 @@ import React from 'react';
 import Form from '~/components/form/Form';
 import Dialog from '~/components/Dialog';
 
-const Component = ({ children, formId, isValid, action, onChangeDialog, exibeDialog }) => {
+const Component = ({ children, formId, isValid, action, onChangeDialog, exibeDialog, title }) => {
 
     return (
-        <Dialog open={exibeDialog[formId]} onClose={() => onChangeDialog(formId)}>
+        <Dialog title={title} open={exibeDialog[formId]} onClose={() => onChangeDialog(formId)}>
             <Form
                 width={1000}
                 id={`form-${formId}`}

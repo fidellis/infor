@@ -22,12 +22,13 @@ const TextAreaDescricao = props => (
     />
 );
 
+const initialState = { uorInclusao: {}, uorResponsavel: {}, responsaveis: [] };
+
 const Component = ({ match, message, history, usuario }) => {
     const id = Number(match.params.id);
 
-    const [demanda, setDemanda] = useState({ uorInclusao: {}, uorResponsavel: {}, responsaveis: [] });
+    const [demanda, setDemanda] = useState(initialState);
     const [movimentacoes, setMovimentacoes] = useState([]);
-    console.log('demanda', demanda.uorDestinoAtual_id, usuario.uor_id);
 
     const [movimentacao, setMovimentacao] = useState({});
     const [status, setStatus] = useState({});
@@ -35,20 +36,9 @@ const Component = ({ match, message, history, usuario }) => {
 
     const [exibeDialog, setExibeDialog] = useState({});
 
-    const uorUsuarioId = usuario.uor_id;
-
-    const isSolicitante = uorUsuarioId === demanda.uorOrigem_id;
-    const isResponsavel = uorUsuarioId === demanda.uorDestinoAtual_id;
-
-    const acessos = {
-        descricao: isResponsavel,
-        status: isResponsavel,
-        movimentacao: isResponsavel,
-    };
-
     async function change() {
         const [d, m] = await getData(`/demanda/movimentacao/${id}`);
-        setDemanda(d);
+        setDemanda(d || initialState);
         setMovimentacoes(m);
     }
 
@@ -81,8 +71,9 @@ const Component = ({ match, message, history, usuario }) => {
         setStatus(params);
         onChangeDialog('status')
     }
-    function onClickActionMovimentacao(statusMovimentacao_id) {
-        setMovimentacao({ demanda_id: id, uorDestino_id: demanda.uorOrigem_id, statusMovimentacao_id });
+
+    function onClickActionMovimentacao(params) {
+        setMovimentacao({ demanda_id: id, ...params });
         onChangeDialog('movimentacao')
     }
 
@@ -127,8 +118,10 @@ const Component = ({ match, message, history, usuario }) => {
 
             <Card>
                 <TableDemanda
+                    usuario={usuario}
+                    demanda={demanda}
                     movimentacoes={movimentacoes}
-                    acessos={acessos}
+                    // acessos={acessos}
                     onClickActionDescricao={onClickActionDescricao}
                     onClickActionStatus={onClickActionStatus}
                     onClickActionMovimentacao={onClickActionMovimentacao}
@@ -160,14 +153,15 @@ const Component = ({ match, message, history, usuario }) => {
                 isValid={status.status_id != demanda.status_id}
             >
                 <Grid container spacing={1}>
-                    <Grid item xs={4}>
-                        <SelectStatusDemanda
-                            value={status.status_id}
-                            onChange={onChangestatus}
-                            required
-                            statusMovimentacao_id={status.statusMovimentacao_id}
-                        />
-                    </Grid>
+                    {status.tipoMovimentacao_id &&
+                        <Grid item xs={4}>
+                            <SelectStatusDemanda
+                                value={status.status_id}
+                                onChange={onChangestatus}
+                                required
+                                tipoMovimentacao_id={status.tipoMovimentacao_id}
+                            />
+                        </Grid>}
 
                     <Grid item xs={12}>
                         <TextAreaDescricao
@@ -180,6 +174,7 @@ const Component = ({ match, message, history, usuario }) => {
 
             <DialogForm
                 formId="movimentacao"
+                title="Encaminhar"
                 action={salvarMovimentacao}
                 onChangeDialog={onChangeDialog}
                 exibeDialog={exibeDialog}
@@ -188,6 +183,7 @@ const Component = ({ match, message, history, usuario }) => {
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <SelectUor
+                            label="Para"
                             id="uorDestino_id"
                             value={movimentacao.uorDestino_id}
                             onChange={onChangeMovimentacao}
@@ -200,7 +196,7 @@ const Component = ({ match, message, history, usuario }) => {
                             value={movimentacao.status_id}
                             onChange={onChangeMovimentacao}
                             required
-                        // statusMovimentacao_id={movimentacao.statusMovimentacao_id}
+                        // tipoMovimentacao_id={movimentacao.tipoMovimentacao_id}
                         />
                     </Grid> */}
 
@@ -208,6 +204,7 @@ const Component = ({ match, message, history, usuario }) => {
                         <TextAreaDescricao
                             value={movimentacao.descricao}
                             onChange={onChangeMovimentacao}
+                            required
                         />
                     </Grid>
                 </Grid>

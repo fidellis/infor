@@ -22,7 +22,7 @@ const Component = ({ match, message, history }) => {
   const id = Number(match.params.id);
   //const query = qs.parse(props.location.search.replace('?', ''));
   const [formEditavel, setFormEditavel] = useState(true);
-  const [data, setData] = useState({ usuarioInclusao: {}, uorResponsavel: {}, movimentacoes: [], responsaveis: null });
+  const [data, setData] = useState({ usuarioInclusao: {}, uorResponsavel: {}, movimentacoes: [], responsaveis: null, uorDestino_id: 283521 });
 
   async function change() {
     const response = await getData(`/demanda/demanda/${id}`);

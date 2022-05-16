@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 import Usuario from 'common/models/portal/usuario';
 import UOR from 'common/models/uor/uor';
-import Status from './statusMovimentacao';
+import Status from './tipoMovimentacao';
 import MovimentacaoStatus from './movimentacaoStatus';
 
 const Model = sequelize.define(
@@ -29,7 +29,7 @@ const Model = sequelize.define(
             allowNull: false,
         },
 
-        status_id: {
+        tipo_id: {
             type: Sequelize.BIGINT,
             allowNull: false,
             defaultValue: 1,
@@ -51,7 +51,7 @@ const Model = sequelize.define(
     },
     {
         scopes: {
-            status: { include: [{ model: Status, as: 'status' }] },
+            tipo: { include: [{ model: Status, as: 'tipo' }] },
             uorOrigem: { include: [{ model: UOR, as: 'uorOrigem', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             uorDestino: { include: [{ model: UOR, as: 'uorDestino', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
@@ -68,11 +68,11 @@ const Model = sequelize.define(
 
 Model.hook("afterSave", async (movimentacao, { transaction }) => {
     const { Demanda } = sequelize.models;
-    await Demanda.update({ statusMovimentacao_id: movimentacao.status_id, uorOrigemAtual_id: movimentacao.uorOrigem_id, uorDestinoAtual_id: movimentacao.uorDestino_id }, { where: { id: movimentacao.demanda_id } });
+    await Demanda.update({ tipoMovimentacao_id: movimentacao.tipo_id, uorOrigemAtual_id: movimentacao.uorOrigem_id, uorDestinoAtual_id: movimentacao.uorDestino_id }, { where: { id: movimentacao.demanda_id } });
 });
 
 
-Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
+Model.belongsTo(Status, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(UOR, { as: 'uorOrigem', foreignKey: 'uorOrigem_id' });
 Model.belongsTo(UOR, { as: 'uorDestino', foreignKey: 'uorDestino_id' });
 Model.hasMany(MovimentacaoStatus, { as: 'movimentacoesStatus', foreignKey: 'movimentacao_id' });

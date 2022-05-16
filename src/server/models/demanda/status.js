@@ -21,7 +21,7 @@ const Model = sequelize.define(
             defaultValue: true,
         },
 
-        statusMovimentacao_id: {
+        tipoMovimentacao_id: {
             type: Sequelize.ARRAY(Sequelize.INTEGER),
             allowNull: true,
         },
@@ -33,15 +33,14 @@ const Model = sequelize.define(
 );
 
 Model.afterSync(() => Promise.all([
-    Model.upsert({ id: 1, nome: 'AGUARDANDO ATENDIMENTO', statusMovimentacao_id: [1, 4] }),
-    Model.upsert({ id: 2, nome: 'EM ANÁLISE', statusMovimentacao_id: [1, 4] }),
-    Model.upsert({ id: 3, nome: 'DEVOLVIDO', statusMovimentacao_id: [3] }),
-    Model.upsert({ id: 4, nome: 'EM EXECUÇÃO', statusMovimentacao_id: [1, 4] }),
-    Model.upsert({ id: 5, nome: 'EM HOMOLOGAÇÃO', statusMovimentacao_id: [2] }),
-    Model.upsert({ id: 6, nome: 'HOMOLOGADO', statusMovimentacao_id: [2] }),
-    Model.upsert({ id: 7, nome: 'FINALIZADO' }),
-    Model.upsert({ id: 8, nome: 'CANCELADO' }),
-    Model.upsert({ id: 9, nome: 'REABERTO' }),
+    Model.upsert({ id: 1, nome: 'AGUARDANDO ATENDIMENTO', tipoMovimentacao_id: [1, 4] }),
+    Model.upsert({ id: 2, nome: 'EM ANÁLISE', tipoMovimentacao_id: [1, 4] }),
+    Model.upsert({ id: 3, nome: 'EM EXECUÇÃO', tipoMovimentacao_id: [1, 4] }),
+    Model.upsert({ id: 4, nome: 'CANCELADO', tipoMovimentacao_id: [3] }),
+    Model.upsert({ id: 5, nome: 'EM HOMOLOGAÇÃO', tipoMovimentacao_id: [2] }),
+    Model.upsert({ id: 6, nome: 'HOMOLOGADO', tipoMovimentacao_id: [2] }),
+    Model.upsert({ id: 7, nome: 'FINALIZADO', tipoMovimentacao_id: [5] }),
+    Model.upsert({ id: 8, nome: 'REABERTO' }),
 ]));
 
 export default Model;

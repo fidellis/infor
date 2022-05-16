@@ -8,12 +8,28 @@ import { Table, TableHead, TableRow, TableCell, TableBody, } from '@material-ui/
 const Component = props => {
 
     const {
+        usuario,
+        demanda,
         movimentacoes,
-        acessos,
+        // acessos,
         onClickActionDescricao,
         onClickActionStatus,
         onClickActionMovimentacao,
     } = props;
+
+    const uorUsuarioId = usuario.uor_id;
+
+    const isSolicitanteDemanda = uorUsuarioId === demanda.uorOrigem_id;
+    const isResponsavelDemanda = uorUsuarioId === demanda.uorDestino_id;
+
+    const ENCAMINHADO_HOMOLOGACAO = demanda.tipoMovimentacao_id === 2;
+    const DEVOLVILDO_COMPLEMENTO_INFORMACOES = demanda.tipoMovimentacao_id === 3;
+    const DEVOLVIDO_AJUSTES = demanda.tipoMovimentacao_id === 4;
+    const ENCAMINHADO_RESPONSAVEL = demanda.tipoMovimentacao_id === 5;
+
+    const EM_HOMOLOGACAO = demanda.status_id === 5;
+    const HOMOLOGADO = demanda.status_id === 6;
+    const FINALIZADO = demanda.status_id === 7;
 
     return (
 
@@ -32,6 +48,22 @@ const Component = props => {
             </TableHead>
             <TableBody>
                 {movimentacoes.map((row, i) => {
+
+                    const isSolicitanteAtual = uorUsuarioId === row.uorOrigem_id;
+                    const isResponsavelAtual = uorUsuarioId === row.uorDestino_id;
+
+                    const acessos = {
+                        descricao: !FINALIZADO && (isResponsavelAtual || isSolicitanteAtual),
+                        status: !FINALIZADO && (isResponsavelAtual),
+                        movimentacao: !FINALIZADO && (isResponsavelAtual),
+                        encaminharHomologacao: !FINALIZADO && (isResponsavelAtual && isResponsavelDemanda),
+                        homologacao: !FINALIZADO && ENCAMINHADO_HOMOLOGACAO && (isResponsavelAtual),
+                        devolucaoInformacao: !FINALIZADO && !DEVOLVILDO_COMPLEMENTO_INFORMACOES && (isResponsavelAtual),
+                        devolucaoAjuste: !FINALIZADO && ENCAMINHADO_HOMOLOGACAO && (isResponsavelAtual),
+                        finalizar: !FINALIZADO && HOMOLOGADO && (isResponsavelAtual),
+                        reabrir: FINALIZADO && isSolicitanteDemanda,
+                    };
+
                     const rowAnterior = movimentacoes[i - 1];
 
                     const exibirMovimentacao = !rowAnterior ? true : row['id'] !== rowAnterior['id'];
@@ -51,38 +83,74 @@ const Component = props => {
                             label: 'Adicionar Observação',
                             icon: 'add_circle',
                             onClick: () => onClickActionDescricao({ movimentacaoStatus_id: row['movimentacoesStatus.id'] }),
-                            hide: !acessos.descricao
+                            disabled: !acessos.descricao
                         },
                         {
                             label: 'Alterar status',
                             icon: 'edit',
-                            onClick: () => onClickActionStatus({ movimentacao_id: row['id'], status_id: row['movimentacoesStatus.status.id'], statusMovimentacao_id: row['status.id'] }),
-                            hide: !acessos.status
+                            onClick: () => onClickActionStatus({ movimentacao_id: row['id'], status_id: row['movimentacoesStatus.status.id'], tipoMovimentacao_id: row['tipo.id'] }),
+                            disabled: !acessos.status
                         },
                         {
                             label: 'Encaminhar',
                             icon: 'send',
-                            onClick: () => onClickActionMovimentacao(),
-                            hide: !acessos.movimentacao
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: row.uorOrigem_id, tipoMovimentacao_id: 1, status_id: 1 }),
+                            disabled: !acessos.movimentacao
                         },
                         {
-                            label: 'Encaminhar Homologação',
+                            label: 'Encaminhar para Homologação',
                             icon: 'send',
-                            onClick: () => onClickActionMovimentacao(2),
-                            hide: !acessos.movimentacao
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: demanda.uorOrigem_id, tipoMovimentacao_id: 2, status_id: 5 }),
+                            disabled: !acessos.encaminharHomologacao,
+                            // hide: EM_HOMOLOGACAO || HOMOLOGADO,
+                        },
+                        {
+                            label: 'Devolver para complemento informações',
+                            icon: 'reply',
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: row.uorOrigem_id, tipoMovimentacao_id: 3, status_id: 1 }),
+                            disabled: !acessos.devolucaoInformacao,
+                            // hide: DEVOLVILDO_COMPLEMENTO_INFORMACOES || ENCAMINHADO_HOMOLOGACAO,
+                        },
+                        {
+                            label: 'Devolver para Ajustes',
+                            icon: 'reply',
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: row.uorOrigem_id, tipoMovimentacao_id: 4, status_id: 1 }),
+                            disabled: !acessos.devolucaoAjuste,
+                            // hide: !EM_HOMOLOGACAO,
+                        },
+                        {
+                            label: 'Homologar',
+                            icon: 'done',
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: row.uorOrigem_id, tipoMovimentacao_id: 5, status_id: 6 }),
+                            disabled: !acessos.homologacao,
+                            // hide: !EM_HOMOLOGACAO,
+                        },
+                        {
+                            label: 'Finalizar',
+                            icon: 'done_all',
+                            onClick: () => onClickActionStatus({ movimentacao_id: row['id'], status_id: 7 }),
+                            disabled: !acessos.finalizar,
+                            // hide: FINALIZADO,
+                        },
+                        {
+                            label: 'Reabrir',
+                            icon: 'refresh',
+                            onClick: () => onClickActionMovimentacao({ uorDestino_id: row.uorDestino_id, tipoMovimentacao_id: 1, status_id: 8 }),
+                            disabled: !acessos.reabrir,
+                            //hide: !FINALIZADO,
                         },
                     ];
 
                     return (
                         <TableRow>
-                            <TableCell>{exibirMovimentacao && row['status.nome']}</TableCell>
+                            <TableCell>{exibirMovimentacao && row['tipo.nome']}</TableCell>
                             <TableCell>{exibirMovimentacao && row['uorOrigem.nomeReduzido']}</TableCell>
                             <TableCell>{exibirMovimentacao && row['uorDestino.nomeReduzido']}</TableCell>
                             <TableCell>{exibirStatus && row['movimentacoesStatus.status.nome']}</TableCell>
                             <TableCell align="center"><AvatarUsuario chave={usuario.id} title={`${usuario.id} - ${usuario.nome}`} /></TableCell>
                             <TableCell align="center">{moment(data).format('DD/MM/YYYY HH:mm')}</TableCell>
                             <TableCell>{row['movimentacoesStatus.descricoes.descricao']}</TableCell>
-                            <TableCell>{ultimaLInha && !!actions.length && <IconMenu actions={actions} />}</TableCell>
+                            <TableCell>{ultimaLInha && <IconMenu actions={actions} />}</TableCell>
                         </TableRow>)
                 })}
             </TableBody>

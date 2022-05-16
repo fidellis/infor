@@ -10,8 +10,8 @@ const Component = ({ icon, actions, ...props }) => {
         <Menu
             {...props}
         >
-            {actions.filter(a => a.hide !== true).map(({ label, icon, onClick }) => (
-                <MenuItem onClick={onClick}>
+            {actions.filter(a => a.hide !== true).map(({ label, icon, disabled, onClick }) => (
+                <MenuItem onClick={onClick} disabled={disabled}>
                     {icon &&
                         <ListItemIcon>
                             <Icon fontSize="small">{icon}</Icon>
@@ -29,6 +29,7 @@ Component.propTypes = {
 Component.defaultProps = {
     keepMounted: true,
     actions: [],
+    disabled: false,
 };
 
 export default Component;

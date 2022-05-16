@@ -2,9 +2,9 @@ import React from 'react';
 import Select from './SelectModel';
 
 const Component = props => {
-    const statusMovimentacao_id = props.statusMovimentacao_id;
+    const tipoMovimentacao_id = props.tipoMovimentacao_id;
     return <Select
-        filterOptions={options => options.filter(o => !statusMovimentacao_id ? true : !o.statusMovimentacao_id ? false : o.statusMovimentacao_id.includes(Number(statusMovimentacao_id)))}
+        filterOptions={options => options.filter(o => !tipoMovimentacao_id ? true : !o.tipoMovimentacao_id ? false : o.tipoMovimentacao_id.includes(Number(tipoMovimentacao_id)))}
         {...props}
 
     />
