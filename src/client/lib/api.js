@@ -6,10 +6,10 @@ import { encrypt } from '~/lib/util/encrypt';
 const defaultOptions = { withCredentials: true };
 // F9154346 silmara
 // F3154375 fabiano
-// F2258687 daniela
+// F2258687 daniela 283441
 const devOptions = process.env.AMBIENTE === 'desenvolvimento' ? {
   headers: {
-    Authorization: encrypt('') || process.env.DISEM_TOKEN,
+    Authorization: encrypt('F2258687') || process.env.DISEM_TOKEN,
   },
   withCredentials: false,
 } : {};
