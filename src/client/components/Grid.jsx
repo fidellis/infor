@@ -6,6 +6,9 @@ const Component = props => (
     <Grid {...props} />
 );
 
-Component.defaultProps = {};
+Component.defaultProps = {
+    direction: 'row',
+    wrap: 'wrap'
+};
 
 export default Component;
