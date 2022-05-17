@@ -4,12 +4,14 @@ import { message } from '~/store/app';
 import { getData, save, destroy } from '~/lib/api';
 import Card from '~/components/Card';
 import Icon from '~/components/icons/Icon';
+import Text from '~/components/Text';
 import AvatarUsuario from '~/components/avatar/AvatarUsuario';
 import Grid from '~/components/Grid';
 import { TextInput, TextArea, NumberInput, DateInput, Select } from '~/components/form/form/inputs';
 import SelectStatusDemanda from '~/components/select/SelectStatusDemanda';
 import SelectStatusMovimentacaoDemanda from '~/components/select/SelectStatusMovimentacaoDemanda';
 import SelectUor from '~/components/select/SelectUor';
+import TextField from '~/components/inputs/TextField';
 import DialogForm from './DialogForm';
 import TableDemanda from './TableDemanda';
 
@@ -108,25 +110,44 @@ const Component = ({ match, message, history, usuario }) => {
     function voltar() {
         history.push(`/demandas`);
     }
-
+    console.log('demanda', demanda)
     return (
         <div>
-            <div>Título: {demanda.titulo}</div>
-            <div>UOR Solicitante: {demanda.uorInclusao.nome}</div>
-            <div>UOR Responsável: {demanda.uorResponsavel.nome}</div>
+            <Grid container spacing={2}>
 
+                <Grid item xs={12}>
+                    <Card width="90%">
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Text variant="h5">{demanda.titulo}</Text>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <TextField label="UOR SOLICITANTE" value={demanda.uorInclusao.nome} />
+                            </Grid>
+                            <Grid item xs={5}>
+                                <TextField label="UOR RESPONSÁVEL" value={demanda.uorResponsavel.nome} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField label="UOR RESPONSÁVEL" value={demanda.uorResponsavel.nome} />
+                            </Grid>
+                        </Grid>
+                    </Card>
+                </Grid>
 
-            <Card>
-                <TableDemanda
-                    usuario={usuario}
-                    demanda={demanda}
-                    movimentacoes={movimentacoes}
-                    // acessos={acessos}
-                    onClickActionDescricao={onClickActionDescricao}
-                    onClickActionStatus={onClickActionStatus}
-                    onClickActionMovimentacao={onClickActionMovimentacao}
-                />
-            </Card>
+                <Grid item xs={12}>
+                    <Card width="90%">
+                        <TableDemanda
+                            usuario={usuario}
+                            demanda={demanda}
+                            movimentacoes={movimentacoes}
+                            onClickActionDescricao={onClickActionDescricao}
+                            onClickActionStatus={onClickActionStatus}
+                            onClickActionMovimentacao={onClickActionMovimentacao}
+                        />
+                    </Card>
+                </Grid>
+
+            </Grid>
 
             <DialogForm
                 formId="descricao"
@@ -153,13 +174,15 @@ const Component = ({ match, message, history, usuario }) => {
                 isValid={status.status_id != demanda.status_id}
             >
                 <Grid container spacing={1}>
-                    {status.tipoMovimentacao_id &&
+
+                    {!status.statusAutomatico &&
                         <Grid item xs={4}>
                             <SelectStatusDemanda
                                 value={status.status_id}
                                 onChange={onChangestatus}
                                 required
-                                tipoMovimentacao_id={status.tipoMovimentacao_id}
+                                statusId={demanda.status_id}
+                                params={{ id: [1, 2, 3] }}
                             />
                         </Grid>}
 
@@ -174,43 +197,43 @@ const Component = ({ match, message, history, usuario }) => {
 
             <DialogForm
                 formId="movimentacao"
-                title="Encaminhar"
+                // title="Encaminhar"
                 action={salvarMovimentacao}
                 onChangeDialog={onChangeDialog}
                 exibeDialog={exibeDialog}
                 isValid={movimentacao.uorDestino_id != demanda.uorDestinoAtual_id}
             >
                 <Grid container spacing={1}>
-                    <Grid item xs={6}>
-                        <SelectUor
-                            label="Para"
-                            id="uorDestino_id"
-                            value={movimentacao.uorDestino_id}
-                            onChange={onChangeMovimentacao}
-                            required
-                        />
-                    </Grid>
+                    {!movimentacao.uorDestinoAutomatica &&
+                        <Grid item xs={6}>
+                            <SelectUor
+                                label="Para"
+                                id="uorDestino_id"
+                                value={movimentacao.uorDestino_id}
+                                onChange={onChangeMovimentacao}
+                                required
+                            />
+                        </Grid>}
 
-                    {/* <Grid item xs={4}>
-                        <SelectStatusMovimentacaoDemanda
-                            value={movimentacao.status_id}
-                            onChange={onChangeMovimentacao}
-                            required
-                        // tipoMovimentacao_id={movimentacao.tipoMovimentacao_id}
-                        />
-                    </Grid> */}
+                    {/* {movimentacao.devolucao &&
+                        <Grid item xs={4}>
+                            <SelectStatusMovimentacaoDemanda
+                                value={movimentacao.status_id}
+                                onChange={onChangeMovimentacao}
+                                required
+                            />
+                        </Grid>} */}
 
                     <Grid item xs={12}>
                         <TextAreaDescricao
                             value={movimentacao.descricao}
                             onChange={onChangeMovimentacao}
-                            required
                         />
                     </Grid>
                 </Grid>
             </DialogForm>
 
-        </div>
+        </div >
     );
 };
 

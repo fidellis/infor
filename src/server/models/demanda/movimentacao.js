@@ -2,7 +2,7 @@ import sequelize from 'common/sequelize';
 import Sequelize from 'common/sequelize/sequelize';
 import Usuario from 'common/models/portal/usuario';
 import UOR from 'common/models/uor/uor';
-import Status from './tipoMovimentacao';
+// import Tipo from './tipoMovimentacao';
 import MovimentacaoStatus from './movimentacaoStatus';
 
 const Model = sequelize.define(
@@ -29,11 +29,11 @@ const Model = sequelize.define(
             allowNull: false,
         },
 
-        tipo_id: {
-            type: Sequelize.BIGINT,
-            allowNull: false,
-            defaultValue: 1,
-        },
+        // tipo_id: {
+        //     type: Sequelize.BIGINT,
+        //     allowNull: true,
+        //     defaultValue: 1,
+        // },
 
         usuarioInclusao_id: {
             type: Sequelize.STRING(9),
@@ -51,7 +51,7 @@ const Model = sequelize.define(
     },
     {
         scopes: {
-            tipo: { include: [{ model: Status, as: 'tipo' }] },
+            // tipo: { include: [{ model: Tipo, as: 'tipo' }] },
             uorOrigem: { include: [{ model: UOR, as: 'uorOrigem', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             uorDestino: { include: [{ model: UOR, as: 'uorDestino', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
@@ -72,7 +72,7 @@ Model.hook("afterSave", async (movimentacao, { transaction }) => {
 });
 
 
-Model.belongsTo(Status, { as: 'tipo', foreignKey: 'tipo_id' });
+// Model.belongsTo(Tipo, { as: 'tipo', foreignKey: 'tipo_id' });
 Model.belongsTo(UOR, { as: 'uorOrigem', foreignKey: 'uorOrigem_id' });
 Model.belongsTo(UOR, { as: 'uorDestino', foreignKey: 'uorDestino_id' });
 Model.hasMany(MovimentacaoStatus, { as: 'movimentacoesStatus', foreignKey: 'movimentacao_id' });

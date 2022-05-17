@@ -1,22 +1,21 @@
 import React from 'react';
 import Select from './SelectModel';
 
-const Component = props => {
-    const tipoMovimentacao_id = props.tipoMovimentacao_id;
+const Component = ({ ...props }) => {
+    const params = props.params;
     return <Select
-        // filterOptions={options => options.filter(o => !tipoMovimentacao_id ? true : !o.tipoMovimentacao_id ? false : o.tipoMovimentacao_id.includes(Number(tipoMovimentacao_id)))}
+        params={{ order: ['motivoMovimentacao'], motivoMovimentacao: { $not: null }, cache: 0, ...params }}
         {...props}
 
     />
 };
 
 Component.defaultProps = {
-    url: '/demanda/tipoMovimentacao',
+    url: '/demanda/status',
     id: 'status_id',
-    label: 'Situação',
+    label: 'Motivo',
     optionValue: 'id',
-    optionLabel: 'nome',
-    params: { order: ['id'], cache: 0 },
+    optionLabel: 'motivoMovimentacao',
 };
 
 export default Component;

@@ -4,7 +4,7 @@ import Version from 'common/sequelize/version';
 import Usuario from 'common/models/portal/usuario';
 import UOR from 'common/models/uor/uor';
 import Status from './status';
-import TipoMovimentacao from './tipoMovimentacao';
+// import TipoMovimentacao from './tipoMovimentacao';
 import Prioridade from './prioridade';
 import Movimentacao from './movimentacao';
 import Responsavel from './responsavel';
@@ -25,11 +25,11 @@ const Model = sequelize.define(
             // unique: true,
         },
 
-        tipoMovimentacao_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            defaultValue: 1,
-        },
+        // tipoMovimentacao_id: {
+        //     type: Sequelize.INTEGER,
+        //     allowNull: false,
+        //     defaultValue: 1,
+        // },
 
         status_id: {
             type: Sequelize.INTEGER,
@@ -95,13 +95,13 @@ const Model = sequelize.define(
     {
         scopes: {
             status: { include: [{ model: Status, as: 'status' }] },
-            tipoMovimentacao: { include: [{ model: TipoMovimentacao, as: 'tipoMovimentacao' }] },
+            // tipoMovimentacao: { include: [{ model: TipoMovimentacao, as: 'tipoMovimentacao' }] },
             uorInclusao: { include: [{ model: UOR, as: 'uorInclusao', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             uorResponsavel: { include: [{ model: UOR, as: 'uorResponsavel', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             uorAtual: { include: [{ model: UOR, as: 'uorAtual', attributes: ['id', 'nome', 'nomeReduzido'] }] },
             usuarioInclusao: { include: [{ model: Usuario, as: 'usuarioInclusao', attributes: ['id', 'nome'] }] },
             prioridade: { include: [{ model: Prioridade, as: 'prioridade' }] },
-            movimentacoes: { include: [{ model: Movimentacao.scope('tipo', 'uorOrigem', 'uorDestino', 'usuarioInclusao'), as: 'movimentacoes' }] },
+            movimentacoes: { include: [{ model: Movimentacao.scope('uorOrigem', 'uorDestino', 'usuarioInclusao'), as: 'movimentacoes' }] },
             responsaveis: { include: [{ model: Responsavel.scope('usuario'), as: 'responsaveis' }] },
         },
         schema: 'demanda',
@@ -110,7 +110,7 @@ const Model = sequelize.define(
 );
 
 Model.belongsTo(Status, { as: 'status', foreignKey: 'status_id' });
-Model.belongsTo(TipoMovimentacao, { as: 'tipoMovimentacao', foreignKey: 'tipoMovimentacao_id' });
+// Model.belongsTo(TipoMovimentacao, { as: 'tipoMovimentacao', foreignKey: 'tipoMovimentacao_id' });
 Model.belongsTo(UOR, { as: 'uorInclusao', foreignKey: 'uorOrigem_id' });
 Model.belongsTo(UOR, { as: 'uorResponsavel', foreignKey: 'uorDestino_id' });
 Model.belongsTo(UOR, { as: 'uorAtual', foreignKey: 'uorDestinoAtual_id' });
