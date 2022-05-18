@@ -7,8 +7,8 @@ const Component = props => (
 );
 
 Component.defaultProps = {
-    direction: 'row',
-    wrap: 'wrap'
+    // direction: 'row',
+    // wrap: 'wrap'
 };
 
 export default Component;

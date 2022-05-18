@@ -127,7 +127,7 @@ const Component = ({ match, message, history, usuario }) => {
                             <Grid item xs={5}>
                                 <TextField label="UOR RESPONSÁVEL" value={demanda.uorResponsavel.nome} />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={4} style={{ display: 'flex' }}>
                                 {demanda.responsaveis.map(r => <AvatarUsuario chave={r.usuario_id} />)}
                             </Grid>
                         </Grid>
