@@ -1,47 +1,51 @@
-// import sequelize from 'common/sequelize';
-// import Sequelize from 'common/sequelize/sequelize';
+'use strict';
 
-// const Model = sequelize.define(
-//     'statusDemanda',
-//     {
-//         id: {
-//             type: Sequelize.BIGINT,
-//             primaryKey: true,
-//             autoIncrement: true,
-//         },
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-//         nome: {
-//             type: Sequelize.STRING(255),
-//             allowNull: false,
-//         },
+var _sequelize = require('common/sequelize');
 
-//         ativo: {
-//             type: Sequelize.BOOLEAN,
-//             allowNull: false,
-//             defaultValue: true,
-//         },
+var _sequelize2 = _interopRequireDefault(_sequelize);
 
-//         statusMovimentaca_id: {
-//             type: Sequelize.ARRAY(Sequelize.INTEGER),
-//             allowNull: true,
-//         },
-//     },
-//     {
-//         schema: 'demanda',
-//         tableName: 'status',
-//     },
-// );
+var _sequelize3 = require('common/sequelize/sequelize');
 
-// // Model.afterSync(() => Promise.all([
-// //     Model.upsert({ id: 1, nome: 'Aguardando atendimento', statusMovimentaca_id: [1, 4] }),
-// //     Model.upsert({ id: 2, nome: 'Em análise', statusMovimentaca_id: [1, 4] }),
-// //     Model.upsert({ id: 3, nome: 'Devolvido', statusMovimentaca_id: [3] }),
-// //     Model.upsert({ id: 4, nome: 'Em execução', statusMovimentaca_id: [1, 4] }),
-// //     Model.upsert({ id: 5, nome: 'Em homologação', statusMovimentaca_id: [2] }),
-// //     Model.upsert({ id: 6, nome: 'Homologado', statusMovimentaca_id: [2] }),
-// //     Model.upsert({ id: 7, nome: 'Finalizado' }),
-// //     Model.upsert({ id: 8, nome: 'Cancelado' }),
-// // ]));
+var _sequelize4 = _interopRequireDefault(_sequelize3);
 
-// export default Model;
-"use strict";
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Model = _sequelize2.default.define('StatusDemanda', {
+    id: {
+        type: _sequelize4.default.BIGINT,
+        primaryKey: true,
+        autoIncrement: true
+    },
+
+    nome: {
+        type: _sequelize4.default.STRING(255),
+        allowNull: false
+    },
+
+    motivoMovimentacao: {
+        type: _sequelize4.default.STRING(255),
+        allowNull: true
+    },
+
+    ativo: {
+        type: _sequelize4.default.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    }
+
+    // statusPermitidos: {
+    //     type: Sequelize.ARRAY(Sequelize.INTEGER),
+    //     allowNull: true,
+    // },
+}, {
+    schema: 'demanda',
+    tableName: 'status'
+});
+
+Model.afterSync(() => Promise.all([Model.upsert({ id: 1, nome: 'AGUARDANDO ATENDIMENTO' }), Model.upsert({ id: 2, nome: 'EM ANÁLISE' }), Model.upsert({ id: 3, nome: 'EM EXECUÇÃO' }), Model.upsert({ id: 4, nome: 'CANCELADO' }), Model.upsert({ id: 5, nome: 'EM HOMOLOGAÇÃO' }), Model.upsert({ id: 6, nome: 'HOMOLOGADO' }), Model.upsert({ id: 7, nome: 'FINALIZADO' }), Model.upsert({ id: 8, nome: 'REABERTO' }), Model.upsert({ id: 9, nome: 'DEVOLVIDO PARA COMPLEMENTO INFORMAÇÕES', motivoMovimentacao: 'COMPLEMENTO DE INFORMAÇÕES' }), Model.upsert({ id: 10, nome: 'DEVOLVIDO PARA AJUSTES', motivoMovimentacao: 'AJUSTES' })]));
+
+exports.default = Model;
