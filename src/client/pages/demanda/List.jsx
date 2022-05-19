@@ -18,10 +18,17 @@ const Component = ({ history, filter, ...props }) => (
           search: true,
           width: 50,
           type: 'NUMBER',
+          align: 'center',
         },
         dataHoraInclusao: {
           label: 'Data',
           type: 'DATE',
+          width: 100,
+        },
+        'prioridade.nome': {
+          label: 'Prioridade',
+          search: true,
+          lookup: true,
           width: 100,
         },
         titulo: {
@@ -32,19 +39,19 @@ const Component = ({ history, filter, ...props }) => (
           label: 'Situação',
           search: true,
           lookup: true,
-          width: 200,
+          width: 150,
         },
         'uorInclusao.nome': {
           label: 'UOR Solicitante',
           search: true,
           lookup: true,
-          width: 250,
+          width: 230,
         },
         'usuarioInclusao.nome': {
           label: 'Usuário Inclusão',
           search: true,
           lookup: true,
-          width: 250,
+          width: 150,
         },
       }}
     // actions={[
@@ -58,7 +65,7 @@ const Component = ({ history, filter, ...props }) => (
     />
 
     <NavigationButton buttons={[{
-      label: 'Adicionar',
+      label: 'Nova',
       onClick: () => history.push('/demanda/edit/0'),
     }]}
     />

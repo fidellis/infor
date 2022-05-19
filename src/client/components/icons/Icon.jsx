@@ -9,12 +9,8 @@ Component.propTypes = {
 };
 
 Component.defaultProps = {
-  style: {
-    cursor: 'pointer',
-    // fontSize:"small",
-    // fontSize:"large",          
-    //<Icon sx={{ fontSize: 40 }} />
-  },
+  // fontSize:"small",
+  // fontSize:"large", 
 };
 
 export default Component;

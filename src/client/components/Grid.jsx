@@ -8,7 +8,8 @@ const Component = props => (
 
 Component.defaultProps = {
     // direction: 'row',
-    // wrap: 'wrap'
+    // wrap: 'wrap',
+    alignItems: 'center',
 };
 
 export default Component;

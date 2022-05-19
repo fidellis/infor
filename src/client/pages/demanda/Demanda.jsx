@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { message } from '~/store/app';
 import { getData, save, destroy } from '~/lib/api';
+import moment from 'moment';
 import Card from '~/components/Card';
 import Icon from '~/components/icons/Icon';
 import Text from '~/components/Text';
+import NavigationButton from '~/components/NavigationButton';
 import AvatarUsuario from '~/components/avatar/AvatarUsuario';
 import Grid from '~/components/Grid';
 import { TextInput, TextArea, NumberInput, DateInput, Select } from '~/components/form/form/inputs';
@@ -24,7 +26,7 @@ const TextAreaDescricao = props => (
     />
 );
 
-const initialState = { uorInclusao: {}, uorResponsavel: {}, responsaveis: [] };
+const initialState = { usuarioInclusao: {}, uorInclusao: {}, uorResponsavel: {}, responsaveis: [] };
 
 const Component = ({ match, message, history, usuario }) => {
     const id = Number(match.params.id);
@@ -116,19 +118,33 @@ const Component = ({ match, message, history, usuario }) => {
             <Grid container spacing={2}>
 
                 <Grid item xs={12}>
-                    <Card width="90%">
+                    <Card
+                        width="90%"
+                        title={id ? `${demanda.titulo}` : null}
+                        subheader={id ? `${demanda.usuarioInclusao.nome} - ${moment(demanda.dataHoraInclusao).format('DD/MM/YYYY HH:mm')}` : ''}
+                        actions={[
+                            {
+                                icon: "edit",
+                                onClick: () => history.push(`/demanda/edit/${id}`),
+                                title: "editar",
+                            },
+                            // {
+                            //     icon: 'delete',
+                            //     disabled: true,
+                            // },
+                        ]}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Text variant="h5">{demanda.titulo}</Text>
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={5}>
                                 <TextField label="UOR SOLICITANTE" value={demanda.uorInclusao.nome} />
                             </Grid>
                             <Grid item xs={5}>
                                 <TextField label="UOR RESPONSÁVEL" value={demanda.uorResponsavel.nome} />
                             </Grid>
-                            <Grid item xs={4} style={{ display: 'flex' }}>
-                                {demanda.responsaveis.map(r => <AvatarUsuario chave={r.usuario_id} />)}
+                            <Grid item xs={2} style={{ display: 'flex' }}>
+                                {demanda.responsaveis.map(r => <AvatarUsuario chave={r.usuario_id} title={r.usuario.nome} />)}
                             </Grid>
                         </Grid>
                     </Card>
@@ -232,6 +248,11 @@ const Component = ({ match, message, history, usuario }) => {
                     </Grid>
                 </Grid>
             </DialogForm>
+
+            <NavigationButton buttons={[{
+                label: 'Voltar',
+                onClick: () => history.push('/demandas'),
+            }]} />
 
         </div >
     );

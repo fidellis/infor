@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-
-import {
-  HUMANOGRAMA_URL,
-  AVATAR_URL,
-} from '~/lib/constants';
+import Avatar from './Avatar';
+import { HUMANOGRAMA_URL, AVATAR_URL } from '~/lib/constants';
 
 const AvatarUsuario = ({ chave, uor, uor_id, ...props }) => (
   <a href={`${HUMANOGRAMA_URL}/uor/${uor_id}`} target="_blank">

@@ -64,7 +64,7 @@ const Component = ({ match, message, history }) => {
   }
 
   function voltar() {
-    history.push(`/demandas`);
+    history.push(id ? `/demanda/${id}` : "/demandas");
   }
 
   return (
@@ -72,7 +72,7 @@ const Component = ({ match, message, history }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Form
-            // width="80%"
+            width="80%"
             action={salvar}
             actions={[
               // {
@@ -122,7 +122,7 @@ const Component = ({ match, message, history }) => {
                   value={data.titulo}
                   onChange={onChange}
                   required
-                  maxLength={255}
+                  maxLength={150}
                   disabled={!formEditavel}
                 />
               </Grid>

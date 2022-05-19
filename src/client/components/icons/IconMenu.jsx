@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Menu from '~/components/menu/Menu';
-import Icon from '~/components/icons/Icon';
+import Icon from './Icon';
 
 const Component = ({ icon, ...props }) => {
     const [openMenu, setOpenMenu] = useState(false);

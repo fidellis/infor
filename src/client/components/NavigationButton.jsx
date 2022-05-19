@@ -9,8 +9,8 @@ const Component = ({ ...props }) => (
 Component.defaultProps = {
   style: {
     position: 'fixed',
-    right: 50,
-    bottom: 50,
+    right: 20,
+    bottom: 20,
     zIndex: 1,
   }
 };

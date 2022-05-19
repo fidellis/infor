@@ -9,7 +9,7 @@ const defaultOptions = { withCredentials: true };
 // F2258687 daniela 283441
 const devOptions = process.env.AMBIENTE === 'desenvolvimento' ? {
   headers: {
-    Authorization: encrypt('F9154346') || process.env.DISEM_TOKEN,
+    Authorization: encrypt() || process.env.DISEM_TOKEN,
   },
   withCredentials: false,
 } : {};
