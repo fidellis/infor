@@ -22,9 +22,9 @@ class InputSelect extends Component {
 
 		};
 
-		document.addEventListener('click', evt => {
-			const e = evt.path[0];
-			const evtClassName = e ? e.className : null;
+		document.addEventListener('click', e => {
+			const target = e.target;
+			const evtClassName = target ? target.className : null;
 			// const path = event.path || (event.composedPath && event.composedPath());
 			const checkboxes = document.getElementsByClassName("checkboxes");
 
