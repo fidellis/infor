@@ -37,7 +37,7 @@ class SelectAsync extends PureComponent {
 
   componentDidMount() {
     const { value } = this.state;
-    if (value) {
+    if (Number(value)) {
       this.setValue(value);
     }
   }
